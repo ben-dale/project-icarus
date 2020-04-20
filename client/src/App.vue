@@ -1,28 +1,23 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app" class="container">
+    <div class="row">
+      <IndexTitle />
+    </div>
+    <div class="row">
+      <GameOption name="The Resistance: Avalon" description="Avalon pits the forces of Good and Evil in a battle to control the future of civilization." :minPlayers="5" :maxPlayers="12" :teams="2" />
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import IndexTitle from './components/index/IndexTitle.vue'
+import GameOption from './components/index/GameOption.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    IndexTitle,
+    GameOption
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
