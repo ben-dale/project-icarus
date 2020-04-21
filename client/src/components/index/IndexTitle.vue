@@ -1,6 +1,6 @@
 <template>
-  <div class="col-md-4 offset-md-4">
-    <h3>Project Icarus</h3>
+  <div class="col-md-4 offset-md-4 py-5 text-center">
+    <h2>Project Icarus</h2>
   </div>
 </template>
 
@@ -13,8 +13,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-  text-align:center;
+.col-md-4 {
+  background: pink;
 }
 </style>

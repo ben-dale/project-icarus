@@ -1,16 +1,13 @@
 <template>
-
-    <div class="card" style="width: 18rem;">
+  <div class="card" style="width: 18rem;">
     <img src="https://placeimg.com/200/100/any" class="card-img-top">
     <div class="card-body">
         <h5 class="card-title">{{name}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{minPlayers}} - {{maxPlayers}} players, {{teams}} teams</h6>
         <p class="card-text">{{description}}</p>
-        <p class="card-text">{{minPlayers}} - {{maxPlayers}} players, {{teams}} teams</p>
-        <a href="#" class="btn btn-primary btn-block">Play</a>
+        <a :href="linkTo" class="btn btn-primary btn-block">Play</a>
     </div>
-    </div>
-
-
+  </div>
 </template>
 
 <script>
@@ -21,7 +18,8 @@ export default {
     description: String,
     minPlayers: Number,
     maxPlayers: Number,
-    teams: Number
+    teams: Number,
+    linkTo: String
   }
 }
 </script>
