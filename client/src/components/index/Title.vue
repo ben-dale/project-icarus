@@ -1,19 +1,18 @@
 <template>
-  <div class="col-md-4 offset-md-4 py-5 text-center">
-    <h2>Project Icarus</h2>
+  <div class="col-md-12 py-5 text-center">
+    <h1 class="display-3">Project Icarus</h1>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'IndexTitle',
-
+  name: 'Title',
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.col-md-4 {
+.col-md-12 {
   background: pink;
 }
 </style>
