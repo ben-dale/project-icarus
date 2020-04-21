@@ -1,0 +1,18 @@
+<template>
+  <div class="col-md-12 py-5 text-center">
+    <h1 class="display-3">The Resistance: Avalon</h1>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Title',
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+.col-md-12 {
+  background: pink;
+}
+</style>

@@ -1,42 +1,59 @@
 <template>
   <div id="app" class="container">
-    <div class="row">
+    <div class="row mb-5">
       <Title />
     </div>
-    <div class="row pb-5">
-      <div class="col-md-4">
+    <div class="row">
+      <div class="col-md-4 pb-4">
         <GameOption name="The Resistance: Avalon" description="Avalon pits the forces of Good and Evil in a battle to control the future of civilization." :minPlayers="5" :maxPlayers="10" :teams="2" linkTo="/avalon" image="avalon.jpeg" />
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 pb-4">
         <GameOption name="Coming Soon" description="More games are on the way!" image="coming-soon.jpeg"/>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 pb-4">
         <GameOption name="Coming Soon" description="More games are on the way!" image="coming-soon.jpeg" />
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-4 pb-4">
         <GameOption name="Coming Soon" description="More games are on the way!" image="coming-soon.jpeg"/>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 pb-4">
         <GameOption name="Coming Soon" description="More games are on the way!" image="coming-soon.jpeg"/>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4 pb-4">
         <GameOption name="Coming Soon" description="More games are on the way!" image="coming-soon.jpeg" />
       </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4 pb-4">
+        <GameOption name="Coming Soon" description="More games are on the way!" image="coming-soon.jpeg"/>
+      </div>
+      <div class="col-md-4 pb-4">
+        <GameOption name="Coming Soon" description="More games are on the way!" image="coming-soon.jpeg"/>
+      </div>
+      <div class="col-md-4 pb-4">
+        <GameOption name="Coming Soon" description="More games are on the way!" image="coming-soon.jpeg" />
+      </div>
+    </div>
+    <div class="row">
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
-import Title from '@/components/index/Title.vue'
-import GameOption from '@/components/index/GameOption.vue'
+  import GameOption from '@/components/index/GameOption.vue'
+  import Footer from '@/components/index/Footer.vue'
+  import Title from '@/components/index/Title.vue'
 
-export default {
-  name: 'App',
-  components: {
-    Title,
-    GameOption
+  export default {
+    name: 'App',
+    components: {
+      GameOption,
+      Footer,
+      Title
+    }
   }
-}
 </script>
+

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Donate from '../views/Donate.vue'
 
 Vue.use(VueRouter)
 
@@ -14,6 +15,11 @@ Vue.use(VueRouter)
     path: '/avalon',
     name: 'Avalon',
     component: () => import('../views/Avalon.vue')
+  },
+  {
+    path: '/donate',
+    name: 'Donate',
+    component: Donate
   }
 ]
 
