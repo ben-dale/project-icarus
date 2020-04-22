@@ -17,6 +17,12 @@ Vue.use(VueRouter)
     component: () => import('../views/Avalon.vue')
   },
   {
+    path: '/avalon/:gameId',
+    name: 'AvalonGame',
+    component: () => import ('../views/AvalonGame.vue'),
+    props: true
+  },
+  {
     path: '/donate',
     name: 'Donate',
     component: Donate

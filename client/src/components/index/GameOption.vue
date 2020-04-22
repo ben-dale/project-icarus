@@ -5,7 +5,7 @@
         <h5 class="card-title">{{name}}</h5>
         <h6 v-if="minPlayers && maxPlayers && teams" class="card-subtitle mb-2 text-muted">{{minPlayers}} - {{maxPlayers}} players, {{teams}} teams</h6>
         <p v-if="description" class="card-text">{{description}}</p>
-        <a v-if="linkTo" :href="linkTo" class="btn btn-dark btn-block">Play</a>
+        <router-link v-if="linkTo" :to="linkTo" class="btn btn-dark btn-block">Play</router-link>
     </div>
   </div>
 </template>

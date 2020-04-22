@@ -39,7 +39,7 @@
     </div>
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <button class="btn btn-dark btn-lg btn-block">Start a new game</button>
+        <button v-on:click="startNewGame(socket)" class="btn btn-dark btn-lg btn-block">Start a new game</button>
       </div>
     </div>
     <div class="row py-2">
@@ -49,7 +49,7 @@
     </div>
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <button class="btn btn-dark btn-lg btn-block">Join an existing game</button>
+         <router-link to="/avalon/thing" class="btn btn-dark btn-lg btn-block">Join an existing game</router-link>
       </div>
     </div>
   </div>
@@ -58,11 +58,26 @@
 
 <script>
   import Title from '@/components/avalon/Title.vue'
-
+  import io from "socket.io-client";
   export default {
     name: 'App',
     components: {
       Title
+    },
+    methods: {
+      startNewGame: function(socket) {
+        socket.emit('avalon-start-new-game');
+      }
+    },
+    data: function() {
+      let socket = io.connect("http://localhost:3000", { upgrade: false, transports: ['websocket'] });
+      socket.on("avalon-game-created", gameData => {
+        let gameId = gameData.id;
+        this.$router.replace({ name: `AvalonGame`, params: { socket: socket, gameId: gameId } });
+      });
+      return { socket: socket }
     }
   }
+
+
 </script>
