@@ -71,11 +71,11 @@
     },
     data: function() {
       let socket = io.connect("http://localhost:3000", { upgrade: false, transports: ['websocket'] });
-      socket.on("avalon-game-created", gameData => {
-        let gameId = gameData.id;
-        this.$router.replace({ name: `AvalonGame`, params: { socket: socket, gameId: gameId } });
+      socket.on("avalon-room-created", roomData => {
+        let roomId = roomData.id;
+        this.$router.replace({ name: `AvalonGame`, params: { socket, roomId } });
       });
-      return { socket: socket }
+      return { socket }
     }
   }
 

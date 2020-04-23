@@ -5,7 +5,7 @@ import Donate from '../views/Donate.vue'
 
 Vue.use(VueRouter)
 
-  const routes = [
+const routes = [
   {
     path: '/',
     name: 'Home',
@@ -17,9 +17,9 @@ Vue.use(VueRouter)
     component: () => import('../views/Avalon.vue')
   },
   {
-    path: '/avalon/:gameId',
+    path: '/avalon/:roomId',
     name: 'AvalonGame',
-    component: () => import ('../views/AvalonGame.vue'),
+    component: () => import('../views/AvalonGame.vue'),
     props: true
   },
   {
