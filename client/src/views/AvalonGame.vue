@@ -11,21 +11,25 @@
       v-bind:class="{ 'visible': screen === 'lobbyScreen', 'hidden': screen !== 'lobbyScreen' }"
     >
       <div class="col-md-12">
-        <div class="row mb-3" v-for="(val, key) in members" :key="key">
-          <div class="col-md-4 offset-md-4">
+        <div class="row">
+          <div class="col-md-3 mb-3" v-for="(val, key) in members" :key="key">
             <div class="card">
               <div class="card-body">
                 <div class="card-text">
-                  <span v-html="userIcon" class="mr-2"></span>
+                  <span v-if="!val.ready" v-html="userIcon" class="mr-2"></span>
+                  <span v-if="val.ready" v-html="userReadyIcon" class="mr-2"></span>
                   {{val.name}}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-md-4 offset-md-4">
+        <div class="row mt-5">
+          <div class="col-md-3 offset-md-3">
             <button type="button" class="btn btn-success btn-lg btn-block">Ready up</button>
+          </div>
+          <div class="col-md-3">
+            <button type="button" class="btn btn-danger btn-lg btn-block">Leave</button>
           </div>
         </div>
       </div>
@@ -60,7 +64,8 @@ export default {
     roomId: String
   },
   computed: {
-    userIcon: () => feather.icons["user"].toSvg()
+    userIcon: () => feather.icons["user"].toSvg(),
+    userReadyIcon: () => feather.icons["user-check"].toSvg()
   },
   created() {
     this.socket.on("member-joined", memberData => {
