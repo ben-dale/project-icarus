@@ -1,15 +1,18 @@
+var REDIS_URL = process.env.REDIS_URL
+
 const path = require('path');
 const history = require('connect-history-api-fallback');
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 
-const redisSocketAdapter = require('socket.io-redis');
+// const redisSocketAdapter = require('socket.io-redis');
 const io = require('socket.io')(http);
-io.adapter(redisSocketAdapter({ host: process.env.REDIS_URL, port: 6379 }))
+// io.adapter(redisSocketAdapter({ host: REDIS_URL, port: 6379 }))
 
 const redis = require('redis')
-var redisClient = redis.createClient(process.env.REDIS_URL);
+var redisClient = REDIS_URL ? redis.createClient(REDIS_URL) : redis.createClient(); // defaults a connection to localhost:6379
+
 
 const staticFileMiddleware = express.static(path.join(__dirname, 'public'));
 app.use(staticFileMiddleware);
