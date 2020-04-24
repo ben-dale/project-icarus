@@ -6,9 +6,9 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 
-// const redisSocketAdapter = require('socket.io-redis');
+const redisSocketAdapter = require('socket.io-redis');
 const io = require('socket.io')(http);
-// io.adapter(redisSocketAdapter({ host: REDIS_URL, port: 6379 }))
+io.adapter(REDIS_URL ? redisSocketAdapter(REDIS_URL) : redisSocketAdapter({ host: REDIS_URL, port: 6379 }));
 
 const redis = require('redis')
 var redisClient = REDIS_URL ? redis.createClient(REDIS_URL) : redis.createClient(); // defaults a connection to localhost:6379
@@ -49,10 +49,7 @@ function putObjectInRedis(key, value) {
 }
 
 function getObjectFromRedis(key, onSuccess, onError) {
-  console.log('getting thing from redis, ' + key)
   redisClient.get(key, (error, result) => {
-    console.log('error = ' + error);
-    console.log('result = ' + result);
     if (error) {
       onError();
     }
@@ -64,12 +61,11 @@ function joinRoom(socket, roomId, name) {
   socket.join(roomId);
   getObjectFromRedis(roomId, (room) => {
     if (room && name) {
-        console.log(socket.id + ' = ' + name);
-        room.members[socket.id] = { name: name };
-        putObjectInRedis(roomId, room);
-        io.in(roomId).emit('member-joined', { members: room.members });
+      console.log(socket.id + ' = ' + name);
+      room.members[socket.id] = { name: name };
+      putObjectInRedis(roomId, room);
+      io.in(roomId).emit('member-joined', { members: room.members });
     } else {
-      console.log(roomId + ' created');
       if (name) {
         putObjectInRedis(roomId, { open: true, members: {} })
       } else {
