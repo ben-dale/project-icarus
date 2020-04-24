@@ -6,10 +6,10 @@ const http = require('http').createServer(app);
 
 const redisSocketAdapter = require('socket.io-redis');
 const io = require('socket.io')(http);
-io.adapter(redisSocketAdapter({ host: 'localhost', port: 6379 }))
+io.adapter(redisSocketAdapter({ host: process.env.REDIS_URL, port: 6379 }))
 
 const redis = require('redis')
-var redisClient = redis.createClient(); // defaults a connection to localhost:6379
+var redisClient = redis.createClient(process.env.REDIS_URL);
 
 const staticFileMiddleware = express.static(path.join(__dirname, 'public'));
 app.use(staticFileMiddleware);
