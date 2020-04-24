@@ -22,3 +22,27 @@ Ping Redis
 ```
 redis-cli -h localhost ping
 ```
+
+## Local development
+```
+cd client && npm run serve
+```
+Starts Vue.js hosting server on port 8080.
+
+```
+cd server && node server.js
+```
+Starts Express server on port 3000. This is where all the socket stuff is configured.
+
+In development the client will point socket connections at localhost:3000.
+
+## Deployment
+```
+./build.sh
+```
+Compiles Vue.js app and moves to `./server/public`.
+
+```
+./deploy.sh
+```
+Pushes contents of `./server` up to Heroku.
