@@ -25,10 +25,12 @@ export default {
     socket: {
       type: Object,
       default: function() {
-        let socket = io.connect({
-          upgrade: false,
-          transports: ["websocket"]
-        });
+        let socket = null;
+        if (process.env.NODE_ENV == "development") {
+          socket = io.connect("http://localhost:3000", {upgrade: false,transports: ["websocket"]});
+        } else {
+          socket = io.connect({upgrade: false,transports: ["websocket"]});
+        }
         return socket;
       }
     },
