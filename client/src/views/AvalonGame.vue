@@ -25,7 +25,7 @@ export default {
     socket: {
       type: Object,
       default: function() {
-        let socket = io.connect("http://localhost:3000", {
+        let socket = io.connect({
           upgrade: false,
           transports: ["websocket"]
         });

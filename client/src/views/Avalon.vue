@@ -70,7 +70,7 @@
       }
     },
     data: function() {
-      let socket = io.connect("http://localhost:3000", { upgrade: false, transports: ['websocket'] });
+      let socket = io.connect({ upgrade: false, transports: ['websocket'] });
       socket.on("avalon-room-created", roomData => {
         let roomId = roomData.id;
         this.$router.replace({ name: `AvalonGame`, params: { socket, roomId } });
