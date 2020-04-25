@@ -3,14 +3,14 @@ module.exports = {
     redis.getObject(roomId, (room) => {
       room.members[socket.id].ready = true;
       redis.putObject(roomId, room);
-      io.in(roomId).emit('room-updated', { members: room.members, owner: room.owner });
+      io.in(roomId).emit('room-updated', { members: room.members, owner: room.owner, settings: room.settings });
     }, () => { });
   },
   notReady: function (redis, socket, io, roomId) {
     redis.getObject(roomId, (room) => {
       room.members[socket.id].ready = false;
       redis.putObject(roomId, room);
-      io.in(roomId).emit('room-updated', { members: room.members, owner: room.owner });
+      io.in(roomId).emit('room-updated', { members: room.members, owner: room.owner, settings: room.settings });
     }, () => { });
   },
   join: function (redis, socket, io, roomId, name) {
@@ -20,7 +20,7 @@ module.exports = {
         room.members[socket.id] = { name: name, ready: false };
         redis.putObject(roomId, room);
         redis.putObject(socket.id, { roomId: roomId }); // Store player object so we can link back to room by socket id
-        io.in(roomId).emit('room-updated', { members: room.members, owner: room.owner });
+        io.in(roomId).emit('room-updated', { members: room.members, owner: room.owner, settings: room.settings });
       }
     }, () => { });
   },
@@ -37,7 +37,7 @@ module.exports = {
             
           }
           redis.putObject(player.roomId, room);
-          io.in(player.roomId).emit('room-updated', { members: room.members, owner: room.owner });
+          io.in(player.roomId).emit('room-updated', { members: room.members, owner: room.owner, settings: room.settings });
         }, () => { })
       }
     }, () => { });

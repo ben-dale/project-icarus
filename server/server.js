@@ -49,6 +49,10 @@ io.on('connection', (socket) => {
   socket.on('player-not-ready', (data) => {
     player.notReady(redis, socket, io, data.roomId);
   })
+
+  socket.on('update-settings', (data) => {
+    room.updateSettings(redis, socket, io, data.roomId, data.settings);
+  });
 });
 
 // Run the damn thing!
