@@ -35,6 +35,7 @@
                   v-on:click="selectPercival()"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (percivalSelected ? 'btn-info' : 'btn-outline-info')]"
+                  :disabled="!isRoomOwner()"
                 >
                   <h5>Percival</h5>Knows Merlin's identity
                 </button>
@@ -44,6 +45,7 @@
                   v-on:click="selectMorgana()"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (morganaSelected ? 'btn-danger' : 'btn-outline-danger')]"
+                  :disabled="!isRoomOwner()"
                 >
                   <h5>Morgana</h5>Shows as a second Merlin to Percival
                 </button>
@@ -53,6 +55,7 @@
                   v-on:click="selectOberon()"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (oberonSelected ? 'btn-danger' : 'btn-outline-danger')]"
+                  :disabled="!isRoomOwner()"
                 >
                   <h5>Oberon</h5>Is only known to Merlin
                 </button>
@@ -211,6 +214,9 @@ export default {
     leave: function() {
       this.socket.disconnect();
       this.$router.replace({ name: `Avalon` });
+    },
+    isRoomOwner: function() {
+      return this.ownerSocketId == this.socket.id;
     }
   }
 };
