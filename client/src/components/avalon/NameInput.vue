@@ -8,7 +8,7 @@
         placeholder="Name"
         aria-label="Name"
         aria-describedby="button-start"
-        maxlength="15"
+        maxlength="10"
         required
       />
       <div class="input-group-append">

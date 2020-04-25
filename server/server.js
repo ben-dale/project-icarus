@@ -1,6 +1,7 @@
 // Custom code
 const room = require('./room.js');
 const redis = require('./redis.js');
+const player = require('./player.js');
 
 // Environment variables configured by Heroku
 const REDIS_URL = process.env.REDIS_URL;
@@ -27,6 +28,7 @@ app.use(staticFileMiddleware);
 io.on('connection', (socket) => {
   console.log(socket.id + ' connected')
   socket.on('disconnect', function () {
+    player.leave(redis, socket, io);
     console.log(socket.id + ' disconnected');
   });
 
@@ -36,9 +38,17 @@ io.on('connection', (socket) => {
     socket.emit('avalon-room-created', { id: roomId })
   });
 
-  socket.on('join-room', (data) => {
-    room.join(redis, socket, io, data.roomId, data.name);
+  socket.on('player-join', (data) => {
+    player.join(redis, socket, io, data.roomId, data.name);
   });
+
+  socket.on('player-ready', (data) => {
+    player.ready(redis, socket, io, data.roomId);
+  });
+
+  socket.on('player-not-ready', (data) => {
+    player.notReady(redis, socket, io, data.roomId);
+  })
 });
 
 // Run the damn thing!
