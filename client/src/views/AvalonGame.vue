@@ -72,7 +72,7 @@
             >Cancel</button>
           </div>
           <div class="col-md-4">
-            <button type="button" class="btn btn-danger btn-lg btn-block">Leave</button>
+            <button v-on:click="leave()" type="button" class="btn btn-danger btn-lg btn-block">Leave</button>
           </div>
         </div>
       </div>
@@ -164,6 +164,10 @@ export default {
     },
     playerReady: function() {
       return this.currentPlayer.ready;
+    },
+    leave: function() {
+      this.socket.disconnect();
+      this.$router.replace({ name: `Avalon` });
     }
   }
 };

@@ -26,7 +26,7 @@ module.exports = {
   },
   leave: function (redis, socket, io) {
     redis.getObject(socket.id, (player) => {
-      if (player.roomId) {
+      if (player) {
         redis.getObject(player.roomId, (room) => {
           delete room.members[socket.id];
           if (room.owner == socket.id && Object.keys(room.members).length >= 1) {
