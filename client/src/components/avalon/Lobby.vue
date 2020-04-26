@@ -9,7 +9,7 @@
         <p
           class="lead"
         >Further instruction and explanation will be provided as you play through the game.</p>
-        <p class="lead"><span class="text-info">{{roomOwnerName}}</span> is the lobby's admin, can change the settings and will start the game when everyone is ready.</p>
+        <p class="lead">{{roomOwnerName}} is the lobby's admin, can change the settings and will start the game when everyone is ready.</p>
       </div>
     </div>
     <div class="row">
@@ -112,6 +112,7 @@
         </div>
       </div>
     </div>
+
     <div class="row mt-5">
       <div class="col-md-4 offset-md-2 mb-3">
         <button
@@ -119,7 +120,7 @@
           v-on:click="readyUp()"
           type="button"
           class="btn btn-success btn-lg btn-block"
-        >Ready up</button>
+        >Ready</button>
         <button
           v-if="isPlayerReady"
           v-on:click="notReady()"
@@ -156,7 +157,8 @@ export default {
     morganaSelected: Boolean,
     oberonSelected: Boolean,
     roomOwner: String,
-    roomId: String
+    roomId: String,
+    isPlayerReady: Boolean
   },
   data: function() {
     return {
@@ -168,10 +170,6 @@ export default {
     };
   },
   computed: {
-    isPlayerReady: function() {
-      let player = this.players.find(o => o.id == this.socket.id);
-      return player && player.ready;
-    },
     isRoomOwner: function() {
       return this.socket.id == this.roomOwner;
     },
@@ -207,17 +205,16 @@ export default {
       this.$emit("toggleOberon");
     },
     startGame: function() {
-      this.socket.emit("start-game", { roomId: this.roomId });
+      this.$emit("startGame");
     },
     readyUp: function() {
-      this.socket.emit("player-ready");
+      this.$emit("readyUp");
     },
     notReady: function() {
-      this.socket.emit("player-not-ready");
+      this.$emit("notReady");
     },
     leave: function() {
-      this.socket.disconnect();
-      this.$router.replace({ name: `Avalon` });
+      this.$emit("leave");
     }
   }
 };

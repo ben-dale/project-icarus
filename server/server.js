@@ -43,12 +43,12 @@ io.on('connection', (socket) => {
     player.join(redis, socket, io, data.roomId, data.name);
   });
 
-  socket.on('player-ready', (data) => {
-    player.ready(redis, socket, io, data.stage);
+  socket.on('player-ready', () => {
+    player.ready(redis, socket, io);
   });
 
-  socket.on('player-not-ready', (data) => {
-    player.notReady(redis, socket, io, data.stage);
+  socket.on('player-not-ready', () => {
+    player.notReady(redis, socket, io);
   })
 
   socket.on('update-settings', (data) => {

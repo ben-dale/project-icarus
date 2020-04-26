@@ -16,6 +16,10 @@ module.exports = {
         room.settings = { morganaSelected: settings.morganaSelected, percivalSelected: settings.percivalSelected, oberonSelected: settings.oberonSelected }
         redis.putObject(roomId, room);
         redis.getObjects(room.players, (players) => {
+          for (let i = 0; i < players.length; i++) {
+            delete players[i].team;
+            delete players[i].role;
+          }
           io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
         });
       }

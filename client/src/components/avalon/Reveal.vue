@@ -1,4 +1,5 @@
 <template>
+
   <!-- <div class="col-md-4">
         <div class="card">
           <img src="https://place-hold.it/200x100" class="card-img-top" />
@@ -26,6 +27,7 @@
           </div>
         </div>
   </div>-->
+  
   <div class="col-md-12">
     <div class="row mb-4">
       <div class="col-md-8 offset-md-2">
@@ -62,7 +64,7 @@
             <p class="card-text">There are three minions in Evil, along with Morgana and Oberon.</p>
             <p
               class="card-text"
-            >Like guards, minions do not know the identity of anyone or what team they're in.</p>
+            >Evil team members know who is in Evil and the identity of the Assassin.</p>
             <p
               class="card-text"
             >Merlin knows which team each person is in, but does not know anyone's role.</p>
@@ -90,18 +92,38 @@
         </div>
       </div>
     </div>
+    <div class="row mb-4">
+      <div class="col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-body">
+            <div class="row text-center">
+              <div v-for="player in players" class="col-md-3" :key="player.id">
+                <div v-if="player.ready" class="bg-success text-white pt-2 pb-1 mb-3 border border-success rounded">
+                  <h5>{{player.name}}</h5>
+                </div>
+                <div v-if="!player.ready" class="text-dark pt-2 pb-1 mb-3 border rounded">
+                  <h5>{{player.name}}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <button
-          v-if="ready"
-          class="btn btn-lg btn-success btn-block"
-          disabled
-        >Waiting for other players...</button>
+          v-if="!isPlayerReady"
+          v-on:click="readyUp()"
+          type="button"
+          class="btn btn-success btn-lg btn-block"
+        >Ready</button>
         <button
-          v-if="!ready"
-          v-on:click="readyUp"
-          class="btn btn-lg btn-success btn-block"
-        >Start adventure</button>
+          v-if="isPlayerReady"
+          v-on:click="notReady()"
+          type="button"
+          class="btn btn-warning btn-lg btn-block"
+        >Cancel</button>
       </div>
     </div>
   </div>
@@ -113,11 +135,32 @@ export default {
     role: String,
     ready: Boolean,
     socket: Object,
-    players: Array
+    players: {
+      type: Array,
+      default: function() {
+        return [{
+          id: 1,
+          name: "ben"
+        },{
+          id: 2,
+          name: "ben"
+        },{
+          id: 3,
+          name: "ben"
+        },{
+          id: 4,
+          name: "ben"
+        }];
+      }
+    },
+    isPlayerReady: Boolean
   },
   methods: {
     readyUp: function() {
-      console.log('click');
+      this.$emit("readyUp");
+    },
+    notReady: function() {
+      this.$emit("notReady");
     }
   }
 };

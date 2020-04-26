@@ -2,7 +2,7 @@
   <div id="app" class="container">
     <div
       class="row"
-      v-bind:class="{ 'visible': screen == 'nameInputScreen', 'hidden': screen != 'nameInputScreen' }"
+      v-bind:class="{ 'visible': screen == 'joinScreen', 'hidden': screen != 'joinScreen' }"
     >
       <NameInput buttonText="Join" @submit="joinSession" />
     </div>
@@ -18,16 +18,26 @@
         :percivalSelected="percivalSelected"
         :oberonSelected="oberonSelected"
         :roomOwner="roomOwner"
-        @togglePercival="selectPercival()"
-        @toggleMorgana="selectMorgana()"
-        @toggleOberon="selectOberon()"
+        :isPlayerReady="isPlayerReady"
+        @togglePercival="togglePercival()"
+        @toggleMorgana="toggleMorgana()"
+        @toggleOberon="toggleOberon()"
+        @leave="leave()"
+        @readyUp="readyUp()"
+        @notReady="notReady()"
+        @startGame="startGame()"
       />
     </div>
     <div
       class="row"
       v-bind:class="{ 'visible': screen === 'revealScreen', 'hidden': screen !== 'revealScreen' }"
     >
-      <Reveal @playerReady="playerReady()" />
+      <Reveal
+        :players="players"
+        :isPlayerReady="isPlayerReady"
+        @readyUp="readyUp()"
+        @notReady="notReady()"
+      />
     </div>
     <div
       class="row"
@@ -126,25 +136,6 @@ export default {
     },
     roomId: String
   },
-  created() {
-    this.socket.on("game-started", playerData => {
-      this.player = playerData;
-      this.screen = "revealScreen";
-    });
-    this.socket.on("player-updated", playerData => {
-      let playerToUpdate = this.players.find(o => o.id == playerData.id);
-      for (let k in playerToUpdate) {
-        playerToUpdate[k] = playerData[k];
-      }
-    });
-    this.socket.on("room-updated", roomData => {
-      this.players = roomData.players;
-      this.roomOwner = roomData.owner;
-      this.percivalSelected = roomData.settings.percivalSelected;
-      this.morganaSelected = roomData.settings.morganaSelected;
-      this.oberonSelected = roomData.settings.oberonSelected;
-    });
-  },
   data: function() {
     return {
       roomOwner: "",
@@ -153,24 +144,57 @@ export default {
       oberonSelected: false,
       players: [],
       name: "",
-      screen: "nameInputScreen",
-      player: {}
+      screen: "joinScreen",
+      team: "",
+      role: ""
     };
   },
+  computed: {
+    isPlayerReady: function() {
+      let player = this.players.find(o => o.id == this.socket.id);
+      return player && player.ready;
+    }
+  },
+  created() {
+    this.socket.on("reveal-started", playerData => {
+      this.player = playerData;
+      this.screen = "revealScreen";
+    });
+     this.socket.on("game-started", playerData => {
+      this.player = playerData;
+      this.screen = "gameScreen";
+    });
+    this.socket.on("player-updated", playerData => {
+
+      console.log(playerData);
+      let playerToUpdate = this.players.find(o => o.id == playerData.id);
+      for (let k in playerToUpdate) {
+        playerToUpdate[k] = playerData[k];
+      }
+    });
+    this.socket.on("room-updated", roomData => {
+      console.log(roomData);
+      this.players = roomData.players;
+      this.roomOwner = roomData.owner;
+      this.percivalSelected = roomData.settings.percivalSelected;
+      this.morganaSelected = roomData.settings.morganaSelected;
+      this.oberonSelected = roomData.settings.oberonSelected;
+    });
+  },
   methods: {
-    selectPercival: function() {
+    togglePercival: function() {
       this.percivalSelected
         ? (this.percivalSelected = false)
         : (this.percivalSelected = true);
       this.emitSettingsChange();
     },
-    selectMorgana: function() {
+    toggleMorgana: function() {
       this.morganaSelected
         ? (this.morganaSelected = false)
         : (this.morganaSelected = true);
       this.emitSettingsChange();
     },
-    selectOberon: function() {
+    toggleOberon: function() {
       this.oberonSelected
         ? (this.oberonSelected = false)
         : (this.oberonSelected = true);
@@ -191,8 +215,18 @@ export default {
       this.screen = "lobbyScreen";
       this.socket.emit("player-join", { name: this.name, roomId: this.roomId });
     },
-    playerReady: function() {
+    startGame: function() {
+      this.socket.emit("start-game", { roomId: this.roomId });
+    },
+    readyUp: function() {
       this.socket.emit("player-ready");
+    },
+    notReady: function() {
+      this.socket.emit("player-not-ready");
+    },
+    leave: function() {
+      this.socket.disconnect();
+      this.$router.replace({ name: `Avalon` });
     }
   }
 };

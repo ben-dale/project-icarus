@@ -3,6 +3,8 @@ module.exports = {
     redis.getObject(socket.id, (player) => {
       player.ready = true;
       redis.putObject(socket.id, player);
+      delete player.team;
+      delete player.role;
       io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
     }, () => { });
   },
@@ -10,6 +12,8 @@ module.exports = {
     redis.getObject(socket.id, (player) => {
       player.ready = false;
       redis.putObject(socket.id, player);
+      delete player.team;
+      delete player.role;
       io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
     }, () => { });
   },
@@ -27,6 +31,10 @@ module.exports = {
 
         // Send all room information back to clients
         redis.getObjects(room.players, (players) => {
+          for (let i = 0; i < players.length; i++) {
+            delete players[i].team;
+            delete players[i].role;
+          }
           io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
         });
       }
@@ -42,8 +50,13 @@ module.exports = {
             room.owner = room.players[0];
           }
           redis.putObject(player.roomId, room);
+
           // Send all room information back to clients
           redis.getObjects(room.players, (players) => {
+            for (let i = 0; i < players.length; i++) {
+              delete players[i].team;
+              delete players[i].role;
+            }
             io.in(player.roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
           });
         }, () => { })

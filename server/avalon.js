@@ -2,20 +2,11 @@ module.exports = {
 
   startGame: function (redis, socket, io, roomId) {
     redis.getObject(roomId, (room) => {
-      // todo - needs to be set to 5
-      if (socket.id === room.owner && room.players.length >= 2) {
+      if (socket.id === room.owner && room.players.length >= 5) {
         room.closed = true;
         redis.putObject(roomId, room);
 
         var teamConfigurations = {
-          1: {
-            goodCount: 1,
-            evilCount: 0
-          },
-          2: {
-            goodCount: 1,
-            evilCount: 1
-          },
           5: {
             goodCount: 3,
             evilCount: 2
@@ -51,7 +42,7 @@ module.exports = {
 
             for (let i = 0; i < good.length; i++) {
               good[i].team = "Good";
-              good[i].role = "Gaurd";
+              good[i].role = "Guard";
             }
             for (let i = 0; i < evil.length; i++) {
               evil[i].team = "Evil";
@@ -93,9 +84,8 @@ module.exports = {
             for (let i = 0; i < assignedPlayers.length; i++) {
               assignedPlayers[i].ready = false;
               redis.putObject(assignedPlayers[i].id, assignedPlayers[i]);
-              io.to(assignedPlayers[i].id).emit('game-started', assignedPlayers[i]);
+              io.to(assignedPlayers[i].id).emit('reveal-started', assignedPlayers[i]);
             }
-            console.log(assignedPlayers);
           }
         });
       }
