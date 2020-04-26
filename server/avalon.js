@@ -1,5 +1,5 @@
 module.exports = {
-  startGame: function (redis, io, roomId) {
+  initGame: function (redis, io, roomId) {
     redis.getObject(roomId, (room) => {
       if (room && room.players.length >= 5) {
         room.closed = true;
@@ -84,7 +84,6 @@ module.exports = {
               assignedPlayers[i].ready = false;
               redis.putObject(assignedPlayers[i].id, assignedPlayers[i]);
               io.to(assignedPlayers[i].id).emit('reveal-started', assignedPlayers[i]);
-              
             }
             redis.getObjects(room.players, (players) => {
               for (let i = 0; i < players.length; i++) {
@@ -97,6 +96,9 @@ module.exports = {
         });
       }
     }, () => { });
+  },
+  startGame: function (redis, io, roomId) {
+    io.in(roomId).emit('game-started');
   },
   shuffle: function (a) {
     for (let i = a.length - 1; i > 0; i--) {

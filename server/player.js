@@ -78,7 +78,9 @@ module.exports = {
             }
           }
           if (ready && screen === "lobbyScreen") {
-            avalon.startGame(redis, io, roomId)
+            avalon.initGame(redis, io, roomId);
+          } else if (ready && screen === "revealScreen") {
+            avalon.startGame(redis, io, roomId);
           }
         }, () => { });
       }

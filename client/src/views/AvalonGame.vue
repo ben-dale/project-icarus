@@ -159,8 +159,7 @@ export default {
       this.player = playerData;
       this.screen = "revealScreen";
     });
-    this.socket.on("game-started", playerData => {
-      this.player = playerData;
+    this.socket.on("game-started", () => {
       this.screen = "gameScreen";
     });
     this.socket.on("player-updated", playerData => {
