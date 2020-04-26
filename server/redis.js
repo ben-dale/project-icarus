@@ -19,6 +19,17 @@ module.exports = {
         onSuccess(JSON.parse(result));
       }
     });
+  },
+  getObjects: function (keys, onSuccess) {
+    redisClient.mget(keys, function (error, resultSet) {
+      let result = [];
+      if (resultSet) {
+        for (let i = 0; i < resultSet.length; i++) {
+          result.push(JSON.parse(resultSet[i]))
+        }
+      }
+      onSuccess(result);
+    });
   }
 
 }

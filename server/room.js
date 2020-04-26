@@ -6,14 +6,18 @@ module.exports = {
   },
   init: function (redis, socket, roomId) {
     socket.join(roomId);
-    redis.putObject(roomId, { open: true, members: {}, owner: socket.id, settings: { morganaSelected: false, percivalSelected: false, oberonSelected: false } });
+    let player = { id: socket.id, ready: false, role: "", team: "", roomId: roomId };
+    redis.putObject(player.id, player); // Player will "offically" be part of the room when they enter their name (and client calls "player-join")
+    redis.putObject(roomId, { open: true, players: [], owner: socket.id, settings: { morganaSelected: false, percivalSelected: false, oberonSelected: false } });
   },
   updateSettings: function (redis, socket, io, roomId, settings) {
     redis.getObject(roomId, (room) => {
       if (socket.id == room.owner) {
-        let updatedRoom = { open: room.open, members: room.members, owner: room.owner, settings: { morganaSelected: settings.morganaSelected, percivalSelected: settings.percivalSelected, oberonSelected: settings.oberonSelected } }
-        redis.putObject(roomId, updatedRoom);
-        io.in(roomId).emit('room-updated', updatedRoom);
+        room.settings = { morganaSelected: settings.morganaSelected, percivalSelected: settings.percivalSelected, oberonSelected: settings.oberonSelected }
+        redis.putObject(roomId, room);
+        redis.getObjects(room.players, (players) => {
+          io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
+        });
       }
     }, () => { });
   }

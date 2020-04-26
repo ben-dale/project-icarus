@@ -1,26 +1,34 @@
 module.exports = {
-  ready: function (redis, socket, io, roomId) {
-    redis.getObject(roomId, (room) => {
-      room.members[socket.id].ready = true;
-      redis.putObject(roomId, room);
-      io.in(roomId).emit('room-updated', { members: room.members, owner: room.owner, settings: room.settings });
+  ready: function (redis, socket, io) {
+    redis.getObject(socket.id, (player) => {
+      player.ready = true;
+      redis.putObject(socket.id, player);
+      io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
     }, () => { });
   },
-  notReady: function (redis, socket, io, roomId) {
-    redis.getObject(roomId, (room) => {
-      room.members[socket.id].ready = false;
-      redis.putObject(roomId, room);
-      io.in(roomId).emit('room-updated', { members: room.members, owner: room.owner, settings: room.settings });
+  notReady: function (redis, socket, io) {
+    redis.getObject(socket.id, (player) => {
+      player.ready = false;
+      redis.putObject(socket.id, player);
+      io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
     }, () => { });
   },
   join: function (redis, socket, io, roomId, name) {
     socket.join(roomId);
     redis.getObject(roomId, (room) => {
       if (room && name) {
-        room.members[socket.id] = { name: name, ready: false };
+        // Store new player in Redis
+        let player = { id: socket.id, name: name, ready: false, role: "", team: "", roomId: roomId };
+        redis.putObject(socket.id, player);
+
+        // Add new player to room and write to Redis
+        room.players.push(socket.id);
         redis.putObject(roomId, room);
-        redis.putObject(socket.id, { roomId: roomId }); // Store player object so we can link back to room by socket id
-        io.in(roomId).emit('room-updated', { members: room.members, owner: room.owner, settings: room.settings });
+
+        // Send all room information back to clients
+        redis.getObjects(room.players, (players) => {
+          io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
+        });
       }
     }, () => { });
   },
@@ -28,16 +36,16 @@ module.exports = {
     redis.getObject(socket.id, (player) => {
       if (player) {
         redis.getObject(player.roomId, (room) => {
-          delete room.members[socket.id];
-          if (room.owner == socket.id && Object.keys(room.members).length >= 1) {
-            // If owner leaves ownership is moved to someone else in the room
-            room.owner = Object.keys(room.members)[0];
-          } else if (Object.keys(room.members) == 1) {
-            // If last person in lobby leaving the room regardless of ownership, delete the room
-            
+          room.players = room.players.filter(playerId => playerId !== socket.id);
+          if (room.owner === socket.id && room.players.length >= 1) {
+            // If owner leaves ownership is moved next person in room
+            room.owner = room.players[0];
           }
           redis.putObject(player.roomId, room);
-          io.in(player.roomId).emit('room-updated', { members: room.members, owner: room.owner, settings: room.settings });
+          // Send all room information back to clients
+          redis.getObjects(room.players, (players) => {
+            io.in(player.roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
+          });
         }, () => { })
       }
     }, () => { });

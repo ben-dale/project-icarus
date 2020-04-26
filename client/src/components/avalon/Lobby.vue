@@ -35,7 +35,7 @@
                   v-on:click="selectPercival()"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (percivalSelected ? 'btn-info' : 'btn-outline-info')]"
-                  :disabled="!isRoomOwner()"
+                  :disabled="!isRoomOwner"
                 >
                   <h5>Percival</h5>Knows Merlin's identity
                 </button>
@@ -45,9 +45,9 @@
                   v-on:click="selectMorgana()"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (morganaSelected ? 'btn-danger' : 'btn-outline-danger')]"
-                  :disabled="!isRoomOwner()"
+                  :disabled="!isRoomOwner"
                 >
-                  <h5>Morgana</h5>Shows as a second Merlin to Percival
+                  <h5>Morgana</h5>Appears as a second Merlin to Percival
                 </button>
               </div>
               <div class="col-md-4">
@@ -55,7 +55,7 @@
                   v-on:click="selectOberon()"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (oberonSelected ? 'btn-danger' : 'btn-outline-danger')]"
-                  :disabled="!isRoomOwner()"
+                  :disabled="!isRoomOwner"
                 >
                   <h5>Oberon</h5>Is only known to Merlin
                 </button>
@@ -68,10 +68,10 @@
     <div class="row mt-5 text-center">
       <div class="col-12">
         <p
-          v-if="playersStillNeeded() > 0"
+          v-if="playersStillNeeded > 0"
           class="lead"
-        >Waiting for {{playersStillNeeded()}} more {{playersStillNeeded() == 1 ? 'player' : 'players'}}...</p>
-        <p v-if="playersStillNeeded() == 0" class="lead">
+        >Waiting for {{playersStillNeeded}} more {{playersStillNeeded == 1 ? 'player' : 'players'}}...</p>
+        <p v-if="playersStillNeeded == 0" class="lead">
           Waiting for all players to click
           <span class="text-success">Ready</span>.
         </p>
@@ -80,17 +80,34 @@
     <div class="row">
       <div
         class="col-6 col-md-4 mb-3 text-truncate text-center"
-        v-for="member in members"
-        :key="member.id"
+        v-for="player in players"
+        :key="player.id"
       >
-        <div v-if="!member.empty" v-bind:class="[member.ready ? readyClasses : 'card']">
+        <div v-bind:class="[player.ready ? readyClasses : 'card']">
           <div class="card-body">
-            <div class="card-text lead">{{member.name}}</div>
+            <div class="card-text lead">{{player.name}}</div>
           </div>
         </div>
-        <div v-if="member.empty" class="card">
+      </div>
+      <div
+        class="col-6 col-md-4 mb-3 text-truncate text-center"
+        v-for="index in playersStillNeeded"
+        :key="index"
+      >
+        <div class="card">
           <div class="card-body">
-            <div class="card-text lead text-muted text-center">{{member.name}}</div>
+            <div class="card-text lead text-muted text-center">Required</div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col-6 col-md-4 mb-3 text-truncate text-center"
+        v-for="index in (maxPlayers - (players.length + playersStillNeeded))"
+        :key="index + 100"
+      >
+        <div class="card">
+          <div class="card-body">
+            <div class="card-text lead text-muted text-center">Optional</div>
           </div>
         </div>
       </div>
@@ -98,13 +115,13 @@
     <div class="row mt-5">
       <div class="col-md-4 offset-md-2 mb-3">
         <button
-          v-if="!playerReady()"
+          v-if="!isPlayerReady"
           v-on:click="readyUp()"
           type="button"
           class="btn btn-success btn-lg btn-block"
         >Ready up</button>
         <button
-          v-if="playerReady()"
+          v-if="isPlayerReady"
           v-on:click="notReady()"
           type="button"
           class="btn btn-warning btn-lg btn-block"
@@ -126,13 +143,12 @@ export default {
   data: function() {
     return {
       name: "",
-      ownerSocketId: "",
+      roomOwner: "",
       minPlayers: 5,
       maxPlayers: 10,
-      members: [],
+      players: [],
       currentMemberCount: 0,
       readyClasses: "card bg-success text-white",
-      currentPlayer: {},
       percivalSelected: false,
       morganaSelected: false,
       oberonSelected: false
@@ -140,33 +156,32 @@ export default {
   },
   created() {
     this.socket.on("room-updated", roomData => {
-      this.percivalSelected = roomData.settings.percivalSelected;
-      this.morganaSelected = roomData.settings.morganaSelected;
-      this.oberonSelected = roomData.settings.oberonSelected;
-      this.ownerSocketId = roomData.owner;
-      this.members = [];
-      for (const field in roomData.members) {
-        let player = {
-          id: field,
-          name: roomData.members[field].name,
-          ready: roomData.members[field].ready
-        };
-        if (this.socket.id == field) {
-          this.currentPlayer = player;
-        }
-        this.members.push(player);
-      }
-      this.currentMemberCount = this.members.length; // Record current number of members before adding the padding seats
-      let requiredPlayersToAdd = this.playersStillNeeded();
-      let optionalPlayersToAdd =
-        this.maxPlayers - (this.members.length + requiredPlayersToAdd);
-      for (let i = 0; i < requiredPlayersToAdd; i++) {
-        this.members.push({ id: i, name: "Required", empty: true });
-      }
-      for (let i = 0; i < optionalPlayersToAdd; i++) {
-        this.members.push({ id: i + 100, name: "Optional", empty: true });
+        this.players = roomData.players;
+        this.roomOwner = roomData.owner;
+        this.percivalSelected = roomData.settings.percivalSelected;
+        this.morganaSelected = roomData.settings.morganaSelected;
+        this.oberonSelected = roomData.settings.oberonSelected;
+    });
+    this.socket.on("player-updated", playerData => {
+      let playerToUpdate = this.players.find(o => o.id == playerData.id);
+      for (let k in playerToUpdate) {
+        playerToUpdate[k] = playerData[k];
       }
     });
+  },
+  computed: {
+    isPlayerReady: function() {
+      let player = this.players.find(o => o.id == this.socket.id);
+      return player && player.ready;
+    },
+    isRoomOwner: function() {
+      return this.socket.id == this.roomOwner;
+    },
+    playersStillNeeded: function() {
+      return this.players.length >= this.minPlayers
+        ? 0
+        : this.minPlayers - this.players.length;
+    }
   },
   methods: {
     selectPercival: function() {
@@ -197,26 +212,15 @@ export default {
         }
       });
     },
-    playersStillNeeded: function() {
-      return this.currentMemberCount >= this.minPlayers
-        ? 0
-        : this.minPlayers - this.currentMemberCount;
-    },
     readyUp: function() {
-      this.socket.emit("player-ready", { roomId: this.roomId });
+      this.socket.emit("player-ready");
     },
     notReady: function() {
-      this.socket.emit("player-not-ready", { roomId: this.roomId });
-    },
-    playerReady: function() {
-      return this.currentPlayer.ready;
+      this.socket.emit("player-not-ready");
     },
     leave: function() {
       this.socket.disconnect();
       this.$router.replace({ name: `Avalon` });
-    },
-    isRoomOwner: function() {
-      return this.ownerSocketId == this.socket.id;
     }
   }
 };
