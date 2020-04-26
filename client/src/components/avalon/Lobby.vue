@@ -9,7 +9,7 @@
         <p
           class="lead"
         >Further instruction and explanation will be provided as you play through the game.</p>
-        <p class="lead">The game will start when every one is ready.</p>
+        <p class="lead">{{roomOwnerName}} will start the game when every one is ready.</p>
       </div>
     </div>
     <div class="row">
@@ -57,7 +57,7 @@
                   v-bind:class="['btn', 'btn-block', (oberonSelected ? 'btn-danger' : 'btn-outline-danger')]"
                   :disabled="!isRoomOwner"
                 >
-                  <h5>Oberon</h5>Is only known to Merlin
+                  <h5>Oberon</h5>Known only to Merlin as Evil member
                 </button>
               </div>
             </div>
@@ -131,6 +131,15 @@
         <button v-on:click="leave()" type="button" class="btn btn-danger btn-lg btn-block">Leave</button>
       </div>
     </div>
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <button
+          v-on:click="startGame"
+          type="button"
+          class="btn btn-success btn-lg btn-block"
+        >Start game</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -156,11 +165,11 @@ export default {
   },
   created() {
     this.socket.on("room-updated", roomData => {
-        this.players = roomData.players;
-        this.roomOwner = roomData.owner;
-        this.percivalSelected = roomData.settings.percivalSelected;
-        this.morganaSelected = roomData.settings.morganaSelected;
-        this.oberonSelected = roomData.settings.oberonSelected;
+      this.players = roomData.players;
+      this.roomOwner = roomData.owner;
+      this.percivalSelected = roomData.settings.percivalSelected;
+      this.morganaSelected = roomData.settings.morganaSelected;
+      this.oberonSelected = roomData.settings.oberonSelected;
     });
     this.socket.on("player-updated", playerData => {
       let playerToUpdate = this.players.find(o => o.id == playerData.id);
@@ -176,6 +185,13 @@ export default {
     },
     isRoomOwner: function() {
       return this.socket.id == this.roomOwner;
+    },
+    roomOwnerName: function() {
+      let player = this.players.find(o => o.id == this.roomOwner);
+      if (player) {
+        return player.name;
+      }
+      return "";
     },
     playersStillNeeded: function() {
       return this.players.length >= this.minPlayers
@@ -211,6 +227,9 @@ export default {
           percivalSelected: this.percivalSelected
         }
       });
+    },
+    startGame: function() {
+      this.socket.emit("start-game", { roomId: this.roomId });
     },
     readyUp: function() {
       this.socket.emit("player-ready");
