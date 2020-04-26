@@ -1,20 +1,27 @@
+const avalon = require('./avalon.js');
+
 module.exports = {
-  ready: function (redis, socket, io, stage) {
+  ready: function (redis, socket, io, screen) {
     redis.getObject(socket.id, (player) => {
-      player.ready = true;
-      redis.putObject(socket.id, player);
-      delete player.team;
-      delete player.role;
-      io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
+      if (player) {
+        player.ready = true;
+        redis.putObject(socket.id, player);
+        delete player.team;
+        delete player.role;
+        io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
+        this.checkIfAllPlayersAreReady(redis, io, player.roomId, screen);
+      }
     }, () => { });
   },
-  notReady: function (redis, socket, io, stage) {
+  notReady: function (redis, socket, io) {
     redis.getObject(socket.id, (player) => {
-      player.ready = false;
-      redis.putObject(socket.id, player);
-      delete player.team;
-      delete player.role;
-      io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
+      if (player) {
+        player.ready = false;
+        redis.putObject(socket.id, player);
+        delete player.team;
+        delete player.role;
+        io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
+      }
     }, () => { });
   },
   join: function (redis, socket, io, roomId, name) {
@@ -30,13 +37,7 @@ module.exports = {
         redis.putObject(roomId, room);
 
         // Send all room information back to clients
-        redis.getObjects(room.players, (players) => {
-          for (let i = 0; i < players.length; i++) {
-            delete players[i].team;
-            delete players[i].role;
-          }
-          io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
-        });
+        this.sendRoomInformationToAll(redis, io, room, roomId);
       }
     }, () => { });
   },
@@ -52,14 +53,34 @@ module.exports = {
           redis.putObject(player.roomId, room);
 
           // Send all room information back to clients
-          redis.getObjects(room.players, (players) => {
-            for (let i = 0; i < players.length; i++) {
-              delete players[i].team;
-              delete players[i].role;
-            }
-            io.in(player.roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
-          });
+          this.sendRoomInformationToAll(redis, io, room, player.roomId);
         }, () => { })
+      }
+    }, () => { });
+  },
+  sendRoomInformationToAll: function (redis, io, room, roomId) {
+    redis.getObjects(room.players, (players) => {
+      for (let i = 0; i < players.length; i++) {
+        delete players[i].team;
+        delete players[i].role;
+      }
+      io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
+    });
+  },
+  checkIfAllPlayersAreReady: function (redis, io, roomId, screen) {
+    redis.getObject(roomId, (room) => {
+      if (room && room.players) {
+        redis.getObjects(room.players, (players) => {
+          let ready = true;
+          for (let i = 0; i < players.length; i++) {
+            if (!players[i].ready) {
+              ready = false;
+            }
+          }
+          if (ready && screen === "lobbyScreen") {
+            avalon.startGame(redis, io, roomId)
+          }
+        }, () => { });
       }
     }, () => { });
   }

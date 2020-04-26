@@ -12,7 +12,7 @@ module.exports = {
   },
   updateSettings: function (redis, socket, io, roomId, settings) {
     redis.getObject(roomId, (room) => {
-      if (socket.id == room.owner) {
+      if (room && socket.id == room.owner) {
         room.settings = { morganaSelected: settings.morganaSelected, percivalSelected: settings.percivalSelected, oberonSelected: settings.oberonSelected }
         redis.putObject(roomId, room);
         redis.getObjects(room.players, (players) => {

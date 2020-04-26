@@ -1,8 +1,7 @@
 module.exports = {
-
-  startGame: function (redis, socket, io, roomId) {
+  startGame: function (redis, io, roomId) {
     redis.getObject(roomId, (room) => {
-      if (socket.id === room.owner && room.players.length >= 5) {
+      if (room && room.players.length >= 5) {
         room.closed = true;
         redis.putObject(roomId, room);
 
@@ -85,7 +84,15 @@ module.exports = {
               assignedPlayers[i].ready = false;
               redis.putObject(assignedPlayers[i].id, assignedPlayers[i]);
               io.to(assignedPlayers[i].id).emit('reveal-started', assignedPlayers[i]);
+              
             }
+            redis.getObjects(room.players, (players) => {
+              for (let i = 0; i < players.length; i++) {
+                delete players[i].team;
+                delete players[i].role;
+              }
+              io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
+            });
           }
         });
       }

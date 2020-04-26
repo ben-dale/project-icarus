@@ -3,13 +3,13 @@
     <div class="row mb-5">
       <div class="col-md-12 text-center">
         <h1 class="display-4 pb-5">The Resistance: Avalon</h1>
-        <p
-          class="lead"
-        >The following screen will reveal which team you are in and which role you will play.</p>
+        
         <p
           class="lead"
         >Further instruction and explanation will be provided as you play through the game.</p>
-        <p class="lead">{{roomOwnerName}} is the lobby's admin, can change the settings and will start the game when everyone is ready.</p>
+        <p
+          class="lead"
+        >The next screen will reveal which team you are in and which role you will play.</p>
       </div>
     </div>
     <div class="row">
@@ -57,7 +57,7 @@
                   v-bind:class="['btn', 'btn-block', (oberonSelected ? 'btn-danger' : 'btn-outline-danger')]"
                   :disabled="!isRoomOwner"
                 >
-                  <h5>Oberon</h5>Known only to Merlin as Evil member
+                  <h5>Oberon</h5>Invisible to all but Merlin
                 </button>
               </div>
             </div>
@@ -132,16 +132,6 @@
         <button v-on:click="leave()" type="button" class="btn btn-danger btn-lg btn-block">Leave</button>
       </div>
     </div>
-    <div v-if="isRoomOwner" class="row">
-      <div class="col-md-8 offset-md-2">
-        <button
-          v-on:click="startGame"
-          type="button"
-          class="btn btn-success btn-lg btn-block"
-          :disabled="!allPlayersReady || players.length < minPlayers"
-        >Start game</button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -173,13 +163,6 @@ export default {
     isRoomOwner: function() {
       return this.socket.id == this.roomOwner;
     },
-    roomOwnerName: function() {
-      let player = this.players.find(o => o.id == this.roomOwner);
-      if (player) {
-        return player.name;
-      }
-      return "";
-    },
     playersStillNeeded: function() {
       return this.players.length >= this.minPlayers
         ? 0
@@ -203,9 +186,6 @@ export default {
     },
     toggleOberon: function() {
       this.$emit("toggleOberon");
-    },
-    startGame: function() {
-      this.$emit("startGame");
     },
     readyUp: function() {
       this.$emit("readyUp");

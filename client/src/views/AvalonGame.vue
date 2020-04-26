@@ -25,7 +25,6 @@
         @leave="leave()"
         @readyUp="readyUp()"
         @notReady="notReady()"
-        @startGame="startGame()"
       />
     </div>
     <div
@@ -160,12 +159,11 @@ export default {
       this.player = playerData;
       this.screen = "revealScreen";
     });
-     this.socket.on("game-started", playerData => {
+    this.socket.on("game-started", playerData => {
       this.player = playerData;
       this.screen = "gameScreen";
     });
     this.socket.on("player-updated", playerData => {
-
       console.log(playerData);
       let playerToUpdate = this.players.find(o => o.id == playerData.id);
       for (let k in playerToUpdate) {
@@ -215,11 +213,8 @@ export default {
       this.screen = "lobbyScreen";
       this.socket.emit("player-join", { name: this.name, roomId: this.roomId });
     },
-    startGame: function() {
-      this.socket.emit("start-game", { roomId: this.roomId });
-    },
     readyUp: function() {
-      this.socket.emit("player-ready");
+      this.socket.emit("player-ready", { screen: this.screen });
     },
     notReady: function() {
       this.socket.emit("player-not-ready");

@@ -2,7 +2,6 @@
 const room = require('./room.js');
 const redis = require('./redis.js');
 const player = require('./player.js');
-const avalon = require('./avalon.js');
 
 // Environment variables configured by Heroku
 const REDIS_URL = process.env.REDIS_URL;
@@ -40,11 +39,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('player-join', (data) => {
-    player.join(redis, socket, io, data.roomId, data.name);
+    if (data) {
+      player.join(redis, socket, io, data.roomId, data.name);
+    }
   });
 
-  socket.on('player-ready', () => {
-    player.ready(redis, socket, io);
+  socket.on('player-ready', (data) => {
+    player.ready(redis, socket, io, data.screen);
   });
 
   socket.on('player-not-ready', () => {
@@ -52,11 +53,9 @@ io.on('connection', (socket) => {
   })
 
   socket.on('update-settings', (data) => {
-    room.updateSettings(redis, socket, io, data.roomId, data.settings);
-  });
-
-  socket.on('start-game', (data) => {
-    avalon.startGame(redis, socket, io, data.roomId)
+    if (data) {
+      room.updateSettings(redis, socket, io, data.roomId, data.settings);
+    }
   });
 });
 
