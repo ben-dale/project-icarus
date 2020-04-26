@@ -10,13 +10,24 @@
       class="row"
       v-bind:class="{ 'visible': screen === 'lobbyScreen', 'hidden': screen !== 'lobbyScreen' }"
     >
-      <Lobby :socket="socket" :roomId="roomId" />
+      <Lobby
+        :socket="socket"
+        :roomId="roomId"
+        :players="players"
+        :morganaSelected="morganaSelected"
+        :percivalSelected="percivalSelected"
+        :oberonSelected="oberonSelected"
+        :roomOwner="roomOwner"
+        @togglePercival="selectPercival()"
+        @toggleMorgana="selectMorgana()"
+        @toggleOberon="selectOberon()"
+      />
     </div>
     <div
       class="row"
       v-bind:class="{ 'visible': screen === 'revealScreen', 'hidden': screen !== 'revealScreen' }"
     >
-      <Reveal />
+      <Reveal @playerReady="playerReady()" />
     </div>
     <div
       class="row"
@@ -120,19 +131,68 @@ export default {
       this.player = playerData;
       this.screen = "revealScreen";
     });
+    this.socket.on("player-updated", playerData => {
+      let playerToUpdate = this.players.find(o => o.id == playerData.id);
+      for (let k in playerToUpdate) {
+        playerToUpdate[k] = playerData[k];
+      }
+    });
+    this.socket.on("room-updated", roomData => {
+      this.players = roomData.players;
+      this.roomOwner = roomData.owner;
+      this.percivalSelected = roomData.settings.percivalSelected;
+      this.morganaSelected = roomData.settings.morganaSelected;
+      this.oberonSelected = roomData.settings.oberonSelected;
+    });
   },
   data: function() {
     return {
+      roomOwner: "",
+      morganaSelected: false,
+      percivalSelected: false,
+      oberonSelected: false,
+      players: [],
       name: "",
       screen: "nameInputScreen",
       player: {}
     };
   },
   methods: {
+    selectPercival: function() {
+      this.percivalSelected
+        ? (this.percivalSelected = false)
+        : (this.percivalSelected = true);
+      this.emitSettingsChange();
+    },
+    selectMorgana: function() {
+      this.morganaSelected
+        ? (this.morganaSelected = false)
+        : (this.morganaSelected = true);
+      this.emitSettingsChange();
+    },
+    selectOberon: function() {
+      this.oberonSelected
+        ? (this.oberonSelected = false)
+        : (this.oberonSelected = true);
+      this.emitSettingsChange();
+    },
+    emitSettingsChange: function() {
+      this.socket.emit("update-settings", {
+        roomId: this.roomId,
+        settings: {
+          oberonSelected: this.oberonSelected,
+          morganaSelected: this.morganaSelected,
+          percivalSelected: this.percivalSelected
+        }
+      });
+    },
     joinSession: function(name) {
       this.name = name;
       this.screen = "lobbyScreen";
       this.socket.emit("player-join", { name: this.name, roomId: this.roomId });
+    },
+    playerReady: function() {
+      this.socket.emit("player-ready");
     }
   }
 };

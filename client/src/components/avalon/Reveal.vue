@@ -92,13 +92,33 @@
     </div>
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <button class="btn btn-lg btn-success btn-block">Ready up</button>
+        <button
+          v-if="ready"
+          class="btn btn-lg btn-success btn-block"
+          disabled
+        >Waiting for other players...</button>
+        <button
+          v-if="!ready"
+          v-on:click="readyUp"
+          class="btn btn-lg btn-success btn-block"
+        >Start adventure</button>
       </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-    
-}
+  props: {
+    team: String,
+    role: String,
+    ready: Boolean,
+    socket: Object,
+    players: Array
+  },
+  methods: {
+    readyUp: function() {
+      console.log('click');
+    }
+  }
+};
 </script>

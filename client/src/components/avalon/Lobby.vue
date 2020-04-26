@@ -9,7 +9,7 @@
         <p
           class="lead"
         >Further instruction and explanation will be provided as you play through the game.</p>
-        <p class="lead">{{roomOwnerName}} will start the game when every one is ready.</p>
+        <p class="lead"><span class="text-info">{{roomOwnerName}}</span> is the lobby's admin, can change the settings and will start the game when everyone is ready.</p>
       </div>
     </div>
     <div class="row">
@@ -20,7 +20,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <button type="button" class="btn btn-info btn-block" disabled>
-                  <h5>Merlin</h5>Can see all players in Good
+                  <h5>Merlin</h5>Knows which team each player is a member of
                 </button>
               </div>
               <div class="col-md-6 mb-3">
@@ -32,7 +32,7 @@
             <div class="row">
               <div class="col-md-4 mb-3">
                 <button
-                  v-on:click="selectPercival()"
+                  v-on:click="togglePercival()"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (percivalSelected ? 'btn-info' : 'btn-outline-info')]"
                   :disabled="!isRoomOwner"
@@ -42,7 +42,7 @@
               </div>
               <div class="col-md-4 mb-3">
                 <button
-                  v-on:click="selectMorgana()"
+                  v-on:click="toggleMorgana()"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (morganaSelected ? 'btn-danger' : 'btn-outline-danger')]"
                   :disabled="!isRoomOwner"
@@ -52,7 +52,7 @@
               </div>
               <div class="col-md-4">
                 <button
-                  v-on:click="selectOberon()"
+                  v-on:click="toggleOberon()"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (oberonSelected ? 'btn-danger' : 'btn-outline-danger')]"
                   :disabled="!isRoomOwner"
@@ -131,12 +131,13 @@
         <button v-on:click="leave()" type="button" class="btn btn-danger btn-lg btn-block">Leave</button>
       </div>
     </div>
-    <div class="row">
+    <div v-if="isRoomOwner" class="row">
       <div class="col-md-8 offset-md-2">
         <button
           v-on:click="startGame"
           type="button"
           class="btn btn-success btn-lg btn-block"
+          :disabled="!allPlayersReady || players.length < minPlayers"
         >Start game</button>
       </div>
     </div>
@@ -147,36 +148,24 @@
 export default {
   props: {
     socket: Object,
+    players: {
+      type: Array,
+      default: () => []
+    },
+    percivalSelected: Boolean,
+    morganaSelected: Boolean,
+    oberonSelected: Boolean,
+    roomOwner: String,
     roomId: String
   },
   data: function() {
     return {
       name: "",
-      roomOwner: "",
       minPlayers: 5,
       maxPlayers: 10,
-      players: [],
       currentMemberCount: 0,
-      readyClasses: "card bg-success text-white",
-      percivalSelected: false,
-      morganaSelected: false,
-      oberonSelected: false
+      readyClasses: "card bg-success text-white"
     };
-  },
-  created() {
-    this.socket.on("room-updated", roomData => {
-      this.players = roomData.players;
-      this.roomOwner = roomData.owner;
-      this.percivalSelected = roomData.settings.percivalSelected;
-      this.morganaSelected = roomData.settings.morganaSelected;
-      this.oberonSelected = roomData.settings.oberonSelected;
-    });
-    this.socket.on("player-updated", playerData => {
-      let playerToUpdate = this.players.find(o => o.id == playerData.id);
-      for (let k in playerToUpdate) {
-        playerToUpdate[k] = playerData[k];
-      }
-    });
   },
   computed: {
     isPlayerReady: function() {
@@ -197,36 +186,25 @@ export default {
       return this.players.length >= this.minPlayers
         ? 0
         : this.minPlayers - this.players.length;
+    },
+    allPlayersReady: function() {
+      for (let i = 0; i < this.players.length; i++) {
+        if (!this.players[i].ready) {
+          return false;
+        }
+      }
+      return true;
     }
   },
   methods: {
-    selectPercival: function() {
-      this.percivalSelected
-        ? (this.percivalSelected = false)
-        : (this.percivalSelected = true);
-      this.emitSettingsChange();
+    togglePercival: function() {
+      this.$emit("togglePercival");
     },
-    selectMorgana: function() {
-      this.morganaSelected
-        ? (this.morganaSelected = false)
-        : (this.morganaSelected = true);
-      this.emitSettingsChange();
+    toggleMorgana: function() {
+      this.$emit("toggleMorgana");
     },
-    selectOberon: function() {
-      this.oberonSelected
-        ? (this.oberonSelected = false)
-        : (this.oberonSelected = true);
-      this.emitSettingsChange();
-    },
-    emitSettingsChange: function() {
-      this.socket.emit("update-settings", {
-        roomId: this.roomId,
-        settings: {
-          oberonSelected: this.oberonSelected,
-          morganaSelected: this.morganaSelected,
-          percivalSelected: this.percivalSelected
-        }
-      });
+    toggleOberon: function() {
+      this.$emit("toggleOberon");
     },
     startGame: function() {
       this.socket.emit("start-game", { roomId: this.roomId });

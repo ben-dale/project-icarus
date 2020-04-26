@@ -91,6 +91,7 @@ module.exports = {
             this.shuffle(assignedPlayers); // Shuffle again for the heck of it
 
             for (let i = 0; i < assignedPlayers.length; i++) {
+              assignedPlayers[i].ready = false;
               redis.putObject(assignedPlayers[i].id, assignedPlayers[i]);
               io.to(assignedPlayers[i].id).emit('game-started', assignedPlayers[i]);
             }

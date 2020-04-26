@@ -1,12 +1,12 @@
 module.exports = {
-  ready: function (redis, socket, io) {
+  ready: function (redis, socket, io, stage) {
     redis.getObject(socket.id, (player) => {
       player.ready = true;
       redis.putObject(socket.id, player);
       io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
     }, () => { });
   },
-  notReady: function (redis, socket, io) {
+  notReady: function (redis, socket, io, stage) {
     redis.getObject(socket.id, (player) => {
       player.ready = false;
       redis.putObject(socket.id, player);
