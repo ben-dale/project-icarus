@@ -1,21 +1,9 @@
 <template>
   <div class="col-12">
-    <div class="row mb-5">
-      <div class="col-md-12 text-center">
-        <h1 class="display-4 pb-5">The Resistance: Avalon</h1>
-        
-        <p
-          class="lead"
-        >Further instruction and explanation will be provided as you play through the game.</p>
-        <p
-          class="lead"
-        >The next screen will reveal which team you are in and which role you will play.</p>
-      </div>
-    </div>
     <div class="row">
-      <div class="col-md-12 mb-3">
+      <div class="col-md-12">
         <div class="card">
-          <h5 class="card-header">Game settings</h5>
+          <h5 class="card-header text-center">Game settings</h5>
           <div class="card-body">
             <div class="row">
               <div class="col-md-6 mb-3">
@@ -34,7 +22,7 @@
                 <button
                   v-on:click="togglePercival()"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (percivalSelected ? 'btn-info' : 'btn-outline-info')]"
+                  v-bind:class="['btn', 'btn-block', (percivalSelected ? 'btn-info' : 'btn-light'), (percivalSelected ? 'border-info' : 'border')]"
                   :disabled="!isRoomOwner"
                 >
                   <h5>Percival</h5>Knows Merlin's identity
@@ -44,7 +32,7 @@
                 <button
                   v-on:click="toggleMorgana()"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (morganaSelected ? 'btn-danger' : 'btn-outline-danger')]"
+                  v-bind:class="['btn', 'btn-block', (morganaSelected ? 'btn-danger' : 'btn-light'), (morganaSelected ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner"
                 >
                   <h5>Morgana</h5>Appears as a second Merlin to Percival
@@ -54,7 +42,7 @@
                 <button
                   v-on:click="toggleOberon()"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (oberonSelected ? 'btn-danger' : 'btn-outline-danger')]"
+                  v-bind:class="['btn', 'btn-block', (oberonSelected ? 'btn-danger' : 'btn-light'), (oberonSelected ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner"
                 >
                   <h5>Oberon</h5>Invisible to all but Merlin
@@ -65,56 +53,62 @@
         </div>
       </div>
     </div>
-    <div class="row mt-5 text-center">
-      <div class="col-12">
+    <div class="row pt-4 pb-3">
+      <div class="col-md-12 text-center">
+        <p
+          class="lead"
+        >Further instruction and explanation will be provided as you play through The Resistance: Avalon. <br/>The next screen will reveal which team you are in and which role you will play.</p>
         <p
           v-if="playersStillNeeded > 0"
           class="lead"
-        >Waiting for {{playersStillNeeded}} more {{playersStillNeeded == 1 ? 'player' : 'players'}}...</p>
+        >We are still waiting for {{playersStillNeeded}} more {{playersStillNeeded == 1 ? 'player' : 'players'}} to join the lobby.</p>
         <p v-if="playersStillNeeded == 0" class="lead">
           Waiting for all players to click
           <span class="text-success">Ready</span>.
         </p>
       </div>
     </div>
-    <div class="row">
-      <div
-        class="col-6 col-md-4 mb-3 text-truncate text-center"
-        v-for="player in players"
-        :key="player.id"
-      >
-        <div v-bind:class="[player.ready ? readyClasses : 'card']">
-          <div class="card-body">
-            <div class="card-text lead">{{player.name}}</div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="col-6 col-md-4 mb-3 text-truncate text-center"
-        v-for="index in playersStillNeeded"
-        :key="index"
-      >
+
+    <div class="row mb-5">
+      <div class="col-md-12">
         <div class="card">
           <div class="card-body">
-            <div class="card-text lead text-muted text-center">Required</div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="col-6 col-md-4 mb-3 text-truncate text-center"
-        v-for="index in (maxPlayers - (players.length + playersStillNeeded))"
-        :key="index + 100"
-      >
-        <div class="card">
-          <div class="card-body">
-            <div class="card-text lead text-muted text-center">Optional</div>
+            <div class="row text-center">
+              <div v-for="player in players" class="col-md-3" :key="player.id">
+                <div
+                  v-if="player.ready"
+                  class="bg-success text-white pt-2 pb-1 mb-3 border border-success rounded"
+                >
+                  <h5>{{player.name}}</h5>
+                </div>
+                <div
+                  v-if="!player.ready"
+                  class="text-dark pt-2 pb-1 mb-3 border bg-light rounded"
+                >
+                  <h5>{{player.name}}</h5>
+                </div>
+              </div>
+              <div v-for="index in playersStillNeeded" class="col-md-3" :key="index">
+                <div class="text-secondary pt-2 pb-1 mb-3 border rounded">
+                  <h5>Required</h5>
+                </div>
+              </div>
+              <div
+                v-for="index in (maxPlayers - (players.length + playersStillNeeded))"
+                class="col-md-3"
+                :key="index+100"
+              >
+                <div class="text-secondary pt-2 pb-1 mb-3 border rounded">
+                  <h5>Optional</h5>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="row mt-5">
-      <div class="col-md-4 offset-md-2 mb-3">
+    <div class="row mb-5">
+      <div class="col-md-6 offset-md-3">
         <button
           v-if="!isPlayerReady"
           v-on:click="readyUp()"
@@ -128,15 +122,15 @@
           class="btn btn-warning btn-lg btn-block"
         >Cancel</button>
       </div>
-      <div class="col-md-4">
-        <button v-on:click="leave()" type="button" class="btn btn-danger btn-lg btn-block">Leave</button>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
+// import Title from '@/components/avalon/Title.vue'
+
 export default {
+  // components: { Title },
   props: {
     socket: Object,
     players: {
@@ -192,9 +186,6 @@ export default {
     },
     notReady: function() {
       this.$emit("notReady");
-    },
-    leave: function() {
-      this.$emit("leave");
     }
   }
 };

@@ -253,7 +253,7 @@ export default {
       default: function() {
         let socket = null;
         if (process.env.NODE_ENV == "development") {
-          socket = io.connect("http://localhost:3000", {
+          socket = io.connect("http://192.168.1.199:3000", {
             upgrade: false,
             transports: ["websocket"]
           });
@@ -273,7 +273,7 @@ export default {
       oberonSelected: false,
       players: [],
       name: "",
-      screen: "gameScreen",
+      screen: "joinScreen",
       team: "",
       role: ""
     };

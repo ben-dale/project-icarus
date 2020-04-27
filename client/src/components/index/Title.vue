@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-12 py-5 text-center">
-    <h1 class="display-3">Project Icarus</h1>
+    <h1 class="display-5">Project Icarus</h1>
   </div>
 </template>
 
@@ -12,7 +12,5 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.col-md-12 {
-  background: pink;
-}
+
 </style>

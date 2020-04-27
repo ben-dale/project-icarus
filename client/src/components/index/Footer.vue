@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed-bottom col-md-12 text-center py-5 bg-dark text-light">
+  <div class="fixed-bottom text-center pt-3 pb-1 bg-dark text-light">
     <p>
       Please consider donating to Project Icarus <u><a class="text-light" href="/donate">here</a></u>.
     </p>
