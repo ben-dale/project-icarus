@@ -22,7 +22,6 @@
         @togglePercival="togglePercival()"
         @toggleMorgana="toggleMorgana()"
         @toggleOberon="toggleOberon()"
-        @leave="leave()"
         @readyUp="readyUp()"
         @notReady="notReady()"
       />
@@ -42,198 +41,7 @@
       class="row"
       v-bind:class="{ 'visible': screen === 'gameScreen', 'hidden': screen !== 'gameScreen' }"
     >
-      <div class="col-md-12">
-        <div class="row mb-3">
-          <div class="col-md-12">
-            <div class="card">
-              <h5 class="card-header">Quest log</h5>
-              <div class="card-body">
-                <table class="table text-center table-bordered table-sm">
-                  <thead>
-                    <tr>
-                      <th scope="col">Quest</th>
-                      <th scope="col">Organiser</th>
-
-                      <th scope="col" colspan="4" class="text-center">Members</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr class="bg-light">
-                      <th scope="row">2</th>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr class="bg-light">
-                      <th scope="row">3</th>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr class="bg-light">
-                      <th scope="row">4</th>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                    <tr class="bg-light">
-                      <th scope="row">5</th>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body text-center">
-                <div class="row py-5">
-                  <div class="col-12">
-                    <h4 class="card-title">You have been sent on a quest alonside ...</h4>
-                    <h4
-                      class="card-title"
-                    >What would you like to do? Your answer will be kept anonymous.</h4>
-                  </div>
-                </div>
-                <div class="row pb-5">
-                  <div class="col-4 offset-2">
-                    <button class="btn btn-info btn-lg btn-block">Succeed</button>
-                  </div>
-                  <div class="col-4">
-                    <button class="btn btn-danger btn-lg btn-block">Sabotage</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body text-center">
-                <div class="row py-5">
-                  <div class="col-12">
-                    <h4 class="card-title">... have been sent on a quest.</h4>
-                    <h4 class="card-title">The results of the quest will be revealed by ... shortly.</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body text-center">
-                <div class="row py-5">
-                  <div class="col-12">
-                    <h4 class="card-title">The team has successfully completed the quest!</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body text-center">
-                <div class="row py-5">
-                  <div class="col-12">
-                    <h4 class="card-title">Evil have sabbotaged the quest! The team has failed.</h4>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body text-center">
-                <div class="row py-5">
-                  <div class="col-12">
-                    <h4 class="card-title">... has proposed that ... head out on the quest.</h4>
-                    <h4 class="card-title">What do you think?</h4>
-                    <h4 class="card-title">Your vote will be seen by the other players.</h4>
-                  </div>
-                </div>
-                <div class="row pb-5">
-                  <div class="col-4 offset-2">
-                    <button class="btn btn-success btn-lg btn-block">Agree</button>
-                  </div>
-                  <div class="col-4">
-                    <button class="btn btn-danger btn-lg btn-block">Disagree</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card">
-              <div class="card-body">
-                <div class="row mb-3">
-                  <div class="col-2">
-                    <div class="py-5 bg-info border border-info rounded text-center text-white">
-                      <h5>Succeed</h5>
-                    </div>
-                  </div>
-                  <div class="col-2">
-                    <div class="py-5 bg-danger border border-danger rounded text-center text-white">
-                      <h5>Fail</h5>
-                    </div>
-                  </div>
-                  <div class="col-2">
-                    <div class="py-5 bg-light border rounded text-center">
-                      <h5>Result</h5>
-                    </div>
-                  </div>
-                  <div class="col-2">
-                    <div class="py-5 bg-light border rounded text-center">
-                      <h5>Result</h5>
-                    </div>
-                  </div>
-                </div>
-                <div class="row pb-3">
-                  <div class="col-2">
-                    <button class="btn btn-dark btn-block">Reveal</button>
-                  </div>
-                  <div class="col-2">
-                    <button class="btn btn-dark btn-block">Reveal</button>
-                  </div>
-                  <div class="col-2">
-                    <button class="btn btn-dark btn-block">Reveal</button>
-                  </div>
-                  <div class="col-2">
-                    <button class="btn btn-dark btn-block">Reveal</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Game />
     </div>
   </div>
 </template>
@@ -243,17 +51,18 @@ import io from "socket.io-client";
 import NameInput from "@/components/avalon/NameInput.vue";
 import Lobby from "@/components/avalon/Lobby.vue";
 import Reveal from "@/components/avalon/Reveal.vue";
+import Game from "@/components/avalon/Game.vue";
 
 export default {
   name: "App",
-  components: { NameInput, Lobby, Reveal },
+  components: { NameInput, Lobby, Reveal, Game },
   props: {
     socket: {
       type: Object,
       default: function() {
         let socket = null;
         if (process.env.NODE_ENV == "development") {
-          socket = io.connect("http://192.168.1.199:3000", {
+          socket = io.connect("http://localhost:3000", {
             upgrade: false,
             transports: ["websocket"]
           });
@@ -273,7 +82,7 @@ export default {
       oberonSelected: false,
       players: [],
       name: "",
-      screen: "joinScreen",
+      screen: "gameScreen",
       team: "",
       role: ""
     };
@@ -347,10 +156,6 @@ export default {
     },
     notReady: function() {
       this.socket.emit("player-not-ready");
-    },
-    leave: function() {
-      this.socket.disconnect();
-      this.$router.replace({ name: `Avalon` });
     }
   }
 };
