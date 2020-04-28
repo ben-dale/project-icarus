@@ -41,7 +41,7 @@
       class="row"
       v-bind:class="{ 'visible': screen === 'gameScreen', 'hidden': screen !== 'gameScreen' }"
     >
-      <Game />
+      <Game :game="game" :players="players" playerId="aaa" />
     </div>
   </div>
 </template>
@@ -80,11 +80,33 @@ export default {
       morganaSelected: false,
       percivalSelected: false,
       oberonSelected: false,
-      players: [],
+      players: [{ id: "aaa", name: "Ben" }, { id: "bbb", name: "Sidd" }],
       name: "",
       screen: "gameScreen",
       team: "",
-      role: ""
+      role: "",
+      game: {
+        questLog: {
+            logs: [
+                { id: 1, requiresDoubleFail: true, organiser: "aaa", members: ["aaa", "aaa"], result: "succeed" },
+                { id: 2, requiresDoubleFail: false, organiser: "aaa", members: ["aaa", "aaa", "aaa"], result: "succeed" },
+                { id: 3, requiresDoubleFail: false, organiser: "aaa", members: ["aaa", "aaa", "aaa"], result: "succeed" },
+                { id: 4, requiresDoubleFail: false, organiser: "aaa", members: ["aaa", "aaa", "aaa"], result: "fail" },
+                { id: 5, requiresDoubleFail: false, organiser: "", members: ["", "", "", ""], result: "" },
+            ]
+        },
+        activeQuest: {
+            id: 1,
+            disagreements: 0,
+            organiser: "aaa",
+            proposedMembers: ["aaa", "bbb"],
+            proposalAccepted: true,
+            requiresDoubleFail: false,
+            questResults: [{ id: 0, revealed: false, result: "success" }],
+            result: "pass/fail"
+        },
+        state: "questProposal"
+      }
     };
   },
   computed: {

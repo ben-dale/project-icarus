@@ -4,10 +4,10 @@
       <div class="card-body text-center">
         <div class="row py-5">
           <div class="col-12">
-            <h4 class="card-title">{{proposal.organiser}} has proposed the following team:</h4>
+            <h4 class="card-title">{{organiser}} has proposed the following team:</h4>
             <h3 class="card-title">
               <span
-                v-for="(member, index) in proposal.members"
+                v-for="(member, index) in members"
                 :key="index"
                 class="badge badge-pill badge-dark mx-2"
               >{{member}}</span>
@@ -31,15 +31,8 @@
 <script>
 export default {
   props: {
-    proposal: {
-      type: Object,
-      default: function() {
-        return {
-          organiser: "Sidd",
-          members: ["Ben", "Sam", "Sidd", "Jim"]
-        };
-      }
-    }
+    organiser: String,
+    members: Array
   }
 };
 </script>

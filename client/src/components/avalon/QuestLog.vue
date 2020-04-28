@@ -19,18 +19,19 @@
                     scope="row"
                     :class="{ 'bg-info text-white': log.result === 'succeed', 'bg-danger text-white': log.result === 'fail' }"
                   >{{log.id}}{{ log.requiresDoubleFail ? '*' : '' }}</th>
-                  <td>{{log.organiser}}</td>
-                  <td v-for="(member, index) in log.members" :key="index * log.id">{{member}}</td>
+                  <td>{{getPlayerNameById(log.organiser)}}</td>
+                  <td
+                    v-for="(member, index) in log.members"
+                    :key="index * log.id"
+                  >{{getPlayerNameById(member)}}</td>
                 </tr>
               </tbody>
             </table>
-            <p v-if="questContainsDoubleFails" class="text-center">(*) quest requires two sabotages by Evil to fail</p>
+            <p
+              v-if="questContainsDoubleFails"
+              class="text-center"
+            >(*) quest requires two sabotages by Evil to fail</p>
           </div>
-        </div>
-        <div class="row">
-          <div
-            class="col-md-12 text-center"
-          >Disagreements remaining: {{questLog.disagreementsRemaining}}</div>
         </div>
       </div>
     </div>
@@ -39,11 +40,11 @@
 <script>
 export default {
   props: {
+    players: Array,
     questLog: {
       type: Object,
       default: function() {
         return {
-          disagreementsRemaining: 5,
           logs: [
             {
               id: 1,
@@ -81,7 +82,15 @@ export default {
   },
   computed: {
     questContainsDoubleFails: function() {
-      return this.questLog.logs.filter(log => log.requiresDoubleFail).length > 0;
+      return (
+        this.questLog.logs.filter(log => log.requiresDoubleFail).length > 0
+      );
+    }
+  },
+  methods: {
+    getPlayerNameById: function(id) {
+      let player = this.players.find(o => o.id == id);
+      return player && player.name ? player.name : "";
     }
   }
 };
