@@ -82,7 +82,7 @@ export default {
       oberonSelected: false,
       players: [],
       name: "",
-      screen: "gameScreen",
+      screen: "joinScreen",
       team: "",
       role: ""
     };

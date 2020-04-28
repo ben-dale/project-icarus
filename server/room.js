@@ -24,5 +24,19 @@ module.exports = {
         });
       }
     }, () => { });
+  },
+  allPlayersAreReady: function (redis, roomId, onSuccess) {
+    redis.getObject(roomId, (room) => {
+      if (room && room.players) {
+        redis.getObjects(room.players, (players) => {
+          for (let i = 0; i < players.length; i++) {
+            if (!players[i].ready) {
+              return;
+            }
+          }
+          onSuccess();
+        }, () => { });
+      }
+    }, () => { });
   }
 }

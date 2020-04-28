@@ -1,26 +1,25 @@
 const avalon = require('./avalon.js');
 
 module.exports = {
-  ready: function (redis, socket, io, screen) {
-    redis.getObject(socket.id, (player) => {
+  markAsReady: function(redis, playerId, onSuccess) {
+    redis.getObject(playerId, (player) => {
       if (player) {
         player.ready = true;
-        redis.putObject(socket.id, player);
+        redis.putObject(playerId, player);
         delete player.team;
         delete player.role;
-        io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
-        this.checkIfAllPlayersAreReady(redis, io, player.roomId, screen);
+        onSuccess(player);
       }
     }, () => { });
   },
-  notReady: function (redis, socket, io) {
-    redis.getObject(socket.id, (player) => {
+  markAsNotReady: function (redis, playerId, onSuccess) {
+    redis.getObject(playerId, (player) => {
       if (player) {
         player.ready = false;
-        redis.putObject(socket.id, player);
+        redis.putObject(playerId, player);
         delete player.team;
         delete player.role;
-        io.in(Object.keys(socket.rooms)[1]).emit('player-updated', player);
+        onSuccess(player);
       }
     }, () => { });
   },
@@ -66,24 +65,5 @@ module.exports = {
       }
       io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
     });
-  },
-  checkIfAllPlayersAreReady: function (redis, io, roomId, screen) {
-    redis.getObject(roomId, (room) => {
-      if (room && room.players) {
-        redis.getObjects(room.players, (players) => {
-          let ready = true;
-          for (let i = 0; i < players.length; i++) {
-            if (!players[i].ready) {
-              ready = false;
-            }
-          }
-          if (ready && screen === "lobbyScreen") {
-            avalon.initGame(redis, io, roomId);
-          } else if (ready && screen === "revealScreen") {
-            avalon.startGame(redis, io, roomId);
-          }
-        }, () => { });
-      }
-    }, () => { });
   }
 }
