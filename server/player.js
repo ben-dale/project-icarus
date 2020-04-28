@@ -1,6 +1,8 @@
-const avalon = require('./avalon.js');
-
 module.exports = {
+  init: function(redis, playerId, roomId) {
+    let player = { id: playerId, ready: false, role: "", team: "", roomId: roomId };
+    redis.putObject(playerId, player);
+  },
   markAsReady: function(redis, playerId, onSuccess) {
     redis.getObject(playerId, (player) => {
       if (player) {

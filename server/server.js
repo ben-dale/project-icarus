@@ -33,9 +33,12 @@ io.on('connection', (socket) => {
     console.log(socket.id + ' disconnected');
   });
 
-  socket.on('avalon-start-new-game', (data) => {
+  socket.on('avalon-start-new-game', () => {
     let roomId = room.generateId();
-    room.init(redis, socket, roomId);
+    let playerId = socket.id;
+    socket.join(roomId);
+    player.init(redis, playerId, roomId);
+    room.init(redis, socket, roomId, playerId);
     socket.emit('avalon-room-created', { id: roomId })
   });
 
@@ -68,8 +71,12 @@ io.on('connection', (socket) => {
   })
 
   socket.on('update-settings', (data) => {
-    if (data) {
-      room.updateSettings(redis, socket, io, data.roomId, data.settings);
+    if (data && data.roomId && data.settings) {
+      let playerId = socket.id;
+      let roomId = data.roomId;
+      room.updateSettings(redis, playerId, roomId, data.settings, (updatedRoom) => {
+        io.in(roomId).emit('room-updated', updatedRoom);
+      });
     }
   });
 });
