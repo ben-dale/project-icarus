@@ -15,7 +15,7 @@
 <script>
 export default {
     props: {
-        line: Array
+        line: String
     }
 }
 </script>

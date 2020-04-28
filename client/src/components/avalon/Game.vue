@@ -3,6 +3,18 @@
     <div class="row mb-3">
       <QuestLog />
     </div>
+    <div class="row">
+      <QuestProposalVoteInput />
+    </div>
+    <div class="row">
+      <QuestProposalVoteResult />
+    </div>
+    <div class="row">
+      <Outcome winner="evil" outcome="Evil have taken the win!" buttonText="Play Again" />
+    </div>
+    <div class="row">
+      <Outcome winner="good" outcome="The Assassin was not able to identify Merlin. Good have taken the win!" buttonText="Play Again" />
+    </div>
     <div class="row mb-3">
       <QuestResultReveal />
     </div>
@@ -23,10 +35,10 @@
     </div>
 
     <div class="row">
-      <QuestOutcomeVoteInput/>
+      <QuestOutcomeVoteInput />
     </div>
-
-    <QuestProposalVoteInput />
+    
+    
   </div>
 </template>
 
@@ -36,6 +48,8 @@ import QuestResultReveal from "@/components/avalon/QuestResultReveal.vue";
 import QuestProposalVoteInput from "@/components/avalon/QuestProposalVoteInput.vue";
 import PlainOutput from "@/components/avalon/PlainOutput.vue";
 import QuestOutcomeVoteInput from "@/components/avalon/QuestOutcomeVoteInput.vue";
+import Outcome from "@/components/avalon/Outcome.vue";
+import QuestProposalVoteResult from "@/components/avalon/QuestProposalVoteResult.vue";
 
 export default {
   components: {
@@ -43,7 +57,9 @@ export default {
     QuestResultReveal,
     QuestProposalVoteInput,
     PlainOutput,
-    QuestOutcomeVoteInput
+    QuestOutcomeVoteInput,
+    Outcome,
+    QuestProposalVoteResult
   }
 };
 </script>

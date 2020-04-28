@@ -55,11 +55,11 @@ export default {
         return {
           requiresDoubleFail: true,
           results: [
-            { id: "2fa3f", revealed: false, result: "success" },
-            { id: "fff3f", revealed: true, result: "success" },
-            { id: "2fff3f", revealed: true, result: "fail" },
-            { id: "2wfff3f", revealed: false, result: "success" },
-            { id: "2fff3f", revealed: false, result: "success" }
+            { id: "2fddsaa3f", revealed: false, result: "success" },
+            { id: "ffdsaf3f", revealed: true, result: "success" },
+            { id: "2fdsadff3f", revealed: true, result: "fail" },
+            { id: "2wffdsadf3f", revealed: false, result: "success" },
+            { id: "fsssdf", revealed: false, result: "success" }
           ]
         };
       }
