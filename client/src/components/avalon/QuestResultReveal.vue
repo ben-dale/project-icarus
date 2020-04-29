@@ -2,14 +2,14 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-body text-center">
-        <div v-if="questResult.requiresDoubleFail" class="card-text">
+        <div v-if="requiresDoubleFail" class="card-text">
           <p class="lead">Evil require two Fail cards in order to sabotage this quest.</p>
         </div>
         <div class="row mb-3">
           <div
-            v-for="(result, index) in questResult.results"
+            v-for="(result, index) in results"
             :key="result.id"
-            :class="['col-md-2', index === 0 ? 'offset-md-' + resultOffset(): '']"
+            :class="['col-2', index === 0 ? 'offset-' + resultOffset(): '']"
           >
             <div
               v-if="result.revealed && result.result === 'success'"
@@ -30,9 +30,9 @@
         </div>
         <div class="row">
           <div
-            v-for="(result, index) in questResult.results"
+            v-for="(result, index) in results"
             :key="result.id"
-            :class="['col-md-2', index === 0 ? 'offset-md-' + resultOffset(): '']"
+            :class="['col-2', index === 0 ? 'offset-' + resultOffset(): '']"
           >
             <button
               class="btn btn-dark btn-block"
@@ -49,6 +49,8 @@
 <script>
 export default {
   props: {
+    requiresDoubleFail: Boolean,
+    results: Array,
     questResult: {
       type: Object,
       default: function() {
@@ -67,7 +69,7 @@ export default {
   },
   methods: {
     resultOffset: function() {
-      switch (this.questResult.results.length) {
+      switch (this.results.length) {
         case 2:
           return 4;
         case 3:

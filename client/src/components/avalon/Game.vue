@@ -18,14 +18,24 @@
     <div v-if="game.state == 'questProposalResult'" class="row">
       <QuestProposalVoteResult />
     </div>
-    <div v-if="game.state == 'questStarted'" class="row">
+    <div
+      v-if="game.state == 'questStarted' && !game.activeQuest.proposedMembers.includes(playerId)"
+      class="row"
+    >
       <PlainOutput line="The results of the quest will be revealed shortly." />
     </div>
-    <div v-if="game.state == 'questStarted'" class="row">
-      <QuestOutcomeVoteInput />
+    <div
+      v-if="game.state == 'questStarted' && game.activeQuest.proposedMembers.includes(playerId)"
+      class="row"
+    >
+      <QuestOutcomeVoteInput :members="proposedQuestMembers" :isEvil="playerTeam == 'evil'" />
     </div>
     <div v-if="game.state == 'questResultReveal'" class="row mb-3">
-      <QuestResultReveal />
+      <QuestResultReveal
+        :requiresDoubleFail="game.activeQuest.requiresDoubleFail"
+        :results="game.activeQuest.results"
+        @revealQuestResult="revealQuestResult"
+      />
     </div>
     <div v-if="game.state == 'questResult'" class="row mb-3">
       <Outcome winner="evil" outcome="Evil have sabotaged the quest" buttonText="Play Again" />
@@ -55,7 +65,6 @@ import QuestOutcomeVoteInput from "@/components/avalon/QuestOutcomeVoteInput.vue
 import Outcome from "@/components/avalon/Outcome.vue";
 import QuestProposalVoteResult from "@/components/avalon/QuestProposalVoteResult.vue";
 import QuestProposalInput from "@/components/avalon/QuestProposalInput.vue";
-
 import Players from "@/components/avalon/Players.vue";
 
 export default {
@@ -73,7 +82,11 @@ export default {
   props: {
     game: Object,
     players: Array,
-    playerId: String
+    playerId: String,
+    playerTeam: {
+      type: String,
+      default: "evil"
+    }
   },
   computed: {
     playerIsOrganiser: function() {
@@ -88,7 +101,9 @@ export default {
     proposedQuestMembers: function() {
       let members = [];
       for (let i = 0; i < this.game.activeQuest.proposedMembers.length; i++) {
-        members.push(this.getPlayerNameById(this.game.activeQuest.proposedMembers[i]))
+        members.push(
+          this.getPlayerNameById(this.game.activeQuest.proposedMembers[i])
+        );
       }
       return members;
     }
@@ -100,6 +115,9 @@ export default {
     getPlayerNameById: function(id) {
       let player = this.players.find(o => o.id == id);
       return player && player.name ? player.name : "";
+    },
+    revealQuestResult: function(id) {
+      this.$emit('revealQuestResult', id);
     }
   }
 };

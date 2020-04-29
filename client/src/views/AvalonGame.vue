@@ -41,7 +41,7 @@
       class="row"
       v-bind:class="{ 'visible': screen === 'gameScreen', 'hidden': screen !== 'gameScreen' }"
     >
-      <Game :game="game" :players="players" playerId="aaa" />
+      <Game :game="game" :players="players" playerId="aaa" :playerTeam="team" @revealQuestResult="revealQuestResult" />
     </div>
   </div>
 </template>
@@ -80,32 +80,72 @@ export default {
       morganaSelected: false,
       percivalSelected: false,
       oberonSelected: false,
-      players: [{ id: "aaa", name: "Ben" }, { id: "bbb", name: "Sidd" }],
+      players: [
+        { id: "aaa", name: "Ben" },
+        { id: "bbb", name: "Sidd" },
+        { id: "ccc", name: "Sam" },
+        { id: "ddd", name: "Adam <3" }
+      ],
       name: "",
       screen: "gameScreen",
-      team: "",
+      team: "evil",
       role: "",
       game: {
         questLog: {
-            logs: [
-                { id: 1, requiresDoubleFail: true, organiser: "aaa", members: ["aaa", "aaa"], result: "succeed" },
-                { id: 2, requiresDoubleFail: false, organiser: "aaa", members: ["aaa", "aaa", "aaa"], result: "succeed" },
-                { id: 3, requiresDoubleFail: false, organiser: "aaa", members: ["aaa", "aaa", "aaa"], result: "succeed" },
-                { id: 4, requiresDoubleFail: false, organiser: "aaa", members: ["aaa", "aaa", "aaa"], result: "fail" },
-                { id: 5, requiresDoubleFail: false, organiser: "", members: ["", "", "", ""], result: "" },
-            ]
+          logs: [
+            {
+              id: 1,
+              requiresDoubleFail: false,
+              required: 2,
+              organiser: "aaa",
+              members: ["aaa", "ddd"],
+              result: "succeed"
+            },
+            {
+              id: 2,
+              requiresDoubleFail: false,
+              required: 3,
+              organiser: "aaa",
+              members: ["aaa", "ccc", "aaa"],
+              result: "succeed"
+            },
+            {
+              id: 3,
+              requiresDoubleFail: true,
+              required: 4,
+              organiser: "aaa",
+              members: ["aaa", "bbb", "aaa", "ddd"],
+              result: "fail"
+            },
+            {
+              id: 4,
+              requiresDoubleFail: true,
+              required: 3,
+              organiser: "aaa",
+              members: ["aaa", "aaa", "ddd"],
+              result: "fail"
+            },
+            {
+              id: 5,
+              requiresDoubleFail: true,
+              required: 4,
+              organiser: "",
+              members: ["", "", "", ""],
+              result: ""
+            }
+          ]
         },
         activeQuest: {
-            id: 1,
-            disagreements: 0,
-            organiser: "aaa",
-            proposedMembers: ["aaa", "bbb"],
-            proposalAccepted: true,
-            requiresDoubleFail: false,
-            questResults: [{ id: 0, revealed: false, result: "success" }],
-            result: "pass/fail"
+          id: 5,
+          disagreements: 0,
+          organiser: "aaa",
+          proposedMembers: ["aaa", "bbb"],
+          proposalAccepted: true,
+          requiresDoubleFail: false,
+          results: [{ id: 0, revealed: false, result: "success" },{ id: 1, revealed: false, result: "fail" }],
+          result: "succeed"
         },
-        state: "questProposal"
+        state: "questResultReveal"
       }
     };
   },
@@ -178,6 +218,9 @@ export default {
     },
     notReady: function() {
       this.socket.emit("player-not-ready");
+    },
+    revealQuestResult: function(id) {
+      console.log(id);
     }
   }
 };

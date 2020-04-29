@@ -9,6 +9,7 @@
               <thead>
                 <tr>
                   <th scope="col">Quest</th>
+                  <th scope="col">Required</th>
                   <th scope="col">Organiser</th>
                   <th scope="col" colspan="5" class="text-center">Members</th>
                 </tr>
@@ -19,6 +20,7 @@
                     scope="row"
                     :class="{ 'bg-info text-white': log.result === 'succeed', 'bg-danger text-white': log.result === 'fail' }"
                   >{{log.id}}{{ log.requiresDoubleFail ? '*' : '' }}</th>
+                  <td>{{log.required}}</td>
                   <td>{{getPlayerNameById(log.organiser)}}</td>
                   <td
                     v-for="(member, index) in log.members"
@@ -29,8 +31,8 @@
             </table>
             <p
               v-if="questContainsDoubleFails"
-              class="text-center"
-            >(*) quest requires two sabotages by Evil to fail</p>
+              class="text-left"
+            ><b>*</b> Quest requires two sabotage votes to fail</p>
           </div>
         </div>
       </div>
