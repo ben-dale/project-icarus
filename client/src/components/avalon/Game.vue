@@ -38,10 +38,10 @@
       />
     </div>
     <div v-if="game.state == 'questResult'" class="row mb-3">
-      <Outcome winner="evil" outcome="Evil have sabotaged the quest" buttonText="Play Again" />
+      <Outcome winner="evil" outcome="Evil have sabotaged the quest" buttonText="Continue" />
     </div>
     <div v-if="game.state == 'questResult'" class="row mb-3">
-      <Outcome winner="good" outcome="The quest has been succeeded" buttonText="Play Again" />
+      <Outcome winner="good" outcome="The quest has been succeeded" buttonText="Continue" />
     </div>
     <div v-if="game.state == 'gameOver'" class="row">
       <Outcome winner="evil" outcome="Evil have taken the win!" buttonText="Play Again" />

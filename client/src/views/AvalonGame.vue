@@ -41,7 +41,13 @@
       class="row"
       v-bind:class="{ 'visible': screen === 'gameScreen', 'hidden': screen !== 'gameScreen' }"
     >
-      <Game :game="game" :players="players" playerId="aaa" :playerTeam="team" @revealQuestResult="revealQuestResult" />
+      <Game
+        :game="game"
+        :players="players"
+        :playerId="socket.id"
+        :playerTeam="team"
+        @revealQuestResult="revealQuestResult"
+      />
     </div>
   </div>
 </template>
@@ -87,66 +93,67 @@ export default {
         { id: "ddd", name: "Adam <3" }
       ],
       name: "",
-      screen: "gameScreen",
+      screen: "joinScreen",
       team: "evil",
       role: "",
-      game: {
-        questLog: {
-          logs: [
-            {
-              id: 1,
-              requiresDoubleFail: false,
-              required: 2,
-              organiser: "aaa",
-              members: ["aaa", "ddd"],
-              result: "succeed"
-            },
-            {
-              id: 2,
-              requiresDoubleFail: false,
-              required: 3,
-              organiser: "aaa",
-              members: ["aaa", "ccc", "aaa"],
-              result: "succeed"
-            },
-            {
-              id: 3,
-              requiresDoubleFail: true,
-              required: 4,
-              organiser: "aaa",
-              members: ["aaa", "bbb", "aaa", "ddd"],
-              result: "fail"
-            },
-            {
-              id: 4,
-              requiresDoubleFail: true,
-              required: 3,
-              organiser: "aaa",
-              members: ["aaa", "aaa", "ddd"],
-              result: "fail"
-            },
-            {
-              id: 5,
-              requiresDoubleFail: true,
-              required: 4,
-              organiser: "",
-              members: ["", "", "", ""],
-              result: ""
-            }
-          ]
-        },
-        activeQuest: {
-          id: 5,
-          disagreements: 0,
-          organiser: "aaa",
-          proposedMembers: ["aaa", "bbb"],
-          proposalAccepted: true,
-          requiresDoubleFail: false,
-          results: [{ id: 0, revealed: false, result: "success" },{ id: 1, revealed: false, result: "fail" }],
-          result: "succeed"
-        },
-        state: "questResultReveal"
-      }
+      game: {}
+      // game: {
+      //   questLog: {
+      //     logs: [
+      //       {
+      //         id: 1,
+      //         requiresDoubleFail: false,
+      //         required: 2,
+      //         organiser: "aaa",
+      //         members: ["aaa", "ddd"],
+      //         result: "succeed"
+      //       },
+      //       {
+      //         id: 2,
+      //         requiresDoubleFail: false,
+      //         required: 3,
+      //         organiser: "aaa",
+      //         members: ["aaa", "ccc", "aaa"],
+      //         result: "succeed"
+      //       },
+      //       {
+      //         id: 3,
+      //         requiresDoubleFail: true,
+      //         required: 4,
+      //         organiser: "aaa",
+      //         members: ["aaa", "bbb", "aaa", "ddd"],
+      //         result: "fail"
+      //       },
+      //       {
+      //         id: 4,
+      //         requiresDoubleFail: true,
+      //         required: 3,
+      //         organiser: "aaa",
+      //         members: ["aaa", "aaa", "ddd"],
+      //         result: "fail"
+      //       },
+      //       {
+      //         id: 5,
+      //         requiresDoubleFail: true,
+      //         required: 4,
+      //         organiser: "",
+      //         members: ["", "", "", ""],
+      //         result: ""
+      //       }
+      //     ]
+      //   },
+      //   activeQuest: {
+      //     id: 5,
+      //     disagreements: 0,
+      //     organiser: "aaa",
+      //     proposedMembers: ["aaa", "bbb"],
+      //     proposalAccepted: true,
+      //     requiresDoubleFail: false,
+      //     results: [{ id: 0, revealed: false, result: "success" },{ id: 1, revealed: false, result: "fail" }],
+      //     result: "succeed"
+      //   },
+      //   state: "questResultReveal"
+      // }
     };
   },
   computed: {
@@ -172,6 +179,8 @@ export default {
     });
     this.socket.on("room-updated", roomData => {
       console.log(roomData);
+      this.game = roomData.game;
+      console.log(this.game);
       this.players = roomData.players;
       this.roomOwner = roomData.owner;
       this.percivalSelected = roomData.settings.percivalSelected;

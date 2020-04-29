@@ -65,7 +65,7 @@ module.exports = {
         delete players[i].team;
         delete players[i].role;
       }
-      io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings });
+      io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings, game: room.game });
     });
   }
 }
