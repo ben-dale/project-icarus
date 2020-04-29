@@ -1,6 +1,6 @@
 module.exports = {
   init: function(redis, playerId, roomId) {
-    let player = { id: playerId, ready: false, role: "", team: "", roomId: roomId };
+    let player = { id: playerId, ready: false, role: "", team: "", roomId: roomId, vote: "" };
     redis.putObject(playerId, player);
   },
   markAsReady: function(redis, playerId, onSuccess) {
