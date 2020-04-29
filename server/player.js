@@ -1,9 +1,9 @@
 module.exports = {
-  init: function(redis, playerId, roomId) {
+  init: function (redis, playerId, roomId) {
     let player = { id: playerId, ready: false, role: "", team: "", roomId: roomId, vote: "" };
     redis.putObject(playerId, player);
   },
-  markAsReady: function(redis, playerId, onSuccess) {
+  markAsReady: function (redis, playerId, onSuccess) {
     redis.getObject(playerId, (player) => {
       if (player) {
         player.ready = true;
@@ -65,7 +65,7 @@ module.exports = {
         delete players[i].team;
         delete players[i].role;
       }
-      io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings, game: room.game });
+      io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings, game: room.game, screen: room.screen });
     });
   }
 }

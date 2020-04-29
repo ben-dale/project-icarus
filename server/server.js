@@ -54,13 +54,19 @@ io.on('connection', (socket) => {
     player.markAsReady(redis, socket.id, (updatedPlayer) => {
       io.in(roomId).emit('player-updated', updatedPlayer);
       room.allPlayersAreReady(redis, roomId, () => {
-        if (currentScreen === "lobbyScreen") {
+        if (currentScreen === "lobby") {
           avalon.initGame(redis, io, roomId);
-        } else if (currentScreen === "revealScreen") {
+        } else if (currentScreen === "roleReveal") {
           avalon.startGame(redis, io, roomId);
         }
       });
     });
+  });
+
+  socket.on('propose-team', (data) => {
+    const roomId = Object.keys(socket.rooms)[1];
+    console.log(data);
+    avalon.proposeQuestMembers(redis, io, socket.id, roomId, data.memberIds);
   });
 
   socket.on('player-not-ready', () => {

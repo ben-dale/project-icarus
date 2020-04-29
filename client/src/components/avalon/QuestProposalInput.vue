@@ -8,7 +8,7 @@
             :key="index"
             :class="['col-md-2 mb-2', index % 5 === 0 ? 'offset-md-1' : '']"
           >
-            <button class="btn btn-dark btn-lg btn-block" v-on:click="unselect(index)">{{member}}</button>
+            <button class="btn btn-dark btn-lg btn-block" v-on:click="unselect(index)">{{member.name}}</button>
           </div>
         </div>
         <div class="row py-5">
@@ -17,12 +17,12 @@
             :key="index"
             :class="['col-md-2 mb-2', index % 5 === 0 ? 'offset-md-1' : '']"
           >
-            <button class="btn btn-dark btn-lg btn-block" v-on:click="select(index)">{{member}}</button>
+            <button class="btn btn-dark btn-lg btn-block" v-on:click="select(index)">{{member.name}}</button>
           </div>
         </div>
         <div class="row py-5">
           <div class="col-4 offset-4">
-            <button class="btn btn-dark btn-lg btn-block">Submit</button>
+            <button v-on:click="submit" class="btn btn-dark btn-lg btn-block">Submit</button>
           </div>
         </div>
       </div>
@@ -47,16 +47,11 @@ export default {
   data: function() {
     return {
       selected: [],
-      notSelected: [
-        "ben",
-        "sam",
-        "Rodney",
-        "test",
-        "test",
-        "wwwwwwww",
-        "pppppppp"
-      ]
+      notSelected: []
     };
+  },
+  created() {
+    this.notSelected = this.players.slice();
   },
   methods: {
     select: function(i) {
@@ -64,6 +59,13 @@ export default {
     },
     unselect: function(i) {
       this.notSelected.push(this.selected.splice(i, 1)[0]);
+    },
+    submit: function() {
+      let ids = [];
+      for (let i = 0; i < this.selected.length; i++) {
+        ids.push(this.selected[i].id);
+      }
+      this.$emit('proposeTeam', ids);
     }
   }
 };

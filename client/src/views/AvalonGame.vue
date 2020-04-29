@@ -6,10 +6,7 @@
     >
       <NameInput buttonText="Join" @submit="joinSession" />
     </div>
-    <div
-      class="row"
-      v-bind:class="{ 'visible': screen === 'lobbyScreen', 'hidden': screen !== 'lobbyScreen' }"
-    >
+    <div class="row" v-bind:class="{ 'visible': screen === 'lobby', 'hidden': screen !== 'lobby' }">
       <Lobby
         :socket="socket"
         :roomId="roomId"
@@ -19,34 +16,32 @@
         :oberonSelected="oberonSelected"
         :roomOwner="roomOwner"
         :isPlayerReady="isPlayerReady"
-        @togglePercival="togglePercival()"
-        @toggleMorgana="toggleMorgana()"
-        @toggleOberon="toggleOberon()"
-        @readyUp="readyUp()"
-        @notReady="notReady()"
+        @togglePercival="togglePercival"
+        @toggleMorgana="toggleMorgana"
+        @toggleOberon="toggleOberon"
+        @readyUp="readyUp"
+        @notReady="notReady"
       />
     </div>
     <div
       class="row"
-      v-bind:class="{ 'visible': screen === 'revealScreen', 'hidden': screen !== 'revealScreen' }"
+      v-bind:class="{ 'visible': screen === 'roleReveal', 'hidden': screen !== 'roleReveal' }"
     >
       <Reveal
         :players="players"
         :isPlayerReady="isPlayerReady"
-        @readyUp="readyUp()"
-        @notReady="notReady()"
+        @readyUp="readyUp"
+        @notReady="notReady"
       />
     </div>
-    <div
-      class="row"
-      v-bind:class="{ 'visible': screen === 'gameScreen', 'hidden': screen !== 'gameScreen' }"
-    >
+    <div class="row" v-bind:class="{ 'visible': screen === 'game', 'hidden': screen !== 'game' }">
       <Game
         :game="game"
         :players="players"
         :playerId="socket.id"
         :playerTeam="team"
         @revealQuestResult="revealQuestResult"
+        @proposeTeam="proposeTeam"
       />
     </div>
   </div>
@@ -163,13 +158,6 @@ export default {
     }
   },
   created() {
-    this.socket.on("reveal-started", playerData => {
-      this.player = playerData;
-      this.screen = "revealScreen";
-    });
-    this.socket.on("game-started", () => {
-      this.screen = "gameScreen";
-    });
     this.socket.on("player-updated", playerData => {
       console.log(playerData);
       let playerToUpdate = this.players.find(o => o.id == playerData.id);
@@ -180,7 +168,7 @@ export default {
     this.socket.on("room-updated", roomData => {
       console.log(roomData);
       this.game = roomData.game;
-      console.log(this.game);
+      this.screen = roomData.screen;
       this.players = roomData.players;
       this.roomOwner = roomData.owner;
       this.percivalSelected = roomData.settings.percivalSelected;
@@ -217,9 +205,11 @@ export default {
         }
       });
     },
+    proposeTeam: function(memberIds) {
+      this.socket.emit("propose-team", { memberIds: memberIds });
+    },
     joinSession: function(name) {
       this.name = name;
-      this.screen = "lobbyScreen";
       this.socket.emit("player-join", { name: this.name, roomId: this.roomId });
     },
     readyUp: function() {

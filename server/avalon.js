@@ -3,6 +3,7 @@ module.exports = {
     redis.getObject(roomId, (room) => {
       if (room && room.players.length >= 5) {
         room.closed = true;
+        room.screen = "roleReveal";
         room.game = this.generateNewGameObject(room);
         redis.putObject(roomId, room);
 
@@ -91,7 +92,7 @@ module.exports = {
                 delete players[i].team;
                 delete players[i].role;
               }
-              io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings, game: room.game });
+              io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings, game: room.game, screen: room.screen });
             });
           }
         });
@@ -101,15 +102,29 @@ module.exports = {
   startGame: function (redis, io, roomId) {
     redis.getObject(roomId, (room) => {
       if (room) {
-        redis.getObjects(room.players, (players) => {
-          for (let i = 0; i < players.length; i++) {
-            delete players[i].team;
-            delete players[i].role;
-          }
-          io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings, game: room.game });
-          io.in(roomId).emit('game-started');
+        // Update room's screen
+        room.screen = "game"
+        redis.putObject(roomId, room);
+        this.unreadyPlayers(redis, room.players, () => {
+          // Get players, strip out sensitive fields and send room update
+          redis.getObjects(room.players, (players) => {
+            for (let i = 0; i < players.length; i++) {
+              delete players[i].team;
+              delete players[i].role;
+            }
+            io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings, game: room.game, screen: room.screen });
+          });
         });
       }
+    }, () => { });
+  },
+  unreadyPlayers: function (redis, playerIds, onSuccess) {
+    redis.getObjects(playerIds, (players) => {
+      for (let i = 0; i < players.length; i++) {
+        players[i].ready = false;
+        redis.putObject(players[i].id, players[i]);
+      }
+      onSuccess();
     }, () => { });
   },
   shuffle: function (a) {
@@ -166,5 +181,26 @@ module.exports = {
   },
   randomIntFromInterval: function (min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min);
+  },
+  proposeQuestMembers: function (redis, io, playerId, roomId, memberIds) {
+    console.log(memberIds);
+    redis.getObject(roomId, (room) => {
+      console.log(room);
+      if (room && room.game.activeQuest.organiser == playerId) {
+        room.game.activeQuest.proposedMembers = memberIds.splice(0, memberIds.length);
+        room.game.state = "questProposal";
+        redis.putObject(roomId, room);
+        this.sendRoomInformationToAll(redis, io, room, roomId);
+      }
+    });
+  },
+  sendRoomInformationToAll: function (redis, io, room, roomId) {
+    redis.getObjects(room.players, (players) => {
+      for (let i = 0; i < players.length; i++) {
+        delete players[i].team;
+        delete players[i].role;
+      }
+      io.in(roomId).emit('room-updated', { players: players, owner: room.owner, settings: room.settings, game: room.game, screen: room.screen });
+    });
   }
 }

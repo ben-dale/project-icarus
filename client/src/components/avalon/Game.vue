@@ -10,7 +10,7 @@
       <PlainOutput :line="playerIsOrganisingTeamText" />
     </div>
     <div v-if="game.state == 'questProposing' && playerIsOrganiser" class="row">
-      <QuestProposalInput />
+      <QuestProposalInput :players="players" @proposeTeam="proposeTeam" /> <!-- todo quest size limitations! -->
     </div>
     <div v-if="game.state == 'questProposal'" class="row">
       <QuestProposalVoteInput :organiser="currentOrganiser.name" :members="proposedQuestMembers" />
@@ -117,7 +117,10 @@ export default {
       return player && player.name ? player.name : "";
     },
     revealQuestResult: function(id) {
-      this.$emit('revealQuestResult', id);
+      this.$emit("revealQuestResult", id);
+    },
+    proposeTeam: function(memberIds) {
+      this.$emit('proposeTeam', memberIds);
     }
   }
 };
