@@ -1,3 +1,6 @@
+const RandomInteger = require('./RandomInteger');
+const AllPlayers = require('./AllPlayers');
+
 module.exports = {
   initGame: function (redis, io, roomId) {
     redis.getObject(roomId, (room) => {
@@ -7,39 +10,12 @@ module.exports = {
         room.game = this.generateNewGameObject(room);
         redis.putObject(roomId, room);
 
-        var teamConfigurations = {
-          5: {
-            goodCount: 3,
-            evilCount: 2
-          },
-          6: {
-            goodCount: 4,
-            evilCount: 2
-          },
-          7: {
-            goodCount: 4,
-            evilCount: 3
-          },
-          8: {
-            goodCount: 5,
-            evilCount: 3
-          },
-          9: {
-            goodCount: 6,
-            evilCount: 3
-          },
-          10: {
-            goodCount: 6,
-            evilCount: 4
-          }
-        }
-
         redis.getObjects(room.players, (players) => {
-          if (this.allPlayersReady) {
+          const allPlayers = AllPlayers(players);
+          if (allPlayers.areReady()) {
             this.shuffle(players);
-            let teamConfig = teamConfigurations[players.length];
-            let good = players.splice(0, teamConfig.goodCount);
-            let evil = players.splice(0, teamConfig.evilCount);
+            let good = players.splice(0, allPlayers.goodPlayerCount());
+            let evil = players.splice(0, allPlayers.evilPlayerCount());
 
             for (let i = 0; i < good.length; i++) {
               good[i].team = "Good";
@@ -153,19 +129,20 @@ module.exports = {
     }
 
     let logs = [];
-    for (let i = 0; i < room.players.length; i++) {
-      let membersRequired = questConfigurations[room.players.length][i]
+    let questConfig = questConfigurations[room.players.length];
+    for (let i = 0; i < 5; i++) {
+      let playersRequired = questConfig[i];
       let questMembers = [];
-      for (let j = 0; j < membersRequired; j++) {
+      for (let j = 0; j < playersRequired; j++) {
         questMembers.push("");
       }
-      logs.push({ id: i + 1, requiresDoubleFail: false, required: membersRequired, organiser: "", members: questMembers, result: "" });
+      logs.push({ id: i + 1, requiresDoubleFail: false, required: playersRequired, organiser: "", members: questMembers, result: "" });
     }
 
     let activeQuest = {
       id: 1,
       disagreements: 0,
-      organiser: room.players[this.randomIntFromInterval(0, room.players.length - 1)],
+      organiser: room.players[new RandomInteger().between(0, room.players.length - 1)].id,
       proposedMembers: [],
       proposalAccepted: false,
       requiresDoubleFail: false,
@@ -178,9 +155,6 @@ module.exports = {
       activeQuest: activeQuest,
       state: "questProposing"
     }
-  },
-  randomIntFromInterval: function (min, max) { // min and max included 
-    return Math.floor(Math.random() * (max - min + 1) + min);
   },
   proposeQuestMembers: function (redis, io, playerId, roomId, memberIds) {
     console.log(memberIds);
