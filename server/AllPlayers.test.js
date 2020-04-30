@@ -1,4 +1,5 @@
 const AllPlayers = require('./AllPlayers');
+const MockRedis = require('./mocks/MockRedis');
 
 test('returns false when all players are not ready', () => {
   let players = [{ id: '1', name: 'Ben', ready: false }]
@@ -10,56 +11,49 @@ test('returns true when all players are ready', () => {
   expect(new AllPlayers(players).areReady()).toBe(true);
 });
 
-test('returns 3 good players when there are 5 total players', () => {
+test('sets ready to false on all players', () => {
   let players = [
     { id: '1', name: 'Ben', ready: true },
     { id: '2', name: 'Ben', ready: true },
     { id: '3', name: 'Ben', ready: true },
     { id: '4', name: 'Ben', ready: true },
     { id: '5', name: 'Ben', ready: true }
-  ]
-  expect(new AllPlayers(players).goodPlayerCount()).toBe(3);
+  ];
+
+  let alteredPlayers = new AllPlayers(players).resetReadyStatuses();
+
+  expect(alteredPlayers.players).toStrictEqual([
+    { id: '1', name: 'Ben', ready: false },
+    { id: '2', name: 'Ben', ready: false },
+    { id: '3', name: 'Ben', ready: false },
+    { id: '4', name: 'Ben', ready: false },
+    { id: '5', name: 'Ben', ready: false }
+  ]);
 });
 
-test('returns 6 good players when there are 10 total players', () => {
-  let players = [
-    { id: '1', name: 'Ben', ready: true },
-    { id: '2', name: 'Ben', ready: true },
-    { id: '3', name: 'Ben', ready: true },
-    { id: '4', name: 'Ben', ready: true },
-    { id: '5', name: 'Ben', ready: true },
-    { id: '6', name: 'Ben', ready: true },
-    { id: '7', name: 'Ben', ready: true },
-    { id: '8', name: 'Ben', ready: true },
-    { id: '9', name: 'Ben', ready: true },
-    { id: '10', name: 'Ben', ready: true }
-  ]
-  expect(new AllPlayers(players).goodPlayerCount()).toBe(6);
-});
-
-test('returns 2 evil players when there are 5 total players', () => {
+test('stores players in redis', () => {
   let players = [
     { id: '1', name: 'Ben', ready: true },
     { id: '2', name: 'Ben', ready: true },
     { id: '3', name: 'Ben', ready: true },
     { id: '4', name: 'Ben', ready: true },
     { id: '5', name: 'Ben', ready: true }
-  ]
-  expect(new AllPlayers(players).evilPlayerCount()).toBe(2);
+  ];
+
+  let redis = new MockRedis();
+  new AllPlayers(players).storeIn(redis);
+
+  expect(redis.idsToPut).toStrictEqual(['1', '2', '3', '4', '5'])
 });
 
-test('returns 4 evil players when there are 10 total players', () => {
+test('shuffles order of players', () =>  {
   let players = [
     { id: '1', name: 'Ben', ready: true },
     { id: '2', name: 'Ben', ready: true },
     { id: '3', name: 'Ben', ready: true },
     { id: '4', name: 'Ben', ready: true },
-    { id: '5', name: 'Ben', ready: true },
-    { id: '6', name: 'Ben', ready: true },
-    { id: '7', name: 'Ben', ready: true },
-    { id: '8', name: 'Ben', ready: true },
-    { id: '9', name: 'Ben', ready: true },
-    { id: '10', name: 'Ben', ready: true }
-  ]
-  expect(new AllPlayers(players).evilPlayerCount()).toBe(4);
+    { id: '5', name: 'Ben', ready: true }
+  ];
+
+  expect(new AllPlayers(players).shuffle()).not.toStrictEqual(players)
 });
