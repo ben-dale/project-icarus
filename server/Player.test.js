@@ -45,32 +45,3 @@ test('emit to all', () => {
   expected.ready = false;
   expect(io.obj).toStrictEqual(expected);
 });
-
-test('emit to all with vote', () => {
-  const player = new Player().init('111', 'Ben');
-  const io = new MockIo();
-
-  player.emitToAllWithVote(io, '39fnr9')
-
-  const expected = new Player();
-  expected.id = '111';
-  expected.name = 'Ben';
-  expected.ready = false;
-  expected.vote = '';
-  expect(io.obj).toStrictEqual(expected);
-});
-
-test('emit to all with team and role', () => {
-  const player = new Player().init('111', 'Ben');
-  const io = new MockIo();
-
-  player.emitToAllWithTeamAndRole(io, '39fnr9')
-
-  const expected = new Player();
-  expected.id = '111';
-  expected.name = 'Ben';
-  expected.ready = false;
-  expected.team = '';
-  expected.role = '';
-  expect(io.obj).toStrictEqual(expected);
-});

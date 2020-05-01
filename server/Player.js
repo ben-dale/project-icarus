@@ -60,19 +60,6 @@ class Player {
     io.in(roomId).emit('player-updated', copy);
   }
 
-  emitToAllWithVote(io, roomId) {
-    const copy = this.copy();
-    delete copy.team;
-    delete copy.role;
-    io.in(roomId).emit('player-updated', copy);
-  }
-
-  emitToAllWithTeamAndRole(io, roomId) {
-    const copy = this.copy();
-    delete copy.vote;
-    io.in(roomId).emit('player-updated', copy);
-  }
-
 }
 
 module.exports = Player;

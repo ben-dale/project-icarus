@@ -33,6 +33,33 @@ class AllPlayers {
       }
     });
   }
+
+  emitToAll(io, roomId) {
+    const playersToEmit = this.players.map(p => {
+      delete p.team;
+      delete p.role;
+      delete p.vote;
+      return p;
+    });
+    io.in(roomId).emit('players-updated', playersToEmit);
+  }
+
+  emitToAllWithVote(io, roomId) {
+    const playersToEmit = this.players.map(p => {
+      delete p.team;
+      delete p.role;
+      return p;
+    });
+    io.in(roomId).emit('players-updated', playersToEmit);
+  }
+
+  emitToAllWithTeamAndRole(io, roomId) {
+    const playersToEmit = this.players.map(p => {
+      delete p.vote;
+      return p;
+    });
+    io.in(roomId).emit('players-updated', playersToEmit);
+  }
 }
 
 module.exports = AllPlayers;

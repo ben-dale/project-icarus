@@ -1,6 +1,7 @@
 const AllPlayers = require('./AllPlayers');
 const Player = require('./Player');
 const MockRedisClient = require('./mocks/MockRedisClient');
+const MockIo = require('./mocks/MockIo')
 
 test('returns false when all players are not ready', () => {
   let players = [new Player('111', 'Ben').withReady(false)];
@@ -24,4 +25,52 @@ test('gets players from redis', () => {
     expect(allPlayers.players.length).toBe(2);
   }, () => { });
 
+});
+
+test('emit to all', () => {
+  const player = new Player().init('111', 'Ben');
+  const io = new MockIo();
+  const allPlayers = new AllPlayers().init([player]);
+
+  allPlayers.emitToAll(io, '39fnr9')
+
+  const expected = new Player();
+  expected.id = '111';
+  expected.name = 'Ben';
+  expected.ready = false;
+  expect(io.message).toBe('players-updated');
+  expect(io.obj).toStrictEqual([expected]);
+});
+
+test('emit to all with vote', () => {
+  const player = new Player().init('111', 'Ben');
+  const io = new MockIo();
+  const allPlayers = new AllPlayers().init([player]);
+
+  allPlayers.emitToAllWithVote(io, '39fnr9')
+
+  const expected = new Player();
+  expected.id = '111';
+  expected.name = 'Ben';
+  expected.ready = false;
+  expected.vote = '';
+  expect(io.message).toBe('players-updated');
+  expect(io.obj).toStrictEqual([expected]);
+});
+
+test('emit to all with team and role', () => {
+  const player = new Player().init('111', 'Ben');
+  const io = new MockIo();
+  const allPlayers = new AllPlayers().init([player]);
+
+  allPlayers.emitToAllWithTeamAndRole(io, '39fnr9')
+
+  const expected = new Player();
+  expected.id = '111';
+  expected.name = 'Ben';
+  expected.ready = false;
+  expected.team = '';
+  expected.role = '';
+  expect(io.message).toBe('players-updated');
+  expect(io.obj).toStrictEqual([expected]);
 });
