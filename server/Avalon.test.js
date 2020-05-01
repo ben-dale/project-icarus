@@ -18,13 +18,13 @@ test('generates a new game object for five players', () => {
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe("ROLE_REVEAL");
   expect(avalon.state).toBe("QUEST_PROPOSING");
-  expect(playerIds.map(p => p.id)).toContain(avalon.activeQuest.organiser);
-  expect(avalon.activeQuest.id).toBe(1);
-  expect(avalon.activeQuest.disagreements).toBe(0);
-  expect(avalon.activeQuest.proposedMembers).toStrictEqual([]);
-  expect(avalon.activeQuest.proposalAccepted).toBe(false);
-  expect(avalon.activeQuest.requiresDoubleFail).toBe(false);
-  expect(avalon.activeQuest.result).toBe('');
+  expect(playerIds.map(p => p.id)).toContain(avalon.currentQuest.organiserId);
+  expect(avalon.currentQuest.id).toBe(1);
+  expect(avalon.currentQuest.disagreements).toBe(0);
+  expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
+  expect(avalon.currentQuest.proposalAccepted).toBe(false);
+  expect(avalon.currentQuest.votes).toStrictEqual([]);
+  expect(avalon.currentQuest.result).toBe('');
 });
 
 test('generates a new game object for six players', () => {
@@ -45,13 +45,13 @@ test('generates a new game object for six players', () => {
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe("ROLE_REVEAL");
   expect(avalon.state).toBe("QUEST_PROPOSING");
-  expect(playerIds.map(p => p.id)).toContain(avalon.activeQuest.organiser);
-  expect(avalon.activeQuest.id).toBe(1);
-  expect(avalon.activeQuest.disagreements).toBe(0);
-  expect(avalon.activeQuest.proposedMembers).toStrictEqual([]);
-  expect(avalon.activeQuest.proposalAccepted).toBe(false);
-  expect(avalon.activeQuest.requiresDoubleFail).toBe(false);
-  expect(avalon.activeQuest.result).toBe('');
+  expect(playerIds.map(p => p.id)).toContain(avalon.currentQuest.organiserId);
+  expect(avalon.currentQuest.id).toBe(1);
+  expect(avalon.currentQuest.disagreements).toBe(0);
+  expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
+  expect(avalon.currentQuest.proposalAccepted).toBe(false);
+  expect(avalon.currentQuest.votes).toStrictEqual([]);
+  expect(avalon.currentQuest.result).toBe('');
 });
 
 test('generates a new game object for ten players', () => {
@@ -72,13 +72,13 @@ test('generates a new game object for ten players', () => {
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe("ROLE_REVEAL");
   expect(avalon.state).toBe("QUEST_PROPOSING");
-  expect(playerIds.map(p => p.id)).toContain(avalon.activeQuest.organiser);
-  expect(avalon.activeQuest.id).toBe(1);
-  expect(avalon.activeQuest.disagreements).toBe(0);
-  expect(avalon.activeQuest.proposedMembers).toStrictEqual([]);
-  expect(avalon.activeQuest.proposalAccepted).toBe(false);
-  expect(avalon.activeQuest.requiresDoubleFail).toBe(false);
-  expect(avalon.activeQuest.result).toBe('');
+  expect(playerIds.map(p => p.id)).toContain(avalon.currentQuest.organiserId);
+  expect(avalon.currentQuest.id).toBe(1);
+  expect(avalon.currentQuest.disagreements).toBe(0);
+  expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
+  expect(avalon.currentQuest.proposalAccepted).toBe(false);
+  expect(avalon.currentQuest.votes).toStrictEqual([]);
+  expect(avalon.currentQuest.result).toBe('');
 });
 
 test('returns 3 good players when there are 5 total players', () => {

@@ -1,4 +1,5 @@
 const RandomInteger = require('./RandomInteger');
+const CurrentQuest = require('./CurrentQuest');
 
 class Avalon {
   constructor(playerIds) {
@@ -28,19 +29,10 @@ class Avalon {
     }
 
     // TODO move to class
-    let activeQuest = {
-      id: 1,
-      disagreements: 0,
-      organiser: this.playerIds[new RandomInteger().between(0, this.playerIds.length - 1)].id,
-      proposedMembers: [],
-      proposalAccepted: false,
-      requiresDoubleFail: false,
-      results: [],
-      result: ""
-    }
-
+    let organiserId = this.playerIds[new RandomInteger().between(0, this.playerIds.length - 1)].id;
+    let currentQuest = new CurrentQuest().init(organiserId);
     this.questLogs = questLogs;
-    this.activeQuest = activeQuest;
+    this.currentQuest = currentQuest;
     this.closed = true;
     this.screen = "ROLE_REVEAL";
     this.state = "QUEST_PROPOSING";
