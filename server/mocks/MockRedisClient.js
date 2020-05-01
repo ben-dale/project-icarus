@@ -23,6 +23,11 @@ class MockRedisClient {
     callback(this.error, this.result);
   }
 
+  mget(ids, callback) {
+    this.idsToGet = ids;
+    callback(this.error, this.result);
+  }
+
 }
 
 module.exports = MockRedisClient;

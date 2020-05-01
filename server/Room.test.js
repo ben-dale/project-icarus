@@ -3,7 +3,7 @@ const MockRedisClient = require('./mocks/MockRedisClient');
 
 test('store in redis', () => {
   let redisClient = new MockRedisClient();
-  let room = new Room().init('123');
+  let room = new Room().init('325t3', '123');
 
   room.storeInRedis(redisClient, '325t3');
 

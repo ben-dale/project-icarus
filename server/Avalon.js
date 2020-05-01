@@ -34,6 +34,7 @@ class Avalon {
 
     // TODO decide which player is which role here?
     // Probably needs to take in AllPlayers object to mutate and store
+    // shuffle player ids at the start of the game to change player order
 
     this.settings = new Settings().init();
     this.questLogs = questLogs;

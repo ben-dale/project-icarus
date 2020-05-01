@@ -2,7 +2,8 @@ const Avalon = require('./Avalon');
 
 class Room {
 
-  init(ownerId) {
+  init(id, ownerId) {
+    this.id = id;
     this.ownerId = ownerId;
     this.playerIds = [];
     this.game = new Avalon().init();
@@ -10,11 +11,11 @@ class Room {
   }
 
   fromRawObject(obj) {
-    const room = new Room();
-    room.ownerId = obj.ownerId;
-    room.playerIds = obj.playerIds.slice();
-    room.game = new Avalon().fromRawObject(obj.game);
-    return room;
+    this.id = obj.id;
+    this.ownerId = obj.ownerId;
+    this.playerIds = obj.playerIds.slice();
+    this.game = new Avalon().fromRawObject(obj.game);
+    return this;
   }
 
   storeInRedis(redisClient, id) {

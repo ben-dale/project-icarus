@@ -1,6 +1,10 @@
+const Player = require('./Player');
+
 class AllPlayers {
-  constructor(players) {
-    this.players = players;
+
+  init(players) {
+    this.players = players.map(p => p.copy());
+    return this;
   }
 
   areReady() {
@@ -8,27 +12,26 @@ class AllPlayers {
   }
 
   resetReadyStatuses() {
-    let alteredPlayers = this.players.map(p => {
-      let alteredPlayer = Object.assign({}, p);
-      alteredPlayer.ready = false;
-      return alteredPlayer;
-    });
+    let alteredPlayers = this.players.map(p => p.withReady(false));
     return new AllPlayers(alteredPlayers);
   }
 
-  storeIn(db) {
-    this.players.forEach(p => db.putObject(p.id, p));
+  storeInRedis(redisClient) {
+    this.players.forEach(p => p.storeInRedis(redisClient));
   }
 
-  shuffle() {
-    let clonedPlayers = this.players.map(p => p);
-    while (clonedPlayers.filter((p, i) => p.id == this.players[i].id).length > 0) {
-      for (let i = clonedPlayers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [clonedPlayers[i], clonedPlayers[j]] = [clonedPlayers[j], clonedPlayers[i]];
+  getFromRedis(redisClient, ids, onSuccess, onError) {
+    redisClient.mget(ids, (error, resultSet) => {
+      if (error) {
+        onError();
+      } else {
+        const players = [];
+        for (let i = 0; i < resultSet.length; i++) {
+          players.push(new Player().fromRawObject(JSON.parse(resultSet[i])))
+        }
+        onSuccess(new AllPlayers().init(players));
       }
-    }
-    return clonedPlayers;
+    });
   }
 }
 

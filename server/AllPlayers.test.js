@@ -1,59 +1,27 @@
 const AllPlayers = require('./AllPlayers');
-const MockRedis = require('./mocks/MockRedis');
+const Player = require('./Player');
+const MockRedisClient = require('./mocks/MockRedisClient');
 
 test('returns false when all players are not ready', () => {
-  let players = [{ id: '1', name: 'Ben', ready: false }]
-  expect(new AllPlayers(players).areReady()).toBe(false);
+  let players = [new Player('111', 'Ben').withReady(false)];
+
+  expect(new AllPlayers().init(players).areReady()).toBe(false);
 });
 
 test('returns true when all players are ready', () => {
-  let players = [{ id: '1', name: 'Ben', ready: true }]
-  expect(new AllPlayers(players).areReady()).toBe(true);
+  let players = [new Player('111', 'Ben').withReady(true)];
+
+  expect(new AllPlayers().init(players).areReady()).toBe(true);
 });
 
-test('sets ready to false on all players', () => {
-  let players = [
-    { id: '1', name: 'Ben', ready: true },
-    { id: '2', name: 'Ben', ready: true },
-    { id: '3', name: 'Ben', ready: true },
-    { id: '4', name: 'Ben', ready: true },
-    { id: '5', name: 'Ben', ready: true }
-  ];
+test('gets players from redis', () => {
+  let playerIds = ['111', '222'];
 
-  let alteredPlayers = new AllPlayers(players).resetReadyStatuses();
+  let redisClient = new MockRedisClient();
+  redisClient.resultToReturn(['{ "id": "111", "name": "Ben", "vote": "", "ready": false }', '{ "id": "222", "name": "Sam", "vote": "", "ready": false }']);
 
-  expect(alteredPlayers.players).toStrictEqual([
-    { id: '1', name: 'Ben', ready: false },
-    { id: '2', name: 'Ben', ready: false },
-    { id: '3', name: 'Ben', ready: false },
-    { id: '4', name: 'Ben', ready: false },
-    { id: '5', name: 'Ben', ready: false }
-  ]);
-});
+  new AllPlayers().getFromRedis(redisClient, playerIds, (allPlayers) => {
+    expect(allPlayers.players.length).toBe(2);
+  }, () => { });
 
-test('stores players in redis', () => {
-  let players = [
-    { id: '1', name: 'Ben', ready: true },
-    { id: '2', name: 'Ben', ready: true },
-    { id: '3', name: 'Ben', ready: true },
-    { id: '4', name: 'Ben', ready: true },
-    { id: '5', name: 'Ben', ready: true }
-  ];
-
-  let redis = new MockRedis();
-  new AllPlayers(players).storeIn(redis);
-
-  expect(redis.idsToPut).toStrictEqual(['1', '2', '3', '4', '5'])
-});
-
-test('shuffles order of players', () =>  {
-  let players = [
-    { id: '1', name: 'Ben', ready: true },
-    { id: '2', name: 'Ben', ready: true },
-    { id: '3', name: 'Ben', ready: true },
-    { id: '4', name: 'Ben', ready: true },
-    { id: '5', name: 'Ben', ready: true }
-  ];
-
-  expect(new AllPlayers(players).shuffle()).not.toStrictEqual(players)
 });
