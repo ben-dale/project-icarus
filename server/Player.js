@@ -5,6 +5,8 @@ class Player {
     this.name = name;
     this.vote = '';
     this.ready = false;
+    this.team = '';
+    this.role = '';
     return this;
   }
 
@@ -13,6 +15,8 @@ class Player {
     this.name = obj.name;
     this.vote = obj.vote;
     this.ready = obj.ready;
+    this.team = obj.team;
+    this.role = obj.role;
     return this;
   }
 
@@ -22,6 +26,8 @@ class Player {
     copy.name = this.name;
     copy.vote = this.vote;
     copy.ready = this.ready;
+    copy.team = this.team;
+    copy.role = this.role;
     return copy;
   }
 
@@ -44,6 +50,27 @@ class Player {
         onSuccess(new Player().fromRawObject(JSON.parse(result)));
       }
     });
+  }
+
+  emitToAll(io, roomId) {
+    const copy = this.copy();
+    delete copy.team;
+    delete copy.role;
+    delete copy.vote;
+    io.in(roomId).emit('player-updated', copy);
+  }
+
+  emitToAllWithVote(io, roomId) {
+    const copy = this.copy();
+    delete copy.team;
+    delete copy.role;
+    io.in(roomId).emit('player-updated', copy);
+  }
+
+  emitToAllWithTeamAndRole(io, roomId) {
+    const copy = this.copy();
+    delete copy.vote;
+    io.in(roomId).emit('player-updated', copy);
   }
 
 }

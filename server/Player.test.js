@@ -1,5 +1,6 @@
 const Player = require('./Player');
 const MockRedisClient = require('./mocks/MockRedisClient');
+const MockIo = require('./mocks/MockIo')
 
 test('init creates new player', () => {
   const player = new Player().init('2930e', 'Ben');
@@ -30,4 +31,46 @@ test('get from redis', () => {
   new Player().getFromRedis(redisClient, '2930e', (result) => {
     expect(result.id).toBe('2930e');
   }, () => { });
+});
+
+test('emit to all', () => {
+  const player = new Player().init('111', 'Ben');
+  const io = new MockIo();
+
+  player.emitToAll(io, '39fnr9')
+
+  const expected = new Player();
+  expected.id = '111';
+  expected.name = 'Ben';
+  expected.ready = false;
+  expect(io.obj).toStrictEqual(expected);
+});
+
+test('emit to all with vote', () => {
+  const player = new Player().init('111', 'Ben');
+  const io = new MockIo();
+
+  player.emitToAllWithVote(io, '39fnr9')
+
+  const expected = new Player();
+  expected.id = '111';
+  expected.name = 'Ben';
+  expected.ready = false;
+  expected.vote = '';
+  expect(io.obj).toStrictEqual(expected);
+});
+
+test('emit to all with team and role', () => {
+  const player = new Player().init('111', 'Ben');
+  const io = new MockIo();
+
+  player.emitToAllWithTeamAndRole(io, '39fnr9')
+
+  const expected = new Player();
+  expected.id = '111';
+  expected.name = 'Ben';
+  expected.ready = false;
+  expected.team = '';
+  expected.role = '';
+  expect(io.obj).toStrictEqual(expected);
 });
