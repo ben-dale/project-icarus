@@ -1,27 +1,25 @@
 class CurrentQuest {
 
   fromRawObject(obj) {
-    let currentQuest = new CurrentQuest();
-    currentQuest.id = obj.id;
-    currentQuest.disagreements = obj.disagreements;
-    currentQuest.organiserId = obj.organiserId;
-    currentQuest.proposedPlayerIds = obj.proposedPlayerIds.slice();
-    currentQuest.proposalAccepted = obj.proposalAccepted;
-    currentQuest.votes = obj.votes.slice();
-    currentQuest.result = obj.result;
-    return currentQuest;
+    this.id = obj.id;
+    this.disagreements = obj.disagreements;
+    this.organiserId = obj.organiserId;
+    this.proposedPlayerIds = obj.proposedPlayerIds.slice();
+    this.proposalAccepted = obj.proposalAccepted;
+    this.votes = obj.votes.slice();
+    this.result = obj.result;
+    return this;
   }
 
   init(organiserId) {
-    let currentQuest = new CurrentQuest();
-    currentQuest.id = 1;
-    currentQuest.disagreements = 0;
-    currentQuest.organiserId = organiserId;
-    currentQuest.proposedPlayerIds = [];
-    currentQuest.proposalAccepted = false;
-    currentQuest.votes = [];
-    currentQuest.result = '';
-    return currentQuest;
+    this.id = 1;
+    this.disagreements = 0;
+    this.organiserId = organiserId;
+    this.proposedPlayerIds = [];
+    this.proposalAccepted = false;
+    this.votes = [];
+    this.result = '';
+    return this;
   }
 
   copy() {
