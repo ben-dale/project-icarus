@@ -33,6 +33,9 @@ class Room {
     });
   }
 
+  emitToAll(io) {
+    io.in(this.id).emit('room-updated', this);
+  }
 
 }
 

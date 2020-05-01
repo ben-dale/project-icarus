@@ -36,6 +36,7 @@ class AllPlayers {
 
   emitToAll(io, roomId) {
     const playersToEmit = this.players.map(p => {
+      delete p.roomId;
       delete p.team;
       delete p.role;
       delete p.vote;
@@ -46,6 +47,7 @@ class AllPlayers {
 
   emitToAllWithVote(io, roomId) {
     const playersToEmit = this.players.map(p => {
+      delete p.roomId;
       delete p.team;
       delete p.role;
       return p;
@@ -55,6 +57,7 @@ class AllPlayers {
 
   emitToAllWithTeamAndRole(io, roomId) {
     const playersToEmit = this.players.map(p => {
+      delete p.roomId;
       delete p.vote;
       return p;
     });

@@ -1,8 +1,9 @@
 class Player {
 
-  init(id, name) {
+  init(id, name, roomId) {
     this.id = id;
     this.name = name;
+    this.roomId = roomId;
     this.vote = '';
     this.ready = false;
     this.team = '';
@@ -13,6 +14,7 @@ class Player {
   fromRawObject(obj) {
     this.id = obj.id;
     this.name = obj.name;
+    this.roomId = obj.roomId;
     this.vote = obj.vote;
     this.ready = obj.ready;
     this.team = obj.team;
@@ -24,6 +26,7 @@ class Player {
     const copy = new Player();
     copy.id = this.id;
     copy.name = this.name;
+    copy.roomId = this.roomId;
     copy.vote = this.vote;
     copy.ready = this.ready;
     copy.team = this.team;
@@ -52,12 +55,13 @@ class Player {
     });
   }
 
-  emitToAll(io, roomId) {
+  emitToAll(io) {
     const copy = this.copy();
     delete copy.team;
     delete copy.role;
     delete copy.vote;
-    io.in(roomId).emit('player-updated', copy);
+    delete copy.roomId;
+    io.in(this.roomId).emit('player-updated', copy);
   }
 
 }

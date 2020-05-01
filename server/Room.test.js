@@ -1,5 +1,6 @@
 const Room = require('./Room');
 const MockRedisClient = require('./mocks/MockRedisClient');
+const MockIo = require('./mocks/MockIo')
 
 test('store in redis', () => {
   let redisClient = new MockRedisClient();
@@ -24,4 +25,14 @@ test('get from redis', () => {
     expect(result.ownerId).toBe('123');
     expect(result.playerIds).toStrictEqual([]);
   }, () => { });
+});
+
+test('emit to all', () => {
+  let room = new Room().init('325t3', '123');
+  const io = new MockIo();
+
+  room.emitToAll(io, '39fnr9')
+
+  expect(io.message).toBe('room-updated');
+  expect(io.obj).toStrictEqual(room);
 });

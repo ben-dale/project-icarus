@@ -28,7 +28,7 @@ test('gets players from redis', () => {
 });
 
 test('emit to all', () => {
-  const player = new Player().init('111', 'Ben');
+  const player = new Player().init('111', 'Ben', '5t6y');
   const io = new MockIo();
   const allPlayers = new AllPlayers().init([player]);
 
@@ -43,7 +43,7 @@ test('emit to all', () => {
 });
 
 test('emit to all with vote', () => {
-  const player = new Player().init('111', 'Ben');
+  const player = new Player().init('111', 'Ben', '5t6y');
   const io = new MockIo();
   const allPlayers = new AllPlayers().init([player]);
 
@@ -59,7 +59,7 @@ test('emit to all with vote', () => {
 });
 
 test('emit to all with team and role', () => {
-  const player = new Player().init('111', 'Ben');
+  const player = new Player().init('111', 'Ben', '5t6y');
   const io = new MockIo();
   const allPlayers = new AllPlayers().init([player]);
 

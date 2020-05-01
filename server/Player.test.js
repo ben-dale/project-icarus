@@ -3,7 +3,7 @@ const MockRedisClient = require('./mocks/MockRedisClient');
 const MockIo = require('./mocks/MockIo')
 
 test('init creates new player', () => {
-  const player = new Player().init('2930e', 'Ben');
+  const player = new Player().init('2930e', 'Ben', '5t6y');
 
   expect(player.id).toBe('2930e');
   expect(player.name).toBe('Ben');
@@ -13,7 +13,7 @@ test('init creates new player', () => {
 
 test('store in redis', () => {
   let redisClient = new MockRedisClient();
-  const player = new Player().init('2930e', 'Ben');
+  const player = new Player().init('2930e', 'Ben', '5t6y');
 
   player.storeInRedis(redisClient);
 
@@ -34,7 +34,7 @@ test('get from redis', () => {
 });
 
 test('emit to all', () => {
-  const player = new Player().init('111', 'Ben');
+  const player = new Player().init('111', 'Ben', '5t6y');
   const io = new MockIo();
 
   player.emitToAll(io, '39fnr9')
