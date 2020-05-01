@@ -1,4 +1,7 @@
 const Avalon = require('./Avalon');
+const Settings = require('./Settings');
+const CurrentQuest = require('./CurrentQuest');
+const QuestLog = require('./QuestLog');
 
 test('starts a new game for five players', () => {
   let playerIds = ['1','2','3','4','5']
@@ -85,6 +88,41 @@ test('starts a new game for ten players', () => {
   expect(avalon.settings.morganaEnabled).toBe(false);
   expect(avalon.settings.percivalEnabled).toBe(false);
   expect(avalon.settings.oberonEnabled).toBe(false);
+});
+
+test('create instance from raw object', () => {
+  const rawObject = {
+    state: 'QUEST_PROPOSING',
+    screen: 'ROLE_REVEAL',
+    closed: true,
+    questLogs: [
+      { id: 1, requiredPlayers: 2, organiserId: '2nfp4', playerIds: [], result: '' }
+    ],
+    settings: {
+      morganaEnabled: true,
+      oberonEnabled: true,
+      percivalEnabled: true
+    },
+    currentQuest: {
+      id: 1,
+      disagreements: 0,
+      organiserId: '393f93',
+      proposedPlayerIds: [],
+      proposalAccepted: false,
+      result: '',
+      votes: []
+    }
+  }
+
+  let avalon = new Avalon().fromRawObject(rawObject);
+
+  expect(avalon.closed).toBe(true);
+  expect(avalon.screen).toBe('ROLE_REVEAL');
+  expect(avalon.state).toBe('QUEST_PROPOSING');
+  expect(avalon.questLogs.length).toBe(1);
+  expect(avalon.questLogs[0]).toStrictEqual(new QuestLog().init(1, 2).withOrganiserId('2nfp4').withResult(''));
+  expect(avalon.settings).toStrictEqual(new Settings().withMorganaEnabled(true).withOberonEnabled(true).withPercivalEnabled(true));
+  expect(avalon.currentQuest).toStrictEqual(new CurrentQuest().init('393f93'));
 });
 
 test('returns 3 good players when there are 5 total players', () => {

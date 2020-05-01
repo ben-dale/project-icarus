@@ -5,6 +5,16 @@ const Settings = require('./Settings');
 
 class Avalon {
 
+  fromRawObject(obj) {
+    this.questLogs = obj.questLogs.map(ql => new QuestLog().fromRawObject(ql));
+    this.settings = new Settings().fromRawObject(obj.settings);
+    this.currentQuest = new CurrentQuest().fromRawObject(obj.currentQuest);
+    this.screen = obj.screen;
+    this.state = obj.state;
+    this.closed = obj.closed;
+    return this;
+  }
+
   startGame(playerIds) {
     let questLogs = [];
     let questConfig = this.playersRequiredEachQuest(playerIds.length);
@@ -16,8 +26,8 @@ class Avalon {
     this.questLogs = questLogs;
     this.currentQuest = new CurrentQuest().init(this.randomPlayerId(playerIds));
     this.closed = true;
-    this.screen = "ROLE_REVEAL";
-    this.state = "QUEST_PROPOSING";
+    this.screen = 'ROLE_REVEAL';
+    this.state = 'QUEST_PROPOSING';
   }
 
   randomPlayerId(playerIds) {
@@ -35,7 +45,6 @@ class Avalon {
     }
   }
 
-  // todo private methods
   goodPlayerCount(playerIds) {
     switch (playerIds.length) {
       case 5: return 3;
@@ -47,7 +56,6 @@ class Avalon {
     }
   }
 
-  // todo private methods
   evilPlayerCount(playerIds) {
     switch (playerIds.length) {
       case 5: return 2;
