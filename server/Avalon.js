@@ -15,6 +15,16 @@ class Avalon {
     return this;
   }
 
+  init() {
+    this.closed = false;
+    this.screen = 'LOBBY';
+    this.state = '';
+    this.currentQuest = new CurrentQuest().init('');
+    this.settings = new Settings().init();
+    this.questLogs = [];
+    return this;
+  }
+
   startGame(playerIds) {
     let questLogs = [];
     let questConfig = this.playersRequiredEachQuest(playerIds.length);
@@ -22,12 +32,16 @@ class Avalon {
       questLogs.push(new QuestLog().init(i + 1, questConfig[i]));
     }
 
+    // TODO decide which player is which role here?
+    // Probably needs to take in AllPlayers object to mutate and store
+
     this.settings = new Settings().init();
     this.questLogs = questLogs;
     this.currentQuest = new CurrentQuest().init(this.randomPlayerId(playerIds));
     this.closed = true;
     this.screen = 'ROLE_REVEAL';
     this.state = 'QUEST_PROPOSING';
+    return this;
   }
 
   randomPlayerId(playerIds) {

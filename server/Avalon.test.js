@@ -64,8 +64,7 @@ test('starts a new game for six players', () => {
 test('starts a new game for ten players', () => {
   let playerIds = ['1','2','3','4','5','6','7','8','9','10']
   
-  let avalon = new Avalon();
-  avalon.startGame(playerIds);
+  let avalon = new Avalon().startGame(playerIds);
 
   expect(avalon.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
@@ -124,6 +123,13 @@ test('create instance from raw object', () => {
   expect(avalon.settings).toStrictEqual(new Settings().withMorganaEnabled(true).withOberonEnabled(true).withPercivalEnabled(true));
   expect(avalon.currentQuest).toStrictEqual(new CurrentQuest().init('393f93'));
 });
+
+test('init instance', () => {
+  const avalon = new Avalon().init();
+  
+  expect(avalon.closed).toBe(false);
+  expect(avalon.screen).toBe('LOBBY');
+})
 
 test('returns 3 good players when there are 5 total players', () => {
   let playerIds = ['1','2','3','4','5'];
