@@ -11,6 +11,7 @@ const http = require('http').createServer(app);
 // Setup redis socket adapter for socket.io (so we can run on multiple instances)
 const redisSocketAdapter = require('socket.io-redis');
 const io = require('socket.io')(http);
+var REDIS_URL = process.env.REDIS_URL;
 io.adapter(REDIS_URL ? redisSocketAdapter(REDIS_URL) : redisSocketAdapter({ host: REDIS_URL, port: 6379 }));
 
 // Setup history and hosting of vue app
