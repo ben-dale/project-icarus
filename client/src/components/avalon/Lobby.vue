@@ -20,9 +20,9 @@
             <div class="row">
               <div class="col-md-4 mb-3">
                 <button
-                  v-on:click="togglePercival()"
+                  v-on:click="percivalEnabled(!room.game.settings.percivalEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (percivalSelected ? 'btn-info' : 'btn-light'), (percivalSelected ? 'border-info' : 'border')]"
+                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-light'), (room && room.game.settings.percivalEnabled ? 'border-info' : 'border')]"
                   :disabled="!isRoomOwner"
                 >
                   <h5>Percival</h5>Knows Merlin's identity
@@ -30,9 +30,9 @@
               </div>
               <div class="col-md-4 mb-3">
                 <button
-                  v-on:click="toggleMorgana()"
+                  v-on:click="morganaEnabled(!room.game.settings.morganaEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (morganaSelected ? 'btn-danger' : 'btn-light'), (morganaSelected ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-light'), (room && room.game.settings.morganaEnabled ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner"
                 >
                   <h5>Morgana</h5>Appears as a second Merlin to Percival
@@ -40,9 +40,9 @@
               </div>
               <div class="col-md-4">
                 <button
-                  v-on:click="toggleOberon()"
+                  v-on:click="oberonEnabled(!room.game.settings.oberonEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (oberonSelected ? 'btn-danger' : 'btn-light'), (oberonSelected ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-light'), (room && room.game.settings.oberonEnabled ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner"
                 >
                   <h5>Oberon</h5>Invisible to all but Merlin
@@ -55,16 +55,17 @@
     </div>
     <div class="row pt-4 pb-3">
       <div class="col-md-12 text-center">
-        <p
-          class="lead"
-        >Further instruction and explanation will be provided as you play through The Resistance: Avalon. <br/>The next screen will reveal which team you are in and which role you will play.</p>
+        <p class="lead">
+          Further instruction and explanation will be provided as you play through The Resistance: Avalon.
+        </p>
+        <p class="lead">The next screen will reveal which team you are in and which role you will play.</p>
         <p
           v-if="playersStillNeeded > 0"
           class="lead"
         >We are still waiting for {{playersStillNeeded}} more {{playersStillNeeded == 1 ? 'player' : 'players'}} to join the lobby.</p>
         <p v-if="playersStillNeeded == 0" class="lead">
           Waiting for all players to click
-          <span class="text-success">Ready</span>.
+          <span class="badge badge-success">Ready</span>
         </p>
       </div>
     </div>
@@ -81,10 +82,7 @@
                 >
                   <h5>{{player.name}}</h5>
                 </div>
-                <div
-                  v-if="!player.ready"
-                  class="text-dark pt-2 pb-1 mb-3 border bg-light rounded"
-                >
+                <div v-if="!player.ready" class="text-dark pt-2 pb-1 mb-3 border bg-light rounded">
                   <h5>{{player.name}}</h5>
                 </div>
               </div>
@@ -127,21 +125,14 @@
 </template>
 
 <script>
-// import Title from '@/components/avalon/Title.vue'
-
 export default {
-  // components: { Title },
   props: {
     socket: Object,
+    room: Object,
     players: {
       type: Array,
       default: () => []
     },
-    percivalSelected: Boolean,
-    morganaSelected: Boolean,
-    oberonSelected: Boolean,
-    roomOwner: String,
-    roomId: String,
     isPlayerReady: Boolean
   },
   data: function() {
@@ -155,31 +146,24 @@ export default {
   },
   computed: {
     isRoomOwner: function() {
-      return this.socket.id == this.roomOwner;
+      console.log(this.room);
+      return this.room && this.socket.id == this.room.ownerId;
     },
     playersStillNeeded: function() {
       return this.players.length >= this.minPlayers
         ? 0
         : this.minPlayers - this.players.length;
-    },
-    allPlayersReady: function() {
-      for (let i = 0; i < this.players.length; i++) {
-        if (!this.players[i].ready) {
-          return false;
-        }
-      }
-      return true;
     }
   },
   methods: {
-    togglePercival: function() {
-      this.$emit("togglePercival");
+    percivalEnabled: function(enabled) {
+      this.$emit("percivalEnabled", enabled);
     },
-    toggleMorgana: function() {
-      this.$emit("toggleMorgana");
+    morganaEnabled: function(enabled) {
+      this.$emit("morganaEnabled", enabled);
     },
-    toggleOberon: function() {
-      this.$emit("toggleOberon");
+    oberonEnabled: function(enabled) {
+      this.$emit("oberonEnabled", enabled);
     },
     readyUp: function() {
       this.$emit("readyUp");

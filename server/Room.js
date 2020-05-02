@@ -2,9 +2,9 @@ const Avalon = require('./Avalon');
 
 class Room {
 
-  init(id, ownerId) {
+  init(id) {
     this.id = id;
-    this.ownerId = ownerId;
+    this.ownerId = '';
     this.playerIds = [];
     this.game = new Avalon().init();
     return this;
@@ -18,9 +18,27 @@ class Room {
     return this;
   }
 
-  storeInRedis(redisClient, id) {
-    redisClient.set(id, JSON.stringify(this));
-    redisClient.expire(id, 86400);
+  copy() {
+    const copy = new Room();
+    copy.id = this.id;
+    copy.ownerId = this.ownerId;
+    copy.playerIds = this.playerIds.slice();
+    copy.game = this.game.copy();
+    return copy;
+  }
+
+  addPlayerId(playerId) {
+    const copy = this.copy();
+    copy.playerIds.push(playerId);
+    if (copy.ownerId == '') {
+      copy.ownerId = playerId;
+    }
+    return copy;
+  }
+
+  storeInRedis(redisClient) {
+    redisClient.set(this.id, JSON.stringify(this));
+    redisClient.expire(this.id, 86400);
   }
 
   getFromRedis(redisClient, id, onSuccess, onError) {

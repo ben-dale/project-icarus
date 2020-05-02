@@ -15,6 +15,17 @@ class Avalon {
     return this;
   }
 
+  copy() {
+    const avalon = new Avalon();
+    avalon.closed = this.closed;
+    avalon.state = this.state;
+    avalon.screen = this.screen;
+    avalon.currentQuest = this.currentQuest.copy();
+    avalon.settings = this.settings.copy();
+    avalon.questLogs = this.questLogs.map(ql => ql.copy());
+    return avalon;
+  }
+
   init() {
     this.closed = false;
     this.screen = 'LOBBY';

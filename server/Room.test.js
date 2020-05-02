@@ -4,7 +4,7 @@ const MockIo = require('./mocks/MockIo')
 
 test('store in redis', () => {
   let redisClient = new MockRedisClient();
-  let room = new Room().init('325t3', '123');
+  let room = new Room().init('325t3');
 
   room.storeInRedis(redisClient, '325t3');
 
@@ -27,8 +27,23 @@ test('get from redis', () => {
   }, () => { });
 });
 
+test('add player id and sets owner id', () => {
+  const room = new Room().init('111').addPlayerId('123');
+
+  expect(room.playerIds).toStrictEqual(['123']);
+  expect(room.ownerId).toBe('123');
+});
+
+test('add second player', () => {
+  const room = new Room().init('111').addPlayerId('123').addPlayerId('293');
+
+  expect(room.playerIds).toStrictEqual(['123', '293']);
+  expect(room.ownerId).toBe('123');
+});
+
+
 test('emit to all', () => {
-  let room = new Room().init('325t3', '123');
+  let room = new Room().init('325t3');
   const io = new MockIo();
 
   room.emitToAll(io, '39fnr9')

@@ -1,28 +1,25 @@
 <template>
   <div id="app" class="container">
-    <div
-      class="row"
-      v-bind:class="{ 'visible': screen == 'joinScreen', 'hidden': screen != 'joinScreen' }"
-    >
+    <div class="row" v-bind:class="{ 'visible': !room, 'hidden': room }">
       <NameInput buttonText="Join" @submit="joinSession" />
     </div>
-    <div class="row" v-bind:class="{ 'visible': screen === 'lobby', 'hidden': screen !== 'lobby' }">
+    <div
+      class="row"
+      v-bind:class="{ 'visible': room && room.game.screen === 'LOBBY', 'hidden': !room || room.game.screen !== 'LOBBY' }"
+    >
       <Lobby
         :socket="socket"
-        :roomId="roomId"
+        :room="room"
         :players="players"
-        :morganaSelected="morganaSelected"
-        :percivalSelected="percivalSelected"
-        :oberonSelected="oberonSelected"
-        :roomOwner="roomOwner"
         :isPlayerReady="isPlayerReady"
-        @togglePercival="togglePercival"
-        @toggleMorgana="toggleMorgana"
-        @toggleOberon="toggleOberon"
+        @percivalEnabled="percivalEnabled"
+        @oberonEnabled="oberonEnabled"
+        @morganaEnabled="morganaEnabled"
         @readyUp="readyUp"
         @notReady="notReady"
       />
     </div>
+    <!-- 
     <div
       class="row"
       v-bind:class="{ 'visible': screen === 'roleReveal', 'hidden': screen !== 'roleReveal' }"
@@ -43,7 +40,7 @@
         @revealQuestResult="revealQuestResult"
         @proposeTeam="proposeTeam"
       />
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -51,12 +48,12 @@
 import io from "socket.io-client";
 import NameInput from "@/components/avalon/NameInput.vue";
 import Lobby from "@/components/avalon/Lobby.vue";
-import Reveal from "@/components/avalon/Reveal.vue";
-import Game from "@/components/avalon/Game.vue";
+// import Reveal from "@/components/avalon/Reveal.vue";
+// import Game from "@/components/avalon/Game.vue";
 
 export default {
   name: "App",
-  components: { NameInput, Lobby, Reveal, Game },
+  components: { NameInput, Lobby },
   props: {
     socket: {
       type: Object,
@@ -77,78 +74,8 @@ export default {
   },
   data: function() {
     return {
-      roomOwner: "",
-      morganaSelected: false,
-      percivalSelected: false,
-      oberonSelected: false,
-      players: [
-        { id: "aaa", name: "Ben" },
-        { id: "bbb", name: "Sidd" },
-        { id: "ccc", name: "Sam" },
-        { id: "ddd", name: "Adam <3" }
-      ],
-      name: "",
-      screen: "joinScreen",
-      team: "evil",
-      role: "",
-      game: {}
-      // game: {
-      //   questLog: {
-      //     logs: [
-      //       {
-      //         id: 1,
-      //         requiresDoubleFail: false,
-      //         required: 2,
-      //         organiser: "aaa",
-      //         members: ["aaa", "ddd"],
-      //         result: "succeed"
-      //       },
-      //       {
-      //         id: 2,
-      //         requiresDoubleFail: false,
-      //         required: 3,
-      //         organiser: "aaa",
-      //         members: ["aaa", "ccc", "aaa"],
-      //         result: "succeed"
-      //       },
-      //       {
-      //         id: 3,
-      //         requiresDoubleFail: true,
-      //         required: 4,
-      //         organiser: "aaa",
-      //         members: ["aaa", "bbb", "aaa", "ddd"],
-      //         result: "fail"
-      //       },
-      //       {
-      //         id: 4,
-      //         requiresDoubleFail: true,
-      //         required: 3,
-      //         organiser: "aaa",
-      //         members: ["aaa", "aaa", "ddd"],
-      //         result: "fail"
-      //       },
-      //       {
-      //         id: 5,
-      //         requiresDoubleFail: true,
-      //         required: 4,
-      //         organiser: "",
-      //         members: ["", "", "", ""],
-      //         result: ""
-      //       }
-      //     ]
-      //   },
-      //   activeQuest: {
-      //     id: 5,
-      //     disagreements: 0,
-      //     organiser: "aaa",
-      //     proposedMembers: ["aaa", "bbb"],
-      //     proposalAccepted: true,
-      //     requiresDoubleFail: false,
-      //     results: [{ id: 0, revealed: false, result: "success" },{ id: 1, revealed: false, result: "fail" }],
-      //     result: "succeed"
-      //   },
-      //   state: "questResultReveal"
-      // }
+      room: null,
+      players: []
     };
   },
   computed: {
@@ -158,51 +85,36 @@ export default {
     }
   },
   created() {
-    this.socket.on("player-updated", playerData => {
-      console.log(playerData);
-      let playerToUpdate = this.players.find(o => o.id == playerData.id);
+    this.socket.on("players-updated", players => {
+      console.log(players);
+      this.players = players;
+    });
+    this.socket.on("player-updated", player => {
+      console.log(player);
+      let playerToUpdate = this.players.find(o => o.id == player.id);
       for (let k in playerToUpdate) {
-        playerToUpdate[k] = playerData[k];
+        playerToUpdate[k] = player[k];
       }
     });
-    this.socket.on("room-updated", roomData => {
-      console.log(roomData);
-      this.game = roomData.game;
-      this.screen = roomData.screen;
-      this.players = roomData.players;
-      this.roomOwner = roomData.owner;
-      this.percivalSelected = roomData.settings.percivalSelected;
-      this.morganaSelected = roomData.settings.morganaSelected;
-      this.oberonSelected = roomData.settings.oberonSelected;
+    this.socket.on("room-updated", room => {
+      console.log(room);
+      this.room = room;
     });
   },
   methods: {
-    togglePercival: function() {
-      this.percivalSelected
-        ? (this.percivalSelected = false)
-        : (this.percivalSelected = true);
-      this.emitSettingsChange();
+    percivalEnabled: function(enabled) {
+      this.socket.emit("room-updated", {
+        game: { settings: { percivalEnabled: enabled } }
+      });
     },
-    toggleMorgana: function() {
-      this.morganaSelected
-        ? (this.morganaSelected = false)
-        : (this.morganaSelected = true);
-      this.emitSettingsChange();
+    morganaEnabled: function(enabled) {
+      this.socket.emit("room-updated", {
+        game: { settings: { morganaEnabled: enabled } }
+      });
     },
-    toggleOberon: function() {
-      this.oberonSelected
-        ? (this.oberonSelected = false)
-        : (this.oberonSelected = true);
-      this.emitSettingsChange();
-    },
-    emitSettingsChange: function() {
-      this.socket.emit("update-settings", {
-        roomId: this.roomId,
-        settings: {
-          oberonSelected: this.oberonSelected,
-          morganaSelected: this.morganaSelected,
-          percivalSelected: this.percivalSelected
-        }
+    oberonEnabled: function(enabled) {
+      this.socket.emit("room-updated", {
+        game: { settings: { oberonEnabled: enabled } }
       });
     },
     proposeTeam: function(memberIds) {
@@ -210,13 +122,16 @@ export default {
     },
     joinSession: function(name) {
       this.name = name;
-      this.socket.emit("player-join", { name: this.name, roomId: this.roomId });
+      this.socket.emit("player-joined", {
+        name: this.name,
+        roomId: this.roomId
+      });
     },
     readyUp: function() {
-      this.socket.emit("player-ready", { screen: this.screen });
+      this.socket.emit("player-updated", { ready: true });
     },
     notReady: function() {
-      this.socket.emit("player-not-ready");
+      this.socket.emit("player-updated", { ready: false });
     },
     revealQuestResult: function(id) {
       console.log(id);

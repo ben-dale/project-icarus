@@ -29,7 +29,7 @@
     },
     methods: {
       startNewGame: function(socket) {
-        socket.emit('avalon-start-new-game');
+        socket.emit('init-avalon');
       }
     },
     data: function() {
@@ -39,13 +39,10 @@
       } else {
         socket = io.connect({upgrade: false,transports: ["websocket"]});
       }
-      socket.on("avalon-room-created", roomData => {
-        let roomId = roomData.id;
+      socket.on("avalon-created", roomId => {
         this.$router.replace({ name: `AvalonGame`, params: { socket, roomId } });
       });
       return { socket }
     }
   }
-
-
 </script>
