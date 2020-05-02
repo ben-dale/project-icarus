@@ -12,7 +12,7 @@ class AllPlayers {
   }
 
   resetReadyStatuses() {
-    let alteredPlayers = this.players.map(p => p.withReady(false));
+    let alteredPlayers = this.players.map(p => p.copy().withReady(false));
     return new AllPlayers().init(alteredPlayers);
   }
 
@@ -36,30 +36,33 @@ class AllPlayers {
 
   emitToAll(io, roomId) {
     const playersToEmit = this.players.map(p => {
-      delete p.roomId;
-      delete p.team;
-      delete p.role;
-      delete p.vote;
-      return p;
+      const copy = p.copy();
+      delete copy.roomId;
+      delete copy.team;
+      delete copy.role;
+      delete copy.vote;
+      return copy;
     });
     io.in(roomId).emit('players-updated', playersToEmit);
   }
 
   emitToAllWithVote(io, roomId) {
     const playersToEmit = this.players.map(p => {
-      delete p.roomId;
-      delete p.team;
-      delete p.role;
-      return p;
+      const copy = p.copy();
+      delete copy.roomId;
+      delete copy.team;
+      delete copy.role;
+      return copy;
     });
     io.in(roomId).emit('players-updated', playersToEmit);
   }
 
   emitToAllWithTeamAndRole(io, roomId) {
     const playersToEmit = this.players.map(p => {
-      delete p.roomId;
-      delete p.vote;
-      return p;
+      const copy = p.copy();
+      delete copy.roomId;
+      delete copy.vote;
+      return copy;
     });
     io.in(roomId).emit('players-updated', playersToEmit);
   }

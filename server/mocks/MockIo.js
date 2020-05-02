@@ -2,6 +2,7 @@ class MockIo {
   constructor() {
     this.inId = "";
     this.message = "";
+    this.messageHistory = [];
     this.obj = {};
   }
 
@@ -12,6 +13,7 @@ class MockIo {
 
   emit(message, obj) {
     this.message = message;
+    this.messageHistory.push(message);
     this.obj = obj;
   }
 

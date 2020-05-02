@@ -19,7 +19,7 @@
         @notReady="notReady"
       />
     </div>
-    
+
     <div
       class="row"
       v-bind:class="{ 'visible': room && room.game.screen === 'ROLE_REVEAL', 'hidden': !room || room.game.screen !== 'ROLE_REVEAL' }"
@@ -76,7 +76,9 @@ export default {
   data: function() {
     return {
       room: null,
-      players: []
+      players: [],
+      team: null,
+      role: null
     };
   },
   computed: {
@@ -96,6 +98,11 @@ export default {
       for (let k in playerToUpdate) {
         playerToUpdate[k] = player[k];
       }
+    });
+    this.socket.on("player-assigned", player => {
+      console.log(player);
+      this.team = player.team;
+      this.role = player.role;
     });
     this.socket.on("room-updated", room => {
       console.log(room);

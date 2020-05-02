@@ -55,7 +55,8 @@ test('starts role reveal for five players', () => {
   expect(avalon.settings.percivalEnabled).toBe(false);
   expect(avalon.settings.oberonEnabled).toBe(false);
 
-  expect(io.message).toBe('players-updated');
+  expect(io.messageHistory).toContain('players-updated');
+  expect(io.messageHistory).toContain('player-assigned');
   expect(io.inId).toBe('293jd9');
   expect(io.obj).toBeDefined();
 
@@ -111,7 +112,8 @@ test('starts role reveal for five players with percival and morgana', () => {
   expect(avalon.settings.percivalEnabled).toBe(true);
   expect(avalon.settings.oberonEnabled).toBe(false);
 
-  expect(io.message).toBe('players-updated');
+  expect(io.messageHistory).toContain('players-updated');
+  expect(io.messageHistory).toContain('player-assigned');
   expect(io.inId).toBe('293jd9');
   expect(io.obj).toBeDefined();
 
@@ -170,7 +172,8 @@ test('starts role reveal for sevev players with percival and morgana and oberon'
   expect(avalon.settings.percivalEnabled).toBe(true);
   expect(avalon.settings.oberonEnabled).toBe(true);
 
-  expect(io.message).toBe('players-updated');
+  expect(io.messageHistory).toContain('players-updated');
+  expect(io.messageHistory).toContain('player-assigned');
   expect(io.inId).toBe('293jd9');
   expect(io.obj).toBeDefined();
 

@@ -48,11 +48,11 @@ class Avalon {
   }
 
   next(redisClient, io, allPlayers, roomId) {
-    if (this.screen = 'LOBBY' && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
+    if (this.screen == 'LOBBY' && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
       this.startRoleReveal(redisClient, io, allPlayers, roomId);
     }
 
-    if (this.screen = 'ROLE_REVEAL') {
+    if (this.screen == 'ROLE_REVEAL') {
       return this.startGame();
     }
     // todo 
@@ -97,20 +97,21 @@ class Avalon {
     updatedAllPlayers.players[goodPlayerCount] = updatedAllPlayers.players[goodPlayerCount].withRole('ASSASSIN');
 
     if (this.settings.morganaEnabled && !this.settings.oberonEnabled) {
-      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] =  updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('MORGANA');
+      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] = updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('MORGANA');
     }
 
     if (this.settings.oberonEnabled && !this.settings.morganaEnabled) {
-      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] =  updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('OBERON');
+      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] = updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('OBERON');
     }
-      
+
     if (this.settings.oberonEnabled && this.settings.morganaEnabled && totalPlayerCount >= 7) {
-      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] =  updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('MORGANA');
-      updatedAllPlayers.players[updatedAllPlayers.players.length - 2] =  updatedAllPlayers.players[updatedAllPlayers.players.length - 2].withRole('OBERON');
+      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] = updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('MORGANA');
+      updatedAllPlayers.players[updatedAllPlayers.players.length - 2] = updatedAllPlayers.players[updatedAllPlayers.players.length - 2].withRole('OBERON');
     }
 
     updatedAllPlayers.storeInRedis(redisClient);
     updatedAllPlayers.emitToAll(io, roomId);
+    updatedAllPlayers.players.forEach(p => p.emitToPlayer(io));
 
     return this;
   }
