@@ -63,6 +63,19 @@ class AllPlayers {
     });
     io.in(roomId).emit('players-updated', playersToEmit);
   }
+
+  shuffle() {
+    const copyOfPlayers = this.players.map(p => p.copy());
+    for (let i = copyOfPlayers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copyOfPlayers[i], copyOfPlayers[j]] = [copyOfPlayers[j], copyOfPlayers[i]];
+    }
+    return new AllPlayers().init(copyOfPlayers);
+  }
+
+  count() {
+    return this.players.length;
+  }
 }
 
 module.exports = AllPlayers;

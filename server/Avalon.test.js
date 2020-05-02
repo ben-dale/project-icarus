@@ -1,12 +1,37 @@
 const Avalon = require('./Avalon');
 const Settings = require('./Settings');
 const CurrentQuest = require('./CurrentQuest');
+const AllPlayers = require('./AllPlayers');
+const Player = require('./Player');
 const QuestLog = require('./QuestLog');
+const MockRedisClient = require('./mocks/MockRedisClient');
+const MockIo = require('./mocks/MockIo')
 
-test('starts a new game for five players', () => {
-  const playerIds = ['1', '2', '3', '4', '5']
+test('init instance', () => {
+  const avalon = new Avalon().init();
 
-  const avalon = new Avalon().next(playerIds);
+  expect(avalon.closed).toBe(false);
+  expect(avalon.screen).toBe('LOBBY');
+  expect(avalon.state).toBe('');
+  expect(avalon.questLogs).toStrictEqual([]);
+  expect(avalon.settings).toStrictEqual(new Settings().init());
+  expect(avalon.currentQuest).toStrictEqual(new CurrentQuest().init(''));
+});
+
+test('starts role reveal for five players', () => {
+  const roomId = '293jd9';
+  const allPlayers = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId),
+    new Player().init('2', 'player2', roomId),
+    new Player().init('3', 'player3', roomId),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId),
+  ]);
+  const io = new MockIo();
+  const redisClient = new MockRedisClient();
+
+  const avalon = new Avalon().init();
+  avalon.next(redisClient, io, allPlayers, roomId);
 
   expect(avalon.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
@@ -17,9 +42,9 @@ test('starts a new game for five players', () => {
     expect(currentLog.organiserId).toBe('');
   }
   expect(avalon.closed).toBe(true);
-  expect(avalon.screen).toBe("ROLE_REVEAL");
-  expect(avalon.state).toBe("");
-  expect(playerIds).toContain(avalon.currentQuest.organiserId);
+  expect(avalon.screen).toBe('ROLE_REVEAL');
+  expect(avalon.state).toBe('');
+  expect(['1', '2', '3', '4', '5']).toContain(avalon.currentQuest.organiserId);
   expect(avalon.currentQuest.id).toBe(1);
   expect(avalon.currentQuest.disagreements).toBe(0);
   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
@@ -29,12 +54,40 @@ test('starts a new game for five players', () => {
   expect(avalon.settings.morganaEnabled).toBe(false);
   expect(avalon.settings.percivalEnabled).toBe(false);
   expect(avalon.settings.oberonEnabled).toBe(false);
+
+  expect(io.message).toBe('players-updated');
+  expect(io.inId).toBe('293jd9');
+  expect(io.obj).toBeDefined();
+
+  expect(redisClient.setKeyHistory.length).toBe(5);
+  expect(redisClient.setValueHistory.length).toBe(5);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(3);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(2);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(0);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(0);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(2);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MINION').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(0);
 });
 
-test('starts a new game for six players', () => {
-  const playerIds = ['1', '2', '3', '4', '5', '6']
+test('starts role reveal for five players with percival and morgana', () => {
+  const roomId = '293jd9';
+  const allPlayers = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId),
+    new Player().init('2', 'player2', roomId),
+    new Player().init('3', 'player3', roomId),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId),
+  ]);
+  const io = new MockIo();
+  const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().next(playerIds);
+  const avalon = new Avalon().init();
+  avalon.settings = avalon.settings.withMorganaEnabled(true);
+  avalon.settings = avalon.settings.withPercivalEnabled(true);
+  avalon.next(redisClient, io, allPlayers, roomId);
 
   expect(avalon.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
@@ -45,24 +98,55 @@ test('starts a new game for six players', () => {
     expect(currentLog.organiserId).toBe('');
   }
   expect(avalon.closed).toBe(true);
-  expect(avalon.screen).toBe("ROLE_REVEAL");
-  expect(avalon.state).toBe("");
-  expect(playerIds).toContain(avalon.currentQuest.organiserId);
+  expect(avalon.screen).toBe('ROLE_REVEAL');
+  expect(avalon.state).toBe('');
+  expect(['1', '2', '3', '4', '5']).toContain(avalon.currentQuest.organiserId);
   expect(avalon.currentQuest.id).toBe(1);
   expect(avalon.currentQuest.disagreements).toBe(0);
   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
   expect(avalon.currentQuest.proposalAccepted).toBe(false);
   expect(avalon.currentQuest.votes).toStrictEqual([]);
   expect(avalon.currentQuest.result).toBe('');
-  expect(avalon.settings.morganaEnabled).toBe(false);
-  expect(avalon.settings.percivalEnabled).toBe(false);
+  expect(avalon.settings.morganaEnabled).toBe(true);
+  expect(avalon.settings.percivalEnabled).toBe(true);
   expect(avalon.settings.oberonEnabled).toBe(false);
+
+  expect(io.message).toBe('players-updated');
+  expect(io.inId).toBe('293jd9');
+  expect(io.obj).toBeDefined();
+
+  expect(redisClient.setKeyHistory.length).toBe(5);
+  expect(redisClient.setValueHistory.length).toBe(5);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(3);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(2);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MINION').length).toBe(0);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(0);
 });
 
-test('starts a new game for ten players', () => {
-  const playerIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+test('starts role reveal for sevev players with percival and morgana and oberon', () => {
+  const roomId = '293jd9';
+  const allPlayers = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId),
+    new Player().init('2', 'player2', roomId),
+    new Player().init('3', 'player3', roomId),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId),
+    new Player().init('6', 'player6', roomId),
+    new Player().init('7', 'player7', roomId),
+  ]);
+  const io = new MockIo();
+  const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().next(playerIds);
+  const avalon = new Avalon().init();
+  avalon.settings = avalon.settings.withMorganaEnabled(true);
+  avalon.settings = avalon.settings.withPercivalEnabled(true);
+  avalon.settings = avalon.settings.withOberonEnabled(true);
+  avalon.next(redisClient, io, allPlayers, roomId);
 
   expect(avalon.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
@@ -73,19 +157,91 @@ test('starts a new game for ten players', () => {
     expect(currentLog.organiserId).toBe('');
   }
   expect(avalon.closed).toBe(true);
-  expect(avalon.screen).toBe("ROLE_REVEAL");
-  expect(avalon.state).toBe("");
-  expect(playerIds).toContain(avalon.currentQuest.organiserId);
+  expect(avalon.screen).toBe('ROLE_REVEAL');
+  expect(avalon.state).toBe('');
+  expect(['1', '2', '3', '4', '5', '6', '7']).toContain(avalon.currentQuest.organiserId);
   expect(avalon.currentQuest.id).toBe(1);
   expect(avalon.currentQuest.disagreements).toBe(0);
   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
   expect(avalon.currentQuest.proposalAccepted).toBe(false);
   expect(avalon.currentQuest.votes).toStrictEqual([]);
   expect(avalon.currentQuest.result).toBe('');
-  expect(avalon.settings.morganaEnabled).toBe(false);
-  expect(avalon.settings.percivalEnabled).toBe(false);
-  expect(avalon.settings.oberonEnabled).toBe(false);
+  expect(avalon.settings.morganaEnabled).toBe(true);
+  expect(avalon.settings.percivalEnabled).toBe(true);
+  expect(avalon.settings.oberonEnabled).toBe(true);
+
+  expect(io.message).toBe('players-updated');
+  expect(io.inId).toBe('293jd9');
+  expect(io.obj).toBeDefined();
+
+  expect(redisClient.setKeyHistory.length).toBe(7);
+  expect(redisClient.setValueHistory.length).toBe(7);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(4);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(3);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(1);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(2);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MINION').length).toBe(0);
+  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(1);
 });
+
+// test('starts role reveal for six players', () => {
+//   const playerIds = ['1', '2', '3', '4', '5', '6']
+
+//   const avalon = new Avalon().next(playerIds);
+
+//   expect(avalon.questLogs.length).toBe(5);
+//   for (let i = 0; i < 5; i++) {
+//     const currentLog = avalon.questLogs[i];
+//     expect(currentLog.id).toBe(i + 1);
+//     expect(currentLog.playerIds).toStrictEqual([]);
+//     expect(currentLog.result).toBe('');
+//     expect(currentLog.organiserId).toBe('');
+//   }
+//   expect(avalon.closed).toBe(true);
+//   expect(avalon.screen).toBe('ROLE_REVEAL');
+//   expect(avalon.state).toBe('');
+//   expect(playerIds).toContain(avalon.currentQuest.organiserId);
+//   expect(avalon.currentQuest.id).toBe(1);
+//   expect(avalon.currentQuest.disagreements).toBe(0);
+//   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
+//   expect(avalon.currentQuest.proposalAccepted).toBe(false);
+//   expect(avalon.currentQuest.votes).toStrictEqual([]);
+//   expect(avalon.currentQuest.result).toBe('');
+//   expect(avalon.settings.morganaEnabled).toBe(false);
+//   expect(avalon.settings.percivalEnabled).toBe(false);
+//   expect(avalon.settings.oberonEnabled).toBe(false);
+// });
+
+// test('starts role reveal for ten players', () => {
+//   const playerIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+
+//   const avalon = new Avalon().next(playerIds);
+
+//   expect(avalon.questLogs.length).toBe(5);
+//   for (let i = 0; i < 5; i++) {
+//     const currentLog = avalon.questLogs[i];
+//     expect(currentLog.id).toBe(i + 1);
+//     expect(currentLog.playerIds).toStrictEqual([]);
+//     expect(currentLog.result).toBe('');
+//     expect(currentLog.organiserId).toBe('');
+//   }
+//   expect(avalon.closed).toBe(true);
+//   expect(avalon.screen).toBe('ROLE_REVEAL');
+//   expect(avalon.state).toBe('');
+//   expect(playerIds).toContain(avalon.currentQuest.organiserId);
+//   expect(avalon.currentQuest.id).toBe(1);
+//   expect(avalon.currentQuest.disagreements).toBe(0);
+//   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
+//   expect(avalon.currentQuest.proposalAccepted).toBe(false);
+//   expect(avalon.currentQuest.votes).toStrictEqual([]);
+//   expect(avalon.currentQuest.result).toBe('');
+//   expect(avalon.settings.morganaEnabled).toBe(false);
+//   expect(avalon.settings.percivalEnabled).toBe(false);
+//   expect(avalon.settings.oberonEnabled).toBe(false);
+// });
 
 test('create instance from raw object', () => {
   const rawObject = {
@@ -122,33 +278,10 @@ test('create instance from raw object', () => {
   expect(avalon.currentQuest).toStrictEqual(new CurrentQuest().init('393f93'));
 });
 
-test('init instance', () => {
-  const avalon = new Avalon().init();
-
-  expect(avalon.closed).toBe(false);
-  expect(avalon.screen).toBe('LOBBY');
-})
-
 test('returns 3 good players when there are 5 total players', () => {
-  const playerIds = ['1', '2', '3', '4', '5'];
-
-  expect(new Avalon().goodPlayerCount(playerIds)).toBe(3);
+  expect(new Avalon().goodPlayerCount(5)).toBe(3);
 });
 
 test('returns 6 good players when there are 10 total players', () => {
-  const playerIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-
-  expect(new Avalon().goodPlayerCount(playerIds)).toBe(6);
-});
-
-test('returns 2 evil players when there are 5 total players', () => {
-  const playerIds = ['1', '2', '3', '4', '5'];
-
-  expect(new Avalon().evilPlayerCount(playerIds)).toBe(2);
-});
-
-test('returns 4 evil players when there are 10 total players', () => {
-  const playerIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-
-  expect(new Avalon().evilPlayerCount(playerIds)).toBe(4);
+  expect(new Avalon().goodPlayerCount(10)).toBe(6);
 });

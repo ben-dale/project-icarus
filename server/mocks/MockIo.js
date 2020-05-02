@@ -14,6 +14,11 @@ class MockIo {
     this.message = message;
     this.obj = obj;
   }
+
+  to(playerId) {
+    this.toPlayerId = playerId;
+    return this;
+  }
 }
 
 module.exports = MockIo;

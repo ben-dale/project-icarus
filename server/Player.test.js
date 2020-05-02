@@ -37,11 +37,40 @@ test('emit to all', () => {
   const player = new Player().init('111', 'Ben', '5t6y');
   const io = new MockIo();
 
-  player.emitToAll(io, '39fnr9')
+  player.emitToAll(io)
 
   const expected = new Player();
   expected.id = '111';
   expected.name = 'Ben';
   expected.ready = false;
+  expect(io.message).toBe('player-updated');
+  expect(io.obj).toStrictEqual(expected);
+});
+
+test('sets team', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withTeam('GOOD');
+  expect(player.team).toBe('GOOD')
+});
+
+
+test('sets role', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withRole('MERLIN');
+  expect(player.role).toBe('MERLIN')
+});
+
+test('emits all data to player', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withRole('MERLIN').withTeam('GOOD');
+  const io = new MockIo();
+
+  player.emitToPlayer(io);
+
+  const expected = new Player();
+  expected.id = '111';
+  expected.name = 'Ben';
+  expected.ready = false;
+  expected.role = 'MERLIN';
+  expected.team = 'GOOD';
+  expect(io.toPlayerId).toBe('111');
+  expect(io.message).toBe('player-assigned');
   expect(io.obj).toStrictEqual(expected);
 });

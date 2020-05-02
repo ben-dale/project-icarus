@@ -82,3 +82,11 @@ test('resets all player statuses', () => {
 
   expect(allPlayers.players[0].ready).toBe(false);
 });
+
+test('shuffles all players', () => {
+  const player1 = new Player().init('111', 'Ben', '5t6y');
+  const player2 = new Player().init('222', 'Sam', '5t6y');
+  const allPlayers = new AllPlayers().init([player1, player2]).shuffle();
+
+  expect(allPlayers.players.length).toBe(2)
+});

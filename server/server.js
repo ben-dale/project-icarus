@@ -82,14 +82,9 @@ io.on('connection', (socket) => {
         new Room().getFromRedis(redisClient, updatedPlayer.roomId, (room) => {
           new AllPlayers().getFromRedis(redisClient, room.playerIds, (allPlayers) => {
             if (allPlayers.areReady() && room.hasEnoughPlayers()) {
-              room.game.next(room.playerIds); // This mutates the room instance which is grim
+              room.game.next(redisClient, io, allPlayers, room.id); // This mutates the game instance which is grim
               room.storeInRedis(redisClient);
-
-              const updatedAllPlayers = allPlayers.resetReadyStatuses();
-              updatedAllPlayers.storeInRedis(redisClient);
-
               room.emitToAll(io);
-              updatedAllPlayers.emitToAll(io, room.id);
             }
           }, () => { });
         }, () => { });

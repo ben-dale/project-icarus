@@ -47,36 +47,76 @@ class Avalon {
     return this;
   }
 
-  next(playerIds) {
-    if (this.screen = 'LOBBY' && playerIds.length >= this.minPlayers && playerIds.length <= this.maxPlayers) {
-      return this.startRoleReveal(playerIds);
+  next(redisClient, io, allPlayers, roomId) {
+    if (this.screen = 'LOBBY' && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
+      this.startRoleReveal(redisClient, io, allPlayers, roomId);
     }
+
+    if (this.screen = 'ROLE_REVEAL') {
+      return this.startGame();
+    }
+    // todo 
+    // this.screen = 'GAME'
+    // if this.screen == 'GAME' && state == ...
   }
 
 
   // PRIVATE METHODS
 
-  startRoleReveal(playerIds) {
+  startGame() {
+
+  }
+
+  startRoleReveal(redisClient, io, allPlayers, roomId) {
     let questLogs = [];
-    let questConfig = this.playersRequiredEachQuest(playerIds.length);
+    let questConfig = this.playersRequiredEachQuest(allPlayers.players.length);
     for (let i = 0; i < 5; i++) {
       questLogs.push(new QuestLog().init(i + 1, questConfig[i]));
     }
-
-    // TODO decide which player is which role here?
-    // Probably needs to take in AllPlayers object to mutate and store
-    // shuffle player ids at the start of the game to change player order
-
-    this.settings = new Settings().init();
     this.questLogs = questLogs;
-    this.currentQuest = new CurrentQuest().init(this.randomPlayerId(playerIds));
+    this.currentQuest = new CurrentQuest().init(this.randomPlayerId(allPlayers));
     this.closed = true;
     this.screen = 'ROLE_REVEAL';
     this.state = '';
+
+    const totalPlayerCount = allPlayers.count();
+    const updatedAllPlayers = allPlayers.shuffle().resetReadyStatuses();
+    const goodPlayerCount = this.goodPlayerCount(totalPlayerCount);
+    for (let i = 0; i < goodPlayerCount; i++) {
+      updatedAllPlayers.players[i] = updatedAllPlayers.players[i].withTeam('GOOD').withRole('GUARD');
+    }
+    for (let i = goodPlayerCount; i < totalPlayerCount; i++) {
+      updatedAllPlayers.players[i] = updatedAllPlayers.players[i].withTeam('EVIL').withRole('MINION');
+    }
+
+    updatedAllPlayers.players[0] = updatedAllPlayers.players[0].withRole('MERLIN');
+    if (this.settings.percivalEnabled) {
+      updatedAllPlayers.players[1] = updatedAllPlayers.players[1].withRole('PERCIVAL');
+    }
+
+    updatedAllPlayers.players[goodPlayerCount] = updatedAllPlayers.players[goodPlayerCount].withRole('ASSASSIN');
+
+    if (this.settings.morganaEnabled && !this.settings.oberonEnabled) {
+      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] =  updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('MORGANA');
+    }
+
+    if (this.settings.oberonEnabled && !this.settings.morganaEnabled) {
+      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] =  updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('OBERON');
+    }
+      
+    if (this.settings.oberonEnabled && this.settings.morganaEnabled && totalPlayerCount >= 7) {
+      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] =  updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('MORGANA');
+      updatedAllPlayers.players[updatedAllPlayers.players.length - 2] =  updatedAllPlayers.players[updatedAllPlayers.players.length - 2].withRole('OBERON');
+    }
+
+    updatedAllPlayers.storeInRedis(redisClient);
+    updatedAllPlayers.emitToAll(io, roomId);
+
     return this;
   }
 
-  randomPlayerId(playerIds) {
+  randomPlayerId(allPlayers) {
+    const playerIds = allPlayers.players.map(p => p.id);
     return playerIds[new RandomInteger().between(0, playerIds.length - 1)];
   }
 
@@ -91,25 +131,14 @@ class Avalon {
     }
   }
 
-  goodPlayerCount(playerIds) {
-    switch (playerIds.length) {
+  goodPlayerCount(totalPlayerCount) {
+    switch (totalPlayerCount) {
       case 5: return 3;
       case 6: return 4;
       case 7: return 4;
       case 8: return 5;
       case 9: return 6;
       case 10: return 6;
-    }
-  }
-
-  evilPlayerCount(playerIds) {
-    switch (playerIds.length) {
-      case 5: return 2;
-      case 6: return 2;
-      case 7: return 3;
-      case 8: return 3;
-      case 9: return 3;
-      case 10: return 4;
     }
   }
 

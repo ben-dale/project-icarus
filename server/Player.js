@@ -45,6 +45,18 @@ class Player {
     return copy;
   }
 
+  withTeam(team) {
+    const copy = this.copy();
+    copy.team = team;
+    return copy;
+  }
+
+  withRole(role) {
+    const copy = this.copy();
+    copy.role = role;
+    return copy;
+  }
+
   getFromRedis(redisClient, id, onSuccess, onError) {
     redisClient.get(id, (error, result) => {
       if (error) {
@@ -62,6 +74,13 @@ class Player {
     delete copy.vote;
     delete copy.roomId;
     io.in(this.roomId).emit('player-updated', copy);
+  }
+
+  emitToPlayer(io) {
+    const copy = this.copy();
+    delete copy.roomId;
+    delete copy.vote;
+    io.to(this.id).emit('player-assigned', copy);
   }
 
 }
