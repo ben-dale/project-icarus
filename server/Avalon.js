@@ -5,6 +5,13 @@ const Settings = require('./Settings');
 
 class Avalon {
 
+  constructor() {
+    this.minPlayers = 5;
+    this.maxPlayers = 10;
+  }
+
+  // PUBLIC METHODS
+
   fromRawObject(obj) {
     this.questLogs = obj.questLogs.map(ql => new QuestLog().fromRawObject(ql));
     this.settings = new Settings().fromRawObject(obj.settings);
@@ -12,6 +19,8 @@ class Avalon {
     this.screen = obj.screen;
     this.state = obj.state;
     this.closed = obj.closed;
+    this.minPlayers = obj.minPlayers;
+    this.maxPlayers = obj.maxPlayers;
     return this;
   }
 
@@ -23,6 +32,8 @@ class Avalon {
     avalon.currentQuest = this.currentQuest.copy();
     avalon.settings = this.settings.copy();
     avalon.questLogs = this.questLogs.map(ql => ql.copy());
+    avalon.minPlayers = this.minPlayers;
+    avalon.maxPlayers = this.maxPlayers;
     return avalon;
   }
 
@@ -36,7 +47,16 @@ class Avalon {
     return this;
   }
 
-  startGame(playerIds) {
+  next(playerIds) {
+    if (this.screen = 'LOBBY' && playerIds.length >= this.minPlayers && playerIds.length <= this.maxPlayers) {
+      return this.startRoleReveal(playerIds);
+    }
+  }
+
+
+  // PRIVATE METHODS
+
+  startRoleReveal(playerIds) {
     let questLogs = [];
     let questConfig = this.playersRequiredEachQuest(playerIds.length);
     for (let i = 0; i < 5; i++) {
@@ -52,7 +72,7 @@ class Avalon {
     this.currentQuest = new CurrentQuest().init(this.randomPlayerId(playerIds));
     this.closed = true;
     this.screen = 'ROLE_REVEAL';
-    this.state = 'QUEST_PROPOSING';
+    this.state = '';
     return this;
   }
 

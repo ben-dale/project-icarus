@@ -47,6 +47,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('player-joined', (data) => {
+    console.log(data);
     if (data && data.name && data.name.length > 0 && data.roomId) {
       new Room().getFromRedis(redisClient, data.roomId, (room) => {
         const playerId = socket.id;
@@ -60,8 +61,6 @@ io.on('connection', (socket) => {
         socket.join(data.roomId);
 
         new AllPlayers().getFromRedis(redisClient, updatedRoom.playerIds, (allPlayers) => {
-          console.log(allPlayers);
-
           updatedRoom.emitToAll(io);
           allPlayers.emitToAll(io, data.roomId);
         }, () => { });
@@ -70,6 +69,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('player-updated', (data) => {
+    console.log(data);
     if (data) {
       new Player().getFromRedis(redisClient, socket.id, (player) => {
         let updatedPlayer = player.copy();
@@ -78,11 +78,27 @@ io.on('connection', (socket) => {
         }
         updatedPlayer.storeInRedis(redisClient);
         updatedPlayer.emitToAll(io);
+
+        new Room().getFromRedis(redisClient, updatedPlayer.roomId, (room) => {
+          new AllPlayers().getFromRedis(redisClient, room.playerIds, (allPlayers) => {
+            if (allPlayers.areReady() && room.hasEnoughPlayers()) {
+              room.game.next(room.playerIds); // This mutates the room instance which is grim
+              room.storeInRedis(redisClient);
+
+              const updatedAllPlayers = allPlayers.resetReadyStatuses();
+              updatedAllPlayers.storeInRedis(redisClient);
+
+              room.emitToAll(io);
+              updatedAllPlayers.emitToAll(io, room.id);
+            }
+          }, () => { });
+        }, () => { });
       }, () => { });
     }
   });
 
   socket.on('room-updated', (data) => {
+    console.log(data);
     if (data) {
       new Player().getFromRedis(redisClient, socket.id, (player) => {
         new Room().getFromRedis(redisClient, player.roomId, (room) => {
@@ -103,46 +119,8 @@ io.on('connection', (socket) => {
         }, () => { });
       }, () => { });
     }
-    console.log(data);
   });
 
-  // socket.on('player-ready', (data) => {
-  //   const roomId = Object.keys(socket.rooms)[1];
-  //   const currentScreen = data.screen;
-  //   player.markAsReady(redis, socket.id, (updatedPlayer) => {
-  //     io.in(roomId).emit('player-updated', updatedPlayer);
-  //     room.allPlayersAreReady(redis, roomId, () => {
-  //       if (currentScreen === "lobby") {
-  //         avalon.initGame(redis, io, roomId);
-  //       } else if (currentScreen === "roleReveal") {
-  //         avalon.startGame(redis, io, roomId);
-  //       }
-  //     });
-  //   });
-  // });
-
-  // socket.on('propose-team', (data) => {
-  //   const roomId = Object.keys(socket.rooms)[1];
-  //   console.log(data);
-  //   avalon.proposeQuestMembers(redis, io, socket.id, roomId, data.memberIds);
-  // });
-
-  // socket.on('player-not-ready', () => {
-  //   const roomId = Object.keys(socket.rooms)[1];
-  //   player.markAsNotReady(redis, socket.id, (updatedPlayer) => {
-  //     io.in(roomId).emit('player-updated', updatedPlayer);
-  //   });
-  // })
-
-  // socket.on('update-settings', (data) => {
-  //   if (data && data.roomId && data.settings) {
-  //     let playerId = socket.id;
-  //     let roomId = data.roomId;
-  //     room.updateSettings(redis, playerId, roomId, data.settings, (updatedRoom) => {
-  //       io.in(roomId).emit('room-updated', updatedRoom);
-  //     });
-  //   }
-  // });
 });
 
 // Run the damn thing!

@@ -4,14 +4,13 @@ const CurrentQuest = require('./CurrentQuest');
 const QuestLog = require('./QuestLog');
 
 test('starts a new game for five players', () => {
-  let playerIds = ['1','2','3','4','5']
+  const playerIds = ['1', '2', '3', '4', '5']
 
-  let avalon = new Avalon();
-  avalon.startGame(playerIds);
+  const avalon = new Avalon().next(playerIds);
 
   expect(avalon.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
-    let currentLog = avalon.questLogs[i];
+    const currentLog = avalon.questLogs[i];
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
@@ -19,7 +18,7 @@ test('starts a new game for five players', () => {
   }
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe("ROLE_REVEAL");
-  expect(avalon.state).toBe("QUEST_PROPOSING");
+  expect(avalon.state).toBe("");
   expect(playerIds).toContain(avalon.currentQuest.organiserId);
   expect(avalon.currentQuest.id).toBe(1);
   expect(avalon.currentQuest.disagreements).toBe(0);
@@ -33,14 +32,13 @@ test('starts a new game for five players', () => {
 });
 
 test('starts a new game for six players', () => {
-  let playerIds = ['1','2','3','4','5','6']
+  const playerIds = ['1', '2', '3', '4', '5', '6']
 
-  let avalon = new Avalon();
-  avalon.startGame(playerIds);
+  const avalon = new Avalon().next(playerIds);
 
   expect(avalon.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
-    let currentLog = avalon.questLogs[i];
+    const currentLog = avalon.questLogs[i];
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
@@ -48,7 +46,7 @@ test('starts a new game for six players', () => {
   }
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe("ROLE_REVEAL");
-  expect(avalon.state).toBe("QUEST_PROPOSING");
+  expect(avalon.state).toBe("");
   expect(playerIds).toContain(avalon.currentQuest.organiserId);
   expect(avalon.currentQuest.id).toBe(1);
   expect(avalon.currentQuest.disagreements).toBe(0);
@@ -62,13 +60,13 @@ test('starts a new game for six players', () => {
 });
 
 test('starts a new game for ten players', () => {
-  let playerIds = ['1','2','3','4','5','6','7','8','9','10']
-  
-  let avalon = new Avalon().startGame(playerIds);
+  const playerIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+
+  const avalon = new Avalon().next(playerIds);
 
   expect(avalon.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
-    let currentLog = avalon.questLogs[i];
+    const currentLog = avalon.questLogs[i];
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
@@ -76,7 +74,7 @@ test('starts a new game for ten players', () => {
   }
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe("ROLE_REVEAL");
-  expect(avalon.state).toBe("QUEST_PROPOSING");
+  expect(avalon.state).toBe("");
   expect(playerIds).toContain(avalon.currentQuest.organiserId);
   expect(avalon.currentQuest.id).toBe(1);
   expect(avalon.currentQuest.disagreements).toBe(0);
@@ -113,7 +111,7 @@ test('create instance from raw object', () => {
     }
   }
 
-  let avalon = new Avalon().fromRawObject(rawObject);
+  const avalon = new Avalon().fromRawObject(rawObject);
 
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe('ROLE_REVEAL');
@@ -126,31 +124,31 @@ test('create instance from raw object', () => {
 
 test('init instance', () => {
   const avalon = new Avalon().init();
-  
+
   expect(avalon.closed).toBe(false);
   expect(avalon.screen).toBe('LOBBY');
 })
 
 test('returns 3 good players when there are 5 total players', () => {
-  let playerIds = ['1','2','3','4','5'];
+  const playerIds = ['1', '2', '3', '4', '5'];
 
   expect(new Avalon().goodPlayerCount(playerIds)).toBe(3);
 });
 
 test('returns 6 good players when there are 10 total players', () => {
-  let playerIds = ['1','2','3','4','5','6','7','8','9','10'];
+  const playerIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
   expect(new Avalon().goodPlayerCount(playerIds)).toBe(6);
 });
 
 test('returns 2 evil players when there are 5 total players', () => {
-  let playerIds = ['1','2','3','4','5'];
+  const playerIds = ['1', '2', '3', '4', '5'];
 
   expect(new Avalon().evilPlayerCount(playerIds)).toBe(2);
 });
 
 test('returns 4 evil players when there are 10 total players', () => {
-  let playerIds = ['1','2','3','4','5','6','7','8','9','10'];
+  const playerIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
   expect(new Avalon().evilPlayerCount(playerIds)).toBe(4);
 });

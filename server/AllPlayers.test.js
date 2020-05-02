@@ -74,3 +74,11 @@ test('emit to all with team and role', () => {
   expect(io.message).toBe('players-updated');
   expect(io.obj).toStrictEqual([expected]);
 });
+
+test('resets all player statuses', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withReady(true);
+
+  const allPlayers = new AllPlayers().init([player]).resetReadyStatuses();
+
+  expect(allPlayers.players[0].ready).toBe(false);
+});

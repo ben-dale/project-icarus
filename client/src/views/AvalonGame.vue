@@ -19,10 +19,10 @@
         @notReady="notReady"
       />
     </div>
-    <!-- 
+    
     <div
       class="row"
-      v-bind:class="{ 'visible': screen === 'roleReveal', 'hidden': screen !== 'roleReveal' }"
+      v-bind:class="{ 'visible': room && room.game.screen === 'ROLE_REVEAL', 'hidden': !room || room.game.screen !== 'ROLE_REVEAL' }"
     >
       <Reveal
         :players="players"
@@ -31,6 +31,7 @@
         @notReady="notReady"
       />
     </div>
+    <!-- 
     <div class="row" v-bind:class="{ 'visible': screen === 'game', 'hidden': screen !== 'game' }">
       <Game
         :game="game"
@@ -48,12 +49,12 @@
 import io from "socket.io-client";
 import NameInput from "@/components/avalon/NameInput.vue";
 import Lobby from "@/components/avalon/Lobby.vue";
-// import Reveal from "@/components/avalon/Reveal.vue";
+import Reveal from "@/components/avalon/Reveal.vue";
 // import Game from "@/components/avalon/Game.vue";
 
 export default {
   name: "App",
-  components: { NameInput, Lobby },
+  components: { NameInput, Lobby, Reveal },
   props: {
     socket: {
       type: Object,

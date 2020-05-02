@@ -36,6 +36,10 @@ class Room {
     return copy;
   }
 
+  hasEnoughPlayers() {
+    return this.playerIds.length >= this.game.minPlayers;
+  }
+
   storeInRedis(redisClient) {
     redisClient.set(this.id, JSON.stringify(this));
     redisClient.expire(this.id, 86400);

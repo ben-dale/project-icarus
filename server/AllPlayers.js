@@ -13,7 +13,7 @@ class AllPlayers {
 
   resetReadyStatuses() {
     let alteredPlayers = this.players.map(p => p.withReady(false));
-    return new AllPlayers(alteredPlayers);
+    return new AllPlayers().init(alteredPlayers);
   }
 
   storeInRedis(redisClient) {

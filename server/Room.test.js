@@ -51,3 +51,9 @@ test('emit to all', () => {
   expect(io.message).toBe('room-updated');
   expect(io.obj).toStrictEqual(room);
 });
+
+test('returns true when enough players are in the room', () => {
+  const room = new Room().init('111').addPlayerId('1').addPlayerId('2').addPlayerId('3').addPlayerId('4').addPlayerId('5');
+
+  expect(room.hasEnoughPlayers()).toBe(true);
+});
