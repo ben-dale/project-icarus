@@ -42,13 +42,13 @@ class CurrentQuest {
 
   withSabotageVote() {
     const copy = this.copy();
-    copy.votes.push('SABOTAGE');
+    copy.votes.push({choice: 'SABOTAGE', revealed: false});
     return copy;
   }
 
   withSucceedVote() {
     const copy = this.copy();
-    copy.votes.push('SUCCEED');
+    copy.votes.push({choice: 'SUCCEED', revealed: false});
     return copy;
   }
 
@@ -64,15 +64,26 @@ class CurrentQuest {
     return copy;
   }
 
-  withAcceptedProposal() {
+  withAcceptedProposal(proposalAccepted) {
     const copy = this.copy();
-    copy.proposalAccepted = true;
+    copy.proposalAccepted = proposalAccepted;
+    return copy;
+  }
+
+  revealVote(index) {
+    const copy = this.copy();
+    if (index < copy.votes.length && index >= 0) {
+      copy.votes[index].revealed = true;
+    }
     return copy;
   }
 
   withResult() {
     const copy = this.copy();
-    const failedQuest = copy.votes.filter(v => v == 'SABOTAGE').length > 0;
+    if (copy.votes.filter(v => !v.revealed).length > 0) {
+      return copy;
+    }
+    const failedQuest = copy.votes.filter(v => v.choice == 'SABOTAGE').length > 0;
     failedQuest ? copy.result = 'FAIL' : copy.result = 'SUCCEED';
     return copy;
   }

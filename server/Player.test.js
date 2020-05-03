@@ -3,7 +3,7 @@ const MockRedisClient = require('./mocks/MockRedisClient');
 const MockIo = require('./mocks/MockIo')
 
 test('init creates new player', () => {
-  const player = new Player().init('2930e', 'Ben', '5t6y');
+  const player = new Player().init('2930e', 'ben', '5t6y');
 
   expect(player.id).toBe('2930e');
   expect(player.name).toBe('Ben');

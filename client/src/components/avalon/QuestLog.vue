@@ -15,24 +15,20 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="log in questLog.logs" :key="log.id">
+                <tr v-for="log in questLog" :key="log.id">
                   <th
                     scope="row"
-                    :class="{ 'bg-info text-white': log.result === 'succeed', 'bg-danger text-white': log.result === 'fail' }"
-                  >{{log.id}}{{ log.requiresDoubleFail ? '*' : '' }}</th>
-                  <td>{{log.required}}</td>
-                  <td>{{getPlayerNameById(log.organiser)}}</td>
+                    :class="{ 'bg-info text-white': log.result === 'SUCCEED', 'bg-danger text-white': log.result === 'FAIL' }"
+                  >{{log.id}}</th>
+                  <td>{{log.requiredPlayers}}</td>
+                  <td>{{getPlayerNameById(log.organiserId)}}</td>
                   <td
-                    v-for="(member, index) in log.members"
+                    v-for="(playerId, index) in log.playerIds"
                     :key="index * log.id"
-                  >{{getPlayerNameById(member)}}</td>
+                  >{{getPlayerNameById(playerId)}}</td>
                 </tr>
               </tbody>
             </table>
-            <p
-              v-if="questContainsDoubleFails"
-              class="text-left"
-            ><b>*</b> Quest requires two sabotage votes to fail</p>
           </div>
         </div>
       </div>
@@ -43,51 +39,7 @@
 export default {
   props: {
     players: Array,
-    questLog: {
-      type: Object,
-      default: function() {
-        return {
-          logs: [
-            {
-              id: 1,
-              requiresDoubleFail: false,
-              organiser: "Ben",
-              members: ["Adam", "Ben"],
-              result: "succeed"
-            },
-            {
-              id: 2,
-              requiresDoubleFail: false,
-              organiser: "Ben",
-              members: ["Adam", "Ben", "Sidd"],
-              result: "fail"
-            },
-            {
-              id: 3,
-              requiresDoubleFail: false,
-              organiser: "Ben",
-              members: ["Adam", "Ben", "Sam", "Jim", "Rodney"],
-              result: "succeed"
-            },
-            {
-              id: 4,
-              requiresDoubleFail: true,
-              organiser: "Ben",
-              members: ["Adam", "Ben", "Sidd"],
-              result: "succeed"
-            },
-            { id: 5, organiser: "", members: ["", "", "", "", ""], result: "" }
-          ]
-        };
-      }
-    }
-  },
-  computed: {
-    questContainsDoubleFails: function() {
-      return (
-        this.questLog.logs.filter(log => log.requiresDoubleFail).length > 0
-      );
-    }
+    questLog: Array
   },
   methods: {
     getPlayerNameById: function(id) {

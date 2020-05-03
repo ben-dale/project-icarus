@@ -146,7 +146,6 @@ export default {
   },
   computed: {
     isRoomOwner: function() {
-      console.log(this.room);
       return this.room && this.socket.id == this.room.ownerId;
     },
     playersStillNeeded: function() {
@@ -157,19 +156,19 @@ export default {
   },
   methods: {
     percivalEnabled: function(enabled) {
-      this.$emit("percivalEnabled", enabled);
+      this.$emit("percival-enabled", enabled);
     },
     morganaEnabled: function(enabled) {
-      this.$emit("morganaEnabled", enabled);
+      this.$emit("morgana-enabled", enabled);
     },
     oberonEnabled: function(enabled) {
-      this.$emit("oberonEnabled", enabled);
+      this.$emit("oberon-enabled", enabled);
     },
     readyUp: function() {
-      this.$emit("readyUp");
+      this.$emit("ready-up");
     },
     notReady: function() {
-      this.$emit("notReady");
+      this.$emit("not-ready");
     }
   }
 };

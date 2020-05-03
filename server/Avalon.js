@@ -49,11 +49,11 @@ class Avalon {
 
   next(redisClient, io, allPlayers, roomId) {
     if (this.screen == 'LOBBY' && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
+      console.log('starting role reveal...')
       this.startRoleReveal(redisClient, io, allPlayers, roomId);
-    }
-
-    if (this.screen == 'ROLE_REVEAL') {
-      return this.startGame();
+    } else if (this.screen == 'ROLE_REVEAL') {
+      console.log('starting game...')
+      return this.startGame(redisClient, io, allPlayers, roomId);
     }
     // todo 
     // this.screen = 'GAME'
@@ -63,8 +63,12 @@ class Avalon {
 
   // PRIVATE METHODS
 
-  startGame() {
-
+  startGame(redisClient, io, allPlayers, roomId) {
+    this.screen = 'GAME';
+    this.state = 'QUEST_PROPOSING';
+    const updatedAllPlayers = allPlayers.resetReadyStatuses();
+    updatedAllPlayers.storeInRedis(redisClient);
+    updatedAllPlayers.emitToAll(io, roomId);
   }
 
   startRoleReveal(redisClient, io, allPlayers, roomId) {
@@ -126,8 +130,6 @@ class Avalon {
         p.emitToPlayer(io, []);
       }
     });
-
-    return this;
   }
 
   randomPlayerId(allPlayers) {

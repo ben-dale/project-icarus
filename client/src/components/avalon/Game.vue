@@ -1,58 +1,74 @@
 <template>
   <div class="col-md-12">
     <div class="row mb-3">
-      <QuestLog :questLog="game.questLog" :players="players" />
+      <QuestLog :questLog="game.questLogs" :players="players" />
     </div>
     <div class="row mb-3">
       <Players :players="players" />
     </div>
-    <div v-if="game.state == 'questProposing' && !playerIsOrganiser" class="row">
-      <PlainOutput :line="playerIsOrganisingTeamText" />
+    <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
+      <PlainOutput
+        :header="'Quest ' + game.currentQuest.id + ' - Team proposal'"
+        :line="playerIsOrganisingTeamText"
+        :isPlayerReady="isPlayerReady"
+        @ready-up="readyUp"
+        @not-ready="notReady"
+      />
     </div>
-    <div v-if="game.state == 'questProposing' && playerIsOrganiser" class="row">
-      <QuestProposalInput :players="players" @proposeTeam="proposeTeam" /> <!-- todo quest size limitations! -->
+    <div v-if="game.state == 'QUEST_PROPOSING' && playerIsOrganiser" class="row">
+      <QuestProposalInput :questId="game.currentQuest.id" :players="players" @propose-team="proposeTeam" />
+      <!-- todo quest size limitations! -->
     </div>
-    <div v-if="game.state == 'questProposal'" class="row">
-      <QuestProposalVoteInput :organiser="currentOrganiser.name" :members="proposedQuestMembers" />
+    <div v-if="game.state == 'QUEST_PROPOSAL'" class="row">
+      <QuestProposalVoteInput :organiser="currentOrganiser.name" :names="proposedQuestMemberNames" />
     </div>
-    <div v-if="game.state == 'questProposalResult'" class="row">
-      <QuestProposalVoteResult />
+    <div v-if="game.state == 'QUEST_PROPOSAL_RESULT'" class="row">
+      <QuestProposalVoteResult
+        :players="players"
+        :proposalAccepted="game.currentQuest.proposalAccepted"
+      />
     </div>
+
     <div
-      v-if="game.state == 'questStarted' && !game.activeQuest.proposedMembers.includes(playerId)"
       class="row"
+      v-if="game.state == 'QUEST_STARTED' && !game.currentQuest.proposedPlayerIds.includes(playerId)"
     >
       <PlainOutput line="The results of the quest will be revealed shortly." />
     </div>
+
     <div
-      v-if="game.state == 'questStarted' && game.activeQuest.proposedMembers.includes(playerId)"
       class="row"
+      v-if="game.state == 'QUEST_STARTED' && game.currentQuest.proposedPlayerIds.includes(playerId)"
     >
-      <QuestOutcomeVoteInput :members="proposedQuestMembers" :isEvil="playerTeam == 'evil'" />
+      <QuestOutcomeVoteInput :members="proposedQuestMembers" :isEvil="team == 'EVIL'" />
     </div>
-    <div v-if="game.state == 'questResultReveal'" class="row mb-3">
+
+    <div v-if="game.state == 'QUEST_RESULT_REVEAL'" class="row mb-3">
       <QuestResultReveal
-        :requiresDoubleFail="game.activeQuest.requiresDoubleFail"
-        :results="game.activeQuest.results"
-        @revealQuestResult="revealQuestResult"
+        :organiserName="currentOrganiser.name"
+        :playerIsOrganiser="playerIsOrganiser"
+        :results="game.currentQuest.votes"
+        @reveal-quest-result="revealQuestResult"
       />
     </div>
-    <div v-if="game.state == 'questResult'" class="row mb-3">
-      <Outcome winner="evil" outcome="Evil have sabotaged the quest" buttonText="Continue" />
+
+    <div v-if="game.state == 'QUEST_RESULT'" class="row mb-3">
+      <Outcome result="FAIL" outcome="The quest was sabotaged" buttonText="Ready" />
     </div>
-    <div v-if="game.state == 'questResult'" class="row mb-3">
-      <Outcome winner="good" outcome="The quest has been succeeded" buttonText="Continue" />
+    <div v-if="game.state == 'QUEST_RESULT'" class="row mb-3">
+      <Outcome result="SUCCEED" outcome="The quest was completed successfully" buttonText="Ready" />
     </div>
-    <div v-if="game.state == 'gameOver'" class="row">
+    <!-- 
+    <div v-if="game.state == 'GAME_OVER'" class="row">
       <Outcome winner="evil" outcome="Evil have taken the win!" buttonText="Play Again" />
     </div>
-    <div v-if="game.state == 'gameOver'" class="row">
+    <div v-if="game.state == 'GAME_OVER'" class="row">
       <Outcome
         winner="good"
         outcome="The Assassin was not able to identify Merlin. Good have taken the win!"
         buttonText="Play Again"
       />
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -83,29 +99,37 @@ export default {
     game: Object,
     players: Array,
     playerId: String,
-    playerTeam: {
-      type: String,
-      default: "evil"
-    }
+    team: String,
+    role: String,
+    isPlayerReady: Boolean
   },
   computed: {
     playerIsOrganiser: function() {
-      return this.playerId == this.game.activeQuest.organiser;
+      return this.playerId == this.game.currentQuest.organiserId;
     },
     currentOrganiser: function() {
-      return this.players.find(o => o.id == this.game.activeQuest.organiser);
+      return this.players.find(o => o.id == this.game.currentQuest.organiserId);
     },
     playerIsOrganisingTeamText: function() {
-      return this.currentOrganiser.name + " is currently organising a team...";
+      return this.currentOrganiser.name + " is currently organising a team. The proposal will be voted on by all players shortly.";
     },
     proposedQuestMembers: function() {
       let members = [];
-      for (let i = 0; i < this.game.activeQuest.proposedMembers.length; i++) {
+      for (
+        let i = 0;
+        i < this.game.currentQuest.proposedPlayerIds.length;
+        i++
+      ) {
         members.push(
-          this.getPlayerNameById(this.game.activeQuest.proposedMembers[i])
+          this.getPlayerNameById(this.game.currentQuest.proposedPlayerIds[i])
         );
       }
       return members;
+    },
+    proposedQuestMemberNames: function() {
+      return this.game.currentQuest.proposedPlayerIds.map(id =>
+        this.getPlayerNameById(id)
+      );
     }
   },
   methods: {
@@ -117,10 +141,16 @@ export default {
       return player && player.name ? player.name : "";
     },
     revealQuestResult: function(id) {
-      this.$emit("revealQuestResult", id);
+      this.$emit("reveal-quest-result", id);
     },
     proposeTeam: function(memberIds) {
-      this.$emit('proposeTeam', memberIds);
+      this.$emit("propose-team", memberIds);
+    },
+    readyUp: function() {
+      this.$emit("ready-up");
+    },
+    notReady: function() {
+      this.$emit("not-ready");
     }
   }
 };

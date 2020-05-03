@@ -203,10 +203,10 @@ export default {
       return this.players.find(p => p.id == id).name;
     },
     readyUp: function() {
-      this.$emit("readyUp");
+      this.$emit("ready-up");
     },
     notReady: function() {
-      this.$emit("notReady");
+      this.$emit("not-ready");
     }
   }
 };

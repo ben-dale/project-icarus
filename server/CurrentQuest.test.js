@@ -7,7 +7,7 @@ test('create instance from raw object', () => {
     organiserId: '123',
     proposedPlayerIds: ['444', '555'],
     proposalAccepted: true,
-    votes: ['SUCCEED', 'SABOTAGE'],
+    votes: [{ choice: 'SABOTAGE', revealed: false }],
     result: 'FAIL'
   }
 
@@ -18,7 +18,7 @@ test('create instance from raw object', () => {
   expect(currentQuest.organiserId).toBe('123');
   expect(currentQuest.proposedPlayerIds).toStrictEqual(['444', '555']);
   expect(currentQuest.proposalAccepted).toBe(true);
-  expect(currentQuest.votes).toStrictEqual(['SUCCEED', 'SABOTAGE']);
+  expect(currentQuest.votes).toStrictEqual([{ choice: 'SABOTAGE', revealed: false }]);
   expect(currentQuest.result).toBe('FAIL');
 });
 
@@ -42,13 +42,7 @@ test('update organiserId', () => {
 
   const currentQuest = new CurrentQuest().init(organiserId).withOrganiserId(newOrganiserId);
 
-  expect(currentQuest.id).toBe(1);
-  expect(currentQuest.disagreements).toBe(0);
   expect(currentQuest.organiserId).toBe('555');
-  expect(currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(currentQuest.proposalAccepted).toBe(false);
-  expect(currentQuest.votes).toStrictEqual([]);
-  expect(currentQuest.result).toBe('');
 });
 
 test('add SABOTAGE vote to votes', () => {
@@ -56,13 +50,7 @@ test('add SABOTAGE vote to votes', () => {
 
   const currentQuest = new CurrentQuest().init(organiserId).withSabotageVote();
 
-  expect(currentQuest.id).toBe(1);
-  expect(currentQuest.disagreements).toBe(0);
-  expect(currentQuest.organiserId).toBe('333');
-  expect(currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(currentQuest.proposalAccepted).toBe(false);
-  expect(currentQuest.votes).toStrictEqual(['SABOTAGE']);
-  expect(currentQuest.result).toBe('');
+  expect(currentQuest.votes).toStrictEqual([{ choice: 'SABOTAGE', revealed: false }]);
 });
 
 test('add SUCCEED vote to votes', () => {
@@ -70,13 +58,7 @@ test('add SUCCEED vote to votes', () => {
 
   const currentQuest = new CurrentQuest().init(organiserId).withSucceedVote();
 
-  expect(currentQuest.id).toBe(1);
-  expect(currentQuest.disagreements).toBe(0);
-  expect(currentQuest.organiserId).toBe('333');
-  expect(currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(currentQuest.proposalAccepted).toBe(false);
-  expect(currentQuest.votes).toStrictEqual(['SUCCEED']);
-  expect(currentQuest.result).toBe('');
+  expect(currentQuest.votes).toStrictEqual([{ choice: 'SUCCEED', revealed: false }]);
 });
 
 test('increment disagreement count', () => {
@@ -84,68 +66,70 @@ test('increment disagreement count', () => {
 
   const currentQuest = new CurrentQuest().init(organiserId).withDisagreement();
 
-  expect(currentQuest.id).toBe(1);
   expect(currentQuest.disagreements).toBe(1);
-  expect(currentQuest.organiserId).toBe('333');
-  expect(currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(currentQuest.proposalAccepted).toBe(false);
-  expect(currentQuest.votes).toStrictEqual([]);
-  expect(currentQuest.result).toBe('');
 });
 
 test('add playerId to proposedPlayerIds', () => {
   const organiserId = '333';
 
-  const currentQuest = new CurrentQuest().init(organiserId).withDisagreement();
+  const currentQuest = new CurrentQuest().init(organiserId).withProposedPlayerId('555');
 
-  expect(currentQuest.id).toBe(1);
-  expect(currentQuest.disagreements).toBe(1);
-  expect(currentQuest.organiserId).toBe('333');
-  expect(currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(currentQuest.proposalAccepted).toBe(false);
-  expect(currentQuest.votes).toStrictEqual([]);
-  expect(currentQuest.result).toBe('');
+  expect(currentQuest.proposedPlayerIds).toStrictEqual(['555']);
 });
 
 test('mark proposal as accepted', () => {
   const organiserId = '333';
 
-  const currentQuest = new CurrentQuest().init(organiserId).withAcceptedProposal();
+  const currentQuest = new CurrentQuest().init(organiserId).withAcceptedProposal(true);
 
-  expect(currentQuest.id).toBe(1);
-  expect(currentQuest.disagreements).toBe(0);
-  expect(currentQuest.organiserId).toBe('333');
-  expect(currentQuest.proposedPlayerIds).toStrictEqual([]);
   expect(currentQuest.proposalAccepted).toBe(true);
-  expect(currentQuest.votes).toStrictEqual([]);
+});
+
+test('mark proposal as rejected', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withAcceptedProposal(false);
+
+  expect(currentQuest.proposalAccepted).toBe(false);
+});
+
+test('reveal a vote', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withSabotageVote().revealVote(0);
+
+  expect(currentQuest.votes).toStrictEqual([{ choice: 'SABOTAGE', revealed: true }]);
+});
+
+test('does not reveal a vote with an invalid index', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withSabotageVote().revealVote(1);
+
+  expect(currentQuest.votes).toStrictEqual([{ choice: 'SABOTAGE', revealed: false }]);
+});
+
+test('does not work out result until all results are revealed', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withSabotageVote().withSucceedVote().withResult();
+
   expect(currentQuest.result).toBe('');
 });
 
 test('work out FAIL result of quest based on votes', () => {
   const organiserId = '333';
 
-  const currentQuest = new CurrentQuest().init(organiserId).withSabotageVote().withSucceedVote().withResult();
+  const currentQuest = new CurrentQuest().init(organiserId).withSabotageVote().withSucceedVote().revealVote(0).revealVote(1).withResult();
 
-  expect(currentQuest.id).toBe(1);
-  expect(currentQuest.disagreements).toBe(0);
-  expect(currentQuest.organiserId).toBe('333');
-  expect(currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(currentQuest.proposalAccepted).toBe(false);
-  expect(currentQuest.votes).toStrictEqual(['SABOTAGE', 'SUCCEED']);
   expect(currentQuest.result).toBe('FAIL');
 });
 
 test('work out SUCCEED result of quest based on votes', () => {
   const organiserId = '333';
 
-  const currentQuest = new CurrentQuest().init(organiserId).withSucceedVote().withSucceedVote().withResult();
+  const currentQuest = new CurrentQuest().init(organiserId).withSucceedVote().withSucceedVote().revealVote(0).revealVote(1).withResult();
 
-  expect(currentQuest.id).toBe(1);
-  expect(currentQuest.disagreements).toBe(0);
-  expect(currentQuest.organiserId).toBe('333');
-  expect(currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(currentQuest.proposalAccepted).toBe(false);
-  expect(currentQuest.votes).toStrictEqual(['SUCCEED', 'SUCCEED']);
   expect(currentQuest.result).toBe('SUCCEED');
 });
 
@@ -156,7 +140,7 @@ test('starts next quest', () => {
     organiserId: '123',
     proposedPlayerIds: ['444', '555'],
     proposalAccepted: true,
-    votes: ['SUCCEED', 'SABOTAGE'],
+    votes: [{ choice: 'SABOTAGE', revealed: false }],
     result: 'FAIL'
   }
   const nextOrganiserId = '444';

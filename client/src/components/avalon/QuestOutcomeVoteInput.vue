@@ -18,10 +18,10 @@
         </div>
         <div class="row pb-5">
           <div class="col-4 offset-2">
-            <button class="btn btn-info btn-lg btn-block">Succeed</button>
+            <button class="btn btn-info btn-block">Succeed</button>
           </div>
           <div class="col-4">
-            <button class="btn btn-danger btn-lg btn-block" :disabled="!isEvil">Sabotage</button>
+            <button class="btn btn-danger btn-block" :disabled="!isEvil">Sabotage</button>
           </div>
         </div>
       </div>

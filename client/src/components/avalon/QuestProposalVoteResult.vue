@@ -7,26 +7,32 @@
             <h3 class="card-title">Approve</h3>
             <h3 class="card-title">
               <span
-                v-for="(member, index) in proposal.result.approve"
+                v-for="(player, index) in players.filter(p => p.vote == 'APPROVE')"
                 :key="index"
                 class="badge badge-pill badge-dark mx-2 my-2"
-              >{{member}}</span>
+              >{{player.name}}</span>
             </h3>
           </div>
           <div class="col-5">
             <h3 class="card-title">Reject</h3>
             <h3 class="card-title">
               <span
-                v-for="(member, index) in proposal.result.reject"
+                v-for="(player, index) in players.filter(p => p.vote == 'REJECT')"
                 :key="index"
                 class="badge badge-pill badge-dark mx-2 my-2"
-              >{{member}}</span>
+              >{{player.name}}</span>
             </h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4 offset-4">
+            <p v-if="proposalAccepted">The team proposal has been approved.</p>
+            <p v-if="!proposalAccepted">The team proposal has been rejected.</p>
           </div>
         </div>
         <div class="row py-5">
           <div class="col-4 offset-4">
-            <button class="btn btn-dark btn-lg btn-block">OK</button>
+            <button class="btn btn-dark btn-block">OK</button>
           </div>
         </div>
       </div>
@@ -37,20 +43,8 @@
 <script>
 export default {
   props: {
-    proposal: {
-      type: Object,
-      default: function() {
-        return {
-          result: {
-            approve: [
-              "Ben",
-              "Adam"
-            ],
-            reject: ["Sam", "Sidd"]
-          }
-        };
-      }
-    }
+    players: Array,
+    proposalAccepted: Boolean
   }
 };
 </script>

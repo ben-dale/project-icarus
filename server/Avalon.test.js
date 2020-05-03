@@ -205,66 +205,32 @@ test('starts role reveal for sevev players with percival and morgana and oberon'
   expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(1);
 });
 
-// test('starts role reveal for six players', () => {
-//   const playerIds = ['1', '2', '3', '4', '5', '6']
+test('starts the game', () => {
+  const roomId = '293jd9';
+  const allPlayers = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId),
+    new Player().init('2', 'player2', roomId),
+    new Player().init('3', 'player3', roomId),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId),
+  ]);
+  const io = new MockIo();
+  const redisClient = new MockRedisClient();
 
-//   const avalon = new Avalon().next(playerIds);
+  const avalon = new Avalon().init();
+  avalon.settings = avalon.settings.withMorganaEnabled(true);
+  avalon.settings = avalon.settings.withPercivalEnabled(true);
+  avalon.next(redisClient, io, allPlayers, roomId);
+  avalon.next(redisClient, io, allPlayers, roomId);
 
-//   expect(avalon.questLogs.length).toBe(5);
-//   for (let i = 0; i < 5; i++) {
-//     const currentLog = avalon.questLogs[i];
-//     expect(currentLog.id).toBe(i + 1);
-//     expect(currentLog.playerIds).toStrictEqual([]);
-//     expect(currentLog.result).toBe('');
-//     expect(currentLog.organiserId).toBe('');
-//   }
-//   expect(avalon.closed).toBe(true);
-//   expect(avalon.screen).toBe('ROLE_REVEAL');
-//   expect(avalon.state).toBe('');
-//   expect(playerIds).toContain(avalon.currentQuest.organiserId);
-//   expect(avalon.currentQuest.id).toBe(1);
-//   expect(avalon.currentQuest.disagreements).toBe(0);
-//   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
-//   expect(avalon.currentQuest.proposalAccepted).toBe(false);
-//   expect(avalon.currentQuest.votes).toStrictEqual([]);
-//   expect(avalon.currentQuest.result).toBe('');
-//   expect(avalon.settings.morganaEnabled).toBe(false);
-//   expect(avalon.settings.percivalEnabled).toBe(false);
-//   expect(avalon.settings.oberonEnabled).toBe(false);
-// });
-
-// test('starts role reveal for ten players', () => {
-//   const playerIds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
-
-//   const avalon = new Avalon().next(playerIds);
-
-//   expect(avalon.questLogs.length).toBe(5);
-//   for (let i = 0; i < 5; i++) {
-//     const currentLog = avalon.questLogs[i];
-//     expect(currentLog.id).toBe(i + 1);
-//     expect(currentLog.playerIds).toStrictEqual([]);
-//     expect(currentLog.result).toBe('');
-//     expect(currentLog.organiserId).toBe('');
-//   }
-//   expect(avalon.closed).toBe(true);
-//   expect(avalon.screen).toBe('ROLE_REVEAL');
-//   expect(avalon.state).toBe('');
-//   expect(playerIds).toContain(avalon.currentQuest.organiserId);
-//   expect(avalon.currentQuest.id).toBe(1);
-//   expect(avalon.currentQuest.disagreements).toBe(0);
-//   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
-//   expect(avalon.currentQuest.proposalAccepted).toBe(false);
-//   expect(avalon.currentQuest.votes).toStrictEqual([]);
-//   expect(avalon.currentQuest.result).toBe('');
-//   expect(avalon.settings.morganaEnabled).toBe(false);
-//   expect(avalon.settings.percivalEnabled).toBe(false);
-//   expect(avalon.settings.oberonEnabled).toBe(false);
-// });
+  expect(avalon.screen).toBe('GAME');
+  expect(avalon.state).toBe('QUEST_PROPOSING');
+})
 
 test('create instance from raw object', () => {
   const rawObject = {
     state: 'QUEST_PROPOSING',
-    screen: 'ROLE_REVEAL',
+    screen: 'GAME',
     closed: true,
     questLogs: [
       { id: 1, requiredPlayers: 2, organiserId: '2nfp4', playerIds: [], result: '' }
@@ -288,7 +254,7 @@ test('create instance from raw object', () => {
   const avalon = new Avalon().fromRawObject(rawObject);
 
   expect(avalon.closed).toBe(true);
-  expect(avalon.screen).toBe('ROLE_REVEAL');
+  expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('QUEST_PROPOSING');
   expect(avalon.questLogs.length).toBe(1);
   expect(avalon.questLogs[0]).toStrictEqual(new QuestLog().init(1, 2).withOrganiserId('2nfp4').withResult(''));

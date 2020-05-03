@@ -2,7 +2,7 @@ class Player {
 
   init(id, name, roomId) {
     this.id = id;
-    this.name = name;
+    this.name = name.charAt(0).toUpperCase() + name.slice(1);
     this.roomId = roomId;
     this.vote = '';
     this.ready = false;

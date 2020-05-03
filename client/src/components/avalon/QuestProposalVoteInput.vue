@@ -5,12 +5,12 @@
         <div class="row py-5">
           <div class="col-12">
             <h4 class="card-title">{{organiser}} has proposed the following team:</h4>
-            <h3 class="card-title">
+            <h3 class="card-title pb-5">
               <span
-                v-for="(member, index) in members"
+                v-for="(name, index) in names"
                 :key="index"
                 class="badge badge-pill badge-dark mx-2"
-              >{{member}}</span>
+              >{{name}}</span>
             </h3>
             <h4 class="card-title">What do you think? Your vote will be seen by the other players.</h4>
           </div>
@@ -32,7 +32,7 @@
 export default {
   props: {
     organiser: String,
-    members: Array
+    names: Array
   }
 };
 </script>

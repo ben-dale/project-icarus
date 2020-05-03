@@ -12,11 +12,11 @@
         :room="room"
         :players="players"
         :isPlayerReady="isPlayerReady"
-        @percivalEnabled="percivalEnabled"
-        @oberonEnabled="oberonEnabled"
-        @morganaEnabled="morganaEnabled"
-        @readyUp="readyUp"
-        @notReady="notReady"
+        @percival-enabled="percivalEnabled"
+        @oberon-enabled="oberonEnabled"
+        @morgana-enabled="morganaEnabled"
+        @ready-up="readyUp"
+        @not-ready="notReady"
       />
     </div>
 
@@ -31,21 +31,28 @@
         :role="role"
         :settings="room && room.game ? room.game.settings : {}"
         :metadata="metadata"
-        @readyUp="readyUp"
-        @notReady="notReady"
+        @ready-up="readyUp"
+        @not-ready="notReady"
       />
     </div>
-    <!-- 
-    <div class="row" v-bind:class="{ 'visible': screen === 'game', 'hidden': screen !== 'game' }">
+
+    <div
+      class="row"
+      v-bind:class="{ 'visible': room && room.game.screen === 'GAME', 'hidden': !room || room.game.screen !== 'GAME' }"
+    >
       <Game
-        :game="game"
+        :game="room && room.game ? room.game : {}"
         :players="players"
-        :playerId="socket.id"
-        :playerTeam="team"
-        @revealQuestResult="revealQuestResult"
-        @proposeTeam="proposeTeam"
+        :team="team"
+        :role="role"
+        :playerId="getPlayerId()"
+        :isPlayerReady="isPlayerReady"
+        @reveal-quest-result="revealQuestResult"
+        @propose-team="proposeTeam"
+        @ready-up="readyUp"
+        @not-ready="notReady"
       />
-    </div>-->
+    </div>
   </div>
 </template>
 
@@ -54,11 +61,11 @@ import io from "socket.io-client";
 import NameInput from "@/components/avalon/NameInput.vue";
 import Lobby from "@/components/avalon/Lobby.vue";
 import Reveal from "@/components/avalon/Reveal.vue";
-// import Game from "@/components/avalon/Game.vue";
+import Game from "@/components/avalon/Game.vue";
 
 export default {
-  name: "App",
-  components: { NameInput, Lobby, Reveal },
+  name: "AvalonGame",
+  components: { NameInput, Lobby, Reveal, Game },
   props: {
     socket: {
       type: Object,
@@ -84,6 +91,78 @@ export default {
       team: null,
       role: null,
       metadata: []
+      // playerId: "111",
+      // room: {
+      //   game: {
+      //     state: "QUEST_RESULT",
+      //     currentQuest: {
+      //       id: "1",
+      //       organiserId: "222",
+      //       disagreements: 0,
+      //       proposedPlayerIds: ["111", "333"],
+      //       proposalAccepted: false,
+      //       votes: [
+      //         { choice: "SUCCEED", revealed: true },
+      //         { choice: "SABOTAGE", revealed: true },
+      //         { choice: "SUCCEED", revealed: true }
+      //       ],
+      //       result: ""
+      //     },
+      //     questLogs: [
+      //       {
+      //         id: "1",
+      //         requiredPlayers: 2,
+      //         playerIds: ["222", "333"],
+      //         organiserId: "222",
+      //         result: "SUCCEED"
+      //       },
+      //       {
+      //         id: "2",
+      //         requiredPlayers: 3,
+      //         playerIds: [],
+      //         organiserId: "",
+      //         result: ""
+      //       },
+      //       {
+      //         id: "3",
+      //         requiredPlayers: 4,
+      //         playerIds: [],
+      //         organiserId: "",
+      //         result: ""
+      //       },
+      //       {
+      //         id: "4",
+      //         requiredPlayers: 3,
+      //         playerIds: [],
+      //         organiserId: "",
+      //         result: ""
+      //       },
+      //       {
+      //         id: "5",
+      //         requiredPlayers: 4,
+      //         playerIds: [],
+      //         organiserId: "",
+      //         result: ""
+      //       }
+      //     ],
+      //     screen: "GAME",
+      //     settings: {
+      //       percivalEnabled: false,
+      //       oberonEnabled: false,
+      //       morganaEnabled: false
+      //     }
+      //   }
+      // },
+      // players: [
+      //   { name: "Ben", id: "111", ready: false, vote: "APPROVE" },
+      //   { name: "Sidd", id: "222", ready: false, vote: "REJECT" },
+      //   { name: "Adam <3", id: "333", ready: false, vote: "REJECT" },
+      //   { name: "Sam", id: "444", ready: false, vote: "REJECT" },
+      //   { name: "Rodney", id: "555", ready: false, vote: "REJECT" }
+      // ],
+      // team: "EVIL",
+      // role: "MINION",
+      // metadata: ["111", "222"]
     };
   },
   computed: {
@@ -121,6 +200,10 @@ export default {
         game: { settings: { percivalEnabled: enabled } }
       });
     },
+    getPlayerId: function() {
+      // return "111";
+      return this.socket.id;
+    },
     morganaEnabled: function(enabled) {
       this.socket.emit("room-updated", {
         game: { settings: { morganaEnabled: enabled } }
@@ -131,8 +214,10 @@ export default {
         game: { settings: { oberonEnabled: enabled } }
       });
     },
-    proposeTeam: function(memberIds) {
-      this.socket.emit("propose-team", { memberIds: memberIds });
+    proposeTeam: function(playerIds) {
+      this.socket.emit("room-updated", {
+        game: { currentQuest: { proposedPlayerIds: playerIds } }
+      });
     },
     joinSession: function(name) {
       this.name = name;
@@ -143,6 +228,9 @@ export default {
     },
     readyUp: function() {
       this.socket.emit("player-updated", { ready: true });
+    },
+    readyUpWithVote(vote) {
+      this.socket.emit("player-updated", { ready: true, vote: vote });
     },
     notReady: function() {
       this.socket.emit("player-updated", { ready: false });
