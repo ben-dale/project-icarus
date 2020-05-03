@@ -4,6 +4,7 @@ class MockIo {
     this.message = "";
     this.messageHistory = [];
     this.obj = {};
+    this.objHistory = [];
   }
 
   in(roomId) {
@@ -15,6 +16,7 @@ class MockIo {
     this.message = message;
     this.messageHistory.push(message);
     this.obj = obj;
+    this.objHistory.push(obj);
   }
 
   to(playerId) {

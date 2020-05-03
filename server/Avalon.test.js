@@ -55,8 +55,15 @@ test('starts role reveal for five players', () => {
   expect(avalon.settings.percivalEnabled).toBe(false);
   expect(avalon.settings.oberonEnabled).toBe(false);
 
-  expect(io.messageHistory).toContain('players-updated');
-  expect(io.messageHistory).toContain('player-assigned');
+  expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
+  expect(io.messageHistory.filter(mh => mh == 'player-assigned').length).toBe(5);
+
+  expect(io.objHistory.find(p => p.role && p.role == 'MERLIN').metadata.length).toBe(2);
+  io.objHistory.filter(p => p.role && p.role == 'GUARD').forEach(p => expect(p.metadata.length).toBe(0));
+
+  expect(io.objHistory.find(p => p.role && p.role == 'ASSASSIN').metadata.length).toBe(2);
+  io.objHistory.filter(p => p.role && p.role == 'MINION').forEach(p => expect(p.metadata).toBeDefined());
+
   expect(io.inId).toBe('293jd9');
   expect(io.obj).toBeDefined();
 
@@ -112,8 +119,16 @@ test('starts role reveal for five players with percival and morgana', () => {
   expect(avalon.settings.percivalEnabled).toBe(true);
   expect(avalon.settings.oberonEnabled).toBe(false);
 
-  expect(io.messageHistory).toContain('players-updated');
-  expect(io.messageHistory).toContain('player-assigned');
+  expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
+  expect(io.messageHistory.filter(mh => mh == 'player-assigned').length).toBe(5);
+
+  expect(io.objHistory.find(p => p.role && p.role == 'MERLIN').metadata.length).toBe(2);
+  expect(io.objHistory.find(p => p.role && p.role == 'PERCIVAL').metadata.length).toBe(2);
+  io.objHistory.filter(p => p.role && p.role == 'GUARD').forEach(p => expect(p.metadata.length).toBe(0));
+
+  expect(io.objHistory.find(p => p.role && p.role == 'ASSASSIN').metadata.length).toBe(2);
+  expect(io.objHistory.find(p => p.role && p.role == 'MORGANA').metadata.length).toBe(2);
+
   expect(io.inId).toBe('293jd9');
   expect(io.obj).toBeDefined();
 

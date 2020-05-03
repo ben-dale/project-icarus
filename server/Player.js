@@ -76,8 +76,9 @@ class Player {
     io.in(this.roomId).emit('player-updated', copy);
   }
 
-  emitToPlayer(io) {
+  emitToPlayer(io, metadata) {
     const copy = this.copy();
+    copy.metadata = metadata;
     delete copy.roomId;
     delete copy.vote;
     io.to(this.id).emit('player-assigned', copy);

@@ -27,6 +27,10 @@
       <Reveal
         :players="players"
         :isPlayerReady="isPlayerReady"
+        :team="team"
+        :role="role"
+        :settings="room && room.game ? room.game.settings : {}"
+        :metadata="metadata"
         @readyUp="readyUp"
         @notReady="notReady"
       />
@@ -78,7 +82,8 @@ export default {
       room: null,
       players: [],
       team: null,
-      role: null
+      role: null,
+      metadata: []
     };
   },
   computed: {
@@ -103,6 +108,7 @@ export default {
       console.log(player);
       this.team = player.team;
       this.role = player.role;
+      this.metadata = player.metadata.slice();
     });
     this.socket.on("room-updated", room => {
       console.log(room);

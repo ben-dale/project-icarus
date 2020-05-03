@@ -62,7 +62,7 @@ test('emits all data to player', () => {
   const player = new Player().init('111', 'Ben', '5t6y').withRole('MERLIN').withTeam('GOOD');
   const io = new MockIo();
 
-  player.emitToPlayer(io);
+  player.emitToPlayer(io, ['444', '555']);
 
   const expected = new Player();
   expected.id = '111';
@@ -70,6 +70,7 @@ test('emits all data to player', () => {
   expected.ready = false;
   expected.role = 'MERLIN';
   expected.team = 'GOOD';
+  expected.metadata = [ '444', '555' ]
   expect(io.toPlayerId).toBe('111');
   expect(io.message).toBe('player-assigned');
   expect(io.obj).toStrictEqual(expected);

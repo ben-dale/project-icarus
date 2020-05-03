@@ -109,9 +109,23 @@ class Avalon {
       updatedAllPlayers.players[updatedAllPlayers.players.length - 2] = updatedAllPlayers.players[updatedAllPlayers.players.length - 2].withRole('OBERON');
     }
 
+    // evil player information to send to certain players
+    const evilPlayerIds = updatedAllPlayers.players.filter(p => p.team == 'EVIL').map(p => p.id);
+
+    // ids of merlins for percival
+    const merlinIds = updatedAllPlayers.players.filter(p => p.role == 'MORGANA' || p.role == 'MERLIN').map(p => p.id);
+
     updatedAllPlayers.storeInRedis(redisClient);
     updatedAllPlayers.emitToAll(io, roomId);
-    updatedAllPlayers.players.forEach(p => p.emitToPlayer(io));
+    updatedAllPlayers.players.forEach(p => {
+      if (p.role == 'MERLIN' || p.team == 'EVIL') {
+        p.emitToPlayer(io, evilPlayerIds);
+      } else if (p.role == 'PERCIVAL') {
+        p.emitToPlayer(io, merlinIds);
+      } else {
+        p.emitToPlayer(io, []);
+      }
+    });
 
     return this;
   }
