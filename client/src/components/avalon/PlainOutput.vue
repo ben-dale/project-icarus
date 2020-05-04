@@ -5,7 +5,7 @@
       <div class="card-body text-center">
         <div class="row">
           <div class="col-12 pt-5">
-            <h4 class="card-title">{{line}}</h4>
+            <h5 class="card-title">{{line}}</h5>
           </div>
         </div>
         <div class="row py-5">

@@ -55,10 +55,12 @@
     </div>
     <div class="row pt-4 pb-3">
       <div class="col-md-12 text-center">
-        <p class="lead">
-          Further instruction and explanation will be provided as you play through The Resistance: Avalon.
-        </p>
-        <p class="lead">The next screen will reveal which team you are in and which role you will play.</p>
+        <p
+          class="lead"
+        >Further instruction and explanation will be provided as you play through The Resistance: Avalon.</p>
+        <p
+          class="lead"
+        >The next screen will reveal which team you are in and which role you will play.</p>
         <p
           v-if="playersStillNeeded > 0"
           class="lead"
@@ -107,25 +109,17 @@
     </div>
     <div class="row mb-5">
       <div class="col-md-6 offset-md-3">
-        <button
-          v-if="!isPlayerReady"
-          v-on:click="readyUp()"
-          type="button"
-          class="btn btn-success btn-lg btn-block"
-        >Ready</button>
-        <button
-          v-if="isPlayerReady"
-          v-on:click="notReady()"
-          type="button"
-          class="btn btn-warning btn-lg btn-block"
-        >Cancel</button>
+        <ReadyButton :large="true" :isPlayerReady="isPlayerReady" v-on="$listeners" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import ReadyButton from "@/components/common/ReadyButton.vue";
 export default {
+  name: "Lobby",
+  components: { ReadyButton },
   props: {
     socket: Object,
     room: Object,
@@ -163,12 +157,6 @@ export default {
     },
     oberonEnabled: function(enabled) {
       this.$emit("oberon-enabled", enabled);
-    },
-    readyUp: function() {
-      this.$emit("ready-up");
-    },
-    notReady: function() {
-      this.$emit("not-ready");
     }
   }
 };

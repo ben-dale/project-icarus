@@ -9,7 +9,7 @@
               <thead>
                 <tr>
                   <th scope="col">Quest</th>
-                  <th scope="col">Required</th>
+                  <th scope="col">Players required</th>
                   <th scope="col">Organiser</th>
                   <th scope="col" colspan="5" class="text-center">Members</th>
                 </tr>

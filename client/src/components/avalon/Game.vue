@@ -4,19 +4,22 @@
       <QuestLog :questLog="game.questLogs" :players="players" />
     </div>
     <div class="row mb-3">
-      <Players :players="players" />
+      <PlayerReadyBar :players="players" />
     </div>
     <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
-      <PlainOutput
-        :header="'Quest ' + game.currentQuest.id + ' - Team proposal'"
-        :line="playerIsOrganisingTeamText"
+      <QuestProposalWaiting
+        :questId="game.currentQuest.id"
+        :organiserName="currentOrganiser.name"
         :isPlayerReady="isPlayerReady"
-        @ready-up="readyUp"
-        @not-ready="notReady"
+        v-on="$listeners"
       />
     </div>
     <div v-if="game.state == 'QUEST_PROPOSING' && playerIsOrganiser" class="row">
-      <QuestProposalInput :questId="game.currentQuest.id" :players="players" @propose-team="proposeTeam" />
+      <QuestProposalInput
+        :questId="game.currentQuest.id"
+        :players="players"
+        @propose-team="proposeTeam"
+      />
       <!-- todo quest size limitations! -->
     </div>
     <div v-if="game.state == 'QUEST_PROPOSAL'" class="row">
@@ -81,7 +84,8 @@ import QuestOutcomeVoteInput from "@/components/avalon/QuestOutcomeVoteInput.vue
 import Outcome from "@/components/avalon/Outcome.vue";
 import QuestProposalVoteResult from "@/components/avalon/QuestProposalVoteResult.vue";
 import QuestProposalInput from "@/components/avalon/QuestProposalInput.vue";
-import Players from "@/components/avalon/Players.vue";
+import PlayerReadyBar from "@/components/common/PlayerReadyBar.vue";
+import QuestProposalWaiting from "@/components/avalon/QuestProposalWaiting.vue";
 
 export default {
   components: {
@@ -93,7 +97,8 @@ export default {
     Outcome,
     QuestProposalVoteResult,
     QuestProposalInput,
-    Players
+    QuestProposalWaiting,
+    PlayerReadyBar
   },
   props: {
     game: Object,
@@ -111,7 +116,10 @@ export default {
       return this.players.find(o => o.id == this.game.currentQuest.organiserId);
     },
     playerIsOrganisingTeamText: function() {
-      return this.currentOrganiser.name + " is currently organising a team. The proposal will be voted on by all players shortly.";
+      return (
+        this.currentOrganiser.name +
+        " is currently putting together a team proposal. The proposal will be voted on by all players shortly."
+      );
     },
     proposedQuestMembers: function() {
       let members = [];
@@ -145,12 +153,6 @@ export default {
     },
     proposeTeam: function(memberIds) {
       this.$emit("propose-team", memberIds);
-    },
-    readyUp: function() {
-      this.$emit("ready-up");
-    },
-    notReady: function() {
-      this.$emit("not-ready");
     }
   }
 };

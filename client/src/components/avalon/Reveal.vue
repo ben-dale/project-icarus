@@ -1,7 +1,7 @@
 <template>
-  <div class="col-md-12">
+  <div class="col-12">
     <div class="row mb-4">
-      <div class="col-md-8 offset-md-2">
+      <div class="col-12">
         <div class="card">
           <div class="card-body text-center">
             <h3 v-if="role == 'GUARD'" class="card-title">You are a guard</h3>
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="row mb-4">
-      <div class="col-md-8 offset-md-2">
+      <div class="col-12">
         <div class="card">
           <h5 class="card-header">Things you need to know about your team</h5>
           <h5
@@ -87,7 +87,7 @@
       </div>
     </div>
     <div class="row mb-4">
-      <div class="col-md-8 offset-md-2">
+      <div class="col-12">
         <div class="card">
           <h5 class="card-header">Things you need to know about the game</h5>
           <div class="card-body">
@@ -96,16 +96,26 @@
             >The goal of Good is to successfully complete three out of five quests and help Merlin avoid identification by the Assassin.</p>
             <p
               class="card-text"
-            >The goal of Evil is to promote suspicion amongst players in an attempt to disrupt the flow of the game.</p>
+            >The goal of Evil is to disrupt the flow of the game by sabotaging as many quests as they can without exposing their identity.</p>
             <p
               class="card-text"
             >There are five quests that can be completed. Each turn a player will be nominated as the quest's leader and will propose a team.</p>
             <p class="card-text">All players will vote to agree or disagree with the team proposal.</p>
-            <p class="card-text">If the proposal is not accepted the quest is not started and a new quest leader is chosen.</p>
-            <p class="card-text">If the proposal is accepted the quest will begin and the quest members will be asked for the outcome they would like.</p>
-            <p class="card-text">Good members on the quest may only choose 'Success' as the outcome, however Evil members can choose to 'Sabotage' the quest.</p>
-            <p class="card-text">If all players choose 'Success' the quest will be completed successfully and the play moves to the next quest with a new quest leader.</p>
-            <p class="card-text">If an Evil team member is on the quest and they choose to 'Sabotage' the quest, the quest will fail and the play moves to the next quest with a new quest leader.</p>
+            <p
+              class="card-text"
+            >If the proposal is not accepted the quest is not started and a new quest leader is chosen.</p>
+            <p
+              class="card-text"
+            >If the proposal is accepted the quest will begin and the quest members will be asked for the outcome they would like.</p>
+            <p
+              class="card-text"
+            >Good members on the quest may only choose 'Success' as the outcome, however Evil members can choose to 'Sabotage' the quest.</p>
+            <p
+              class="card-text"
+            >If all players choose 'Success' the quest will be completed successfully and the play moves to the next quest with a new quest leader.</p>
+            <p
+              class="card-text"
+            >If an Evil team member is on the quest and they choose to 'Sabotage' the quest, the quest will fail and the play moves to the next quest with a new quest leader.</p>
             <p
               class="card-text"
             >At the start of the game Evil team members are told which players are in Evil.</p>
@@ -148,46 +158,21 @@
       </div>
     </div>
     <div class="row mb-4">
-      <div class="col-md-8 offset-md-2">
-        <div class="card">
-          <div class="card-body">
-            <div class="row text-center">
-              <div v-for="player in players" class="col-md-3" :key="player.id">
-                <div
-                  v-if="player.ready"
-                  class="bg-success text-white pt-2 pb-1 mb-3 border border-success rounded"
-                >
-                  <h5>{{player.name}}</h5>
-                </div>
-                <div v-if="!player.ready" class="text-dark pt-2 pb-1 mb-3 border rounded">
-                  <h5>{{player.name}}</h5>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PlayerReadyBar :players="players" />
     </div>
     <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <button
-          v-if="!isPlayerReady"
-          v-on:click="readyUp()"
-          type="button"
-          class="btn btn-success btn-lg btn-block"
-        >Ready</button>
-        <button
-          v-if="isPlayerReady"
-          v-on:click="notReady()"
-          type="button"
-          class="btn btn-warning btn-lg btn-block"
-        >Cancel</button>
+      <div class="col-6 offset-3">
+        <ReadyButton :large="true" :isPlayerReady="isPlayerReady" v-on="$listeners" />
       </div>
     </div>
   </div>
 </template>
 <script>
+import PlayerReadyBar from "@/components/common/PlayerReadyBar.vue";
+import ReadyButton from "@/components/common/ReadyButton.vue";
 export default {
+  name: "Reveal",
+  components: { PlayerReadyBar, ReadyButton },
   props: {
     team: String,
     role: String,
@@ -201,12 +186,6 @@ export default {
   methods: {
     findPlayerName: function(id) {
       return this.players.find(p => p.id == id).name;
-    },
-    readyUp: function() {
-      this.$emit("ready-up");
-    },
-    notReady: function() {
-      this.$emit("not-ready");
     }
   }
 };

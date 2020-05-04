@@ -15,8 +15,8 @@
         @percival-enabled="percivalEnabled"
         @oberon-enabled="oberonEnabled"
         @morgana-enabled="morganaEnabled"
-        @ready-up="readyUp"
-        @not-ready="notReady"
+        @player-ready="readyUp"
+        @player-not-ready="notReady"
       />
     </div>
 
@@ -31,8 +31,8 @@
         :role="role"
         :settings="room && room.game ? room.game.settings : {}"
         :metadata="metadata"
-        @ready-up="readyUp"
-        @not-ready="notReady"
+        @player-ready="readyUp"
+        @player-not-ready="notReady"
       />
     </div>
 
@@ -49,8 +49,8 @@
         :isPlayerReady="isPlayerReady"
         @reveal-quest-result="revealQuestResult"
         @propose-team="proposeTeam"
-        @ready-up="readyUp"
-        @not-ready="notReady"
+        @player-ready="readyUp"
+        @player-not-ready="notReady"
       />
     </div>
   </div>
@@ -94,7 +94,13 @@ export default {
       // playerId: "111",
       // room: {
       //   game: {
-      //     state: "QUEST_RESULT",
+      //     state: "QUEST_PROPOSING",
+      //     screen: "GAME",
+      //     settings: {
+      //       percivalEnabled: false,
+      //       oberonEnabled: false,
+      //       morganaEnabled: false
+      //     },
       //     currentQuest: {
       //       id: "1",
       //       organiserId: "222",
@@ -144,21 +150,18 @@ export default {
       //         organiserId: "",
       //         result: ""
       //       }
-      //     ],
-      //     screen: "GAME",
-      //     settings: {
-      //       percivalEnabled: false,
-      //       oberonEnabled: false,
-      //       morganaEnabled: false
-      //     }
+      //     ]
+          
       //   }
       // },
       // players: [
       //   { name: "Ben", id: "111", ready: false, vote: "APPROVE" },
-      //   { name: "Sidd", id: "222", ready: false, vote: "REJECT" },
+      //   { name: "Sidd", id: "222", ready: true, vote: "REJECT" },
       //   { name: "Adam <3", id: "333", ready: false, vote: "REJECT" },
       //   { name: "Sam", id: "444", ready: false, vote: "REJECT" },
-      //   { name: "Rodney", id: "555", ready: false, vote: "REJECT" }
+      //   { name: "Rodney", id: "555", ready: false, vote: "REJECT" },
+      //   { name: "Jim", id: "666", ready: false, vote: "REJECT" },
+      //   { name: "Max", id: "777", ready: false, vote: "REJECT" },
       // ],
       // team: "EVIL",
       // role: "MINION",
