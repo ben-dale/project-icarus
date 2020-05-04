@@ -18,6 +18,8 @@
       <QuestProposalInput
         :questId="game.currentQuest.id"
         :players="players"
+        :requiredPlayers="requiredPlayers"
+        :isPlayerReady="isPlayerReady"
         @propose-team="proposeTeam"
       />
       <!-- todo quest size limitations! -->
@@ -111,6 +113,9 @@ export default {
   computed: {
     playerIsOrganiser: function() {
       return this.playerId == this.game.currentQuest.organiserId;
+    },
+    requiredPlayers: function() {
+      return this.game.questLogs.find(ql => ql.id == this.game.currentQuest.id).requiredPlayers;
     },
     currentOrganiser: function() {
       return this.players.find(o => o.id == this.game.currentQuest.organiserId);

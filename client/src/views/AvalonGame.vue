@@ -91,7 +91,6 @@ export default {
       team: null,
       role: null,
       metadata: []
-      // playerId: "111",
       // room: {
       //   game: {
       //     state: "QUEST_PROPOSING",
@@ -102,8 +101,8 @@ export default {
       //       morganaEnabled: false
       //     },
       //     currentQuest: {
-      //       id: "1",
-      //       organiserId: "222",
+      //       id: 2,
+      //       organiserId: "111",
       //       disagreements: 0,
       //       proposedPlayerIds: ["111", "333"],
       //       proposalAccepted: false,
@@ -116,42 +115,42 @@ export default {
       //     },
       //     questLogs: [
       //       {
-      //         id: "1",
+      //         id: 1,
       //         requiredPlayers: 2,
       //         playerIds: ["222", "333"],
       //         organiserId: "222",
       //         result: "SUCCEED"
       //       },
       //       {
-      //         id: "2",
-      //         requiredPlayers: 3,
+      //         id: 2,
+      //         requiredPlayers: 2,
       //         playerIds: [],
       //         organiserId: "",
       //         result: ""
       //       },
       //       {
-      //         id: "3",
+      //         id: 3,
       //         requiredPlayers: 4,
       //         playerIds: [],
       //         organiserId: "",
       //         result: ""
       //       },
       //       {
-      //         id: "4",
+      //         id: 4,
       //         requiredPlayers: 3,
       //         playerIds: [],
       //         organiserId: "",
       //         result: ""
       //       },
       //       {
-      //         id: "5",
+      //         id: 5,
       //         requiredPlayers: 4,
       //         playerIds: [],
       //         organiserId: "",
       //         result: ""
       //       }
       //     ]
-          
+
       //   }
       // },
       // players: [
@@ -170,7 +169,7 @@ export default {
   },
   computed: {
     isPlayerReady: function() {
-      let player = this.players.find(o => o.id == this.socket.id);
+      let player = this.players.find(o => o.id == this.getPlayerId());
       return player && player.ready;
     }
   },
@@ -204,7 +203,6 @@ export default {
       });
     },
     getPlayerId: function() {
-      // return "111";
       return this.socket.id;
     },
     morganaEnabled: function(enabled) {

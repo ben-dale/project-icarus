@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12">
     <div class="card">
-      <h5 class="card-header">Quest log</h5>
+      <h5 class="card-header bg-light">Quest log</h5>
       <div class="card-body">
         <div class="row">
           <div class="col-md-12">
