@@ -1,14 +1,10 @@
 <template>
   <div class="col-12">
     <div class="card">
-      <h5 class="card-header bg-light">Quest {{questId}} - {{header}}</h5>
+      <div class="card-header bg-light">Quest {{questId}} - {{header}}</div>
       <div class="card-body text-center">
-        <div class="row my-3">
-          <div class="col-12">
-            <h5>{{line1}}</h5>
-            <h5>{{line2}}</h5>
-          </div>
-        </div>
+        <p class="card-text">{{line1}}</p>
+        <p class="card-text">{{line2}}</p>
       </div>
     </div>
   </div>

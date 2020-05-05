@@ -1,18 +1,12 @@
 <template>
   <div class="col-md-12">
     <div class="card">
-      <h5 class="card-header bg-light">Quest {{questId}} - Proposal result</h5>
+      <div class="card-header bg-light">Quest {{questId}} - Proposal result</div>
       <div class="card-body text-center">
-        <div class="row mt-3 mb-5">
-          <div class="col-12">
-            <p class="card-text lead" v-if="proposalAccepted">The proposal has been approved</p>
-            <p class="card-text lead" v-if="!proposalAccepted">The proposal has been rejected</p>
-          </div>
-        </div>
         <div class="row mb-5">
           <div class="col-5 offset-1">
             <div class="card">
-              <h5 class="card-header bg-light">Approve</h5>
+              <div class="card-header bg-light">Approve</div>
               <h5 class="card-text">
                 <span
                   v-for="(player, index) in players.filter(p => p.vote == 'APPROVE')"
@@ -24,7 +18,7 @@
           </div>
           <div class="col-5">
             <div class="card">
-              <h5 class="card-header bg-light">Reject</h5>
+              <div class="card-header bg-light">Reject</div>
               <h5 class="card-text">
                 <span
                   v-for="(player, index) in players.filter(p => p.vote == 'REJECT')"
@@ -35,9 +29,15 @@
             </div>
           </div>
         </div>
+        <div class="row mt-3 mb-4">
+          <div class="col-12">
+            <p class="card-text" v-if="proposalAccepted">The proposal has been approved.</p>
+            <p class="card-text" v-if="!proposalAccepted">The proposal has been rejected.</p>
+          </div>
+        </div>
         <div class="row mb-3">
           <div class="col-4 offset-4">
-            <button class="btn btn-dark btn-block">OK</button>
+            <button class="btn btn-dark btn-sm btn-block">OK</button>
           </div>
         </div>
       </div>

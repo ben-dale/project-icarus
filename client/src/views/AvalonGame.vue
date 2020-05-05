@@ -53,6 +53,8 @@
         @player-not-ready="notReady"
       />
     </div>
+
+    <div style="padding-bottom:200px"></div>
   </div>
 </template>
 
@@ -72,7 +74,7 @@ export default {
       default: function() {
         let socket = null;
         if (process.env.NODE_ENV == "development") {
-          socket = io.connect("http://localhost:3000", {
+          socket = io.connect("http://192.168.1.199:3000", {
             upgrade: false,
             transports: ["websocket"]
           });
@@ -86,85 +88,84 @@ export default {
   },
   data: function() {
     return {
-      room: null,
-      players: [],
-      team: null,
-      role: null,
-      metadata: []
-      // room: {
-      //   game: {
-      //     state: "QUEST_STARTED",
-      //     screen: "GAME",
-      //     settings: {
-      //       percivalEnabled: false,
-      //       oberonEnabled: false,
-      //       morganaEnabled: false
-      //     },
-      //     currentQuest: {
-      //       id: 2,
-      //       organiserId: "111",
-      //       disagreements: 0,
-      //       proposedPlayerIds: ["111", "333"],
-      //       proposalAccepted: false,
-      //       votes: [
-      //         { choice: "SUCCEED", revealed: true },
-      //         { choice: "SABOTAGE", revealed: true },
-      //         { choice: "SUCCEED", revealed: false }
-      //       ],
-      //       result: ""
-      //     },
-      //     questLogs: [
-      //       {
-      //         id: 1,
-      //         requiredPlayers: 2,
-      //         playerIds: ["222", "333"],
-      //         organiserId: "222",
-      //         result: "SUCCEED"
-      //       },
-      //       {
-      //         id: 2,
-      //         requiredPlayers: 2,
-      //         playerIds: [],
-      //         organiserId: "",
-      //         result: ""
-      //       },
-      //       {
-      //         id: 3,
-      //         requiredPlayers: 4,
-      //         playerIds: [],
-      //         organiserId: "",
-      //         result: ""
-      //       },
-      //       {
-      //         id: 4,
-      //         requiredPlayers: 3,
-      //         playerIds: [],
-      //         organiserId: "",
-      //         result: ""
-      //       },
-      //       {
-      //         id: 5,
-      //         requiredPlayers: 4,
-      //         playerIds: [],
-      //         organiserId: "",
-      //         result: ""
-      //       }
-      //     ]
-
-      //   }
-      // },
-      // players: [
-      //   { name: "Ben", id: "111", ready: false, vote: "APPROVE" },
-      //   { name: "Sidd", id: "222", ready: true, vote: "APPROVE" },
-      //   { name: "Adam <3", id: "333", ready: false, vote: "REJECT" },
-      //   { name: "Sam", id: "444", ready: false, vote: "REJECT" },
-      //   { name: "Rodney", id: "555", ready: false, vote: "REJECT" },
-      //   { name: "Jim", id: "666", ready: false, vote: "REJECT" },
-      //   { name: "Max", id: "777", ready: false, vote: "REJECT" },
-      // ],
-      // team: "EVIL",
-      // role: "MINION",
-      // metadata: ["111", "222"]
+      // room: null,
+      // players: [],
+      // team: null,
+      // role: null,
+      // metadata: []
+      room: {
+        game: {
+          state: "QUEST_RESULT_REVEAL",
+          screen: "GAME",
+          settings: {
+            percivalEnabled: false,
+            oberonEnabled: false,
+            morganaEnabled: false
+          },
+          currentQuest: {
+            id: 2,
+            organiserId: "222",
+            disagreements: 0,
+            proposedPlayerIds: ["111", "333"],
+            proposalAccepted: false,
+            votes: [
+              { choice: "SUCCEED", revealed: true },
+              { choice: "SABOTAGE", revealed: true },
+              { choice: "SUCCEED", revealed: true }
+            ],
+            result: "SUCCEED"
+          },
+          questLogs: [
+            {
+              id: 1,
+              requiredPlayers: 2,
+              playerIds: ["222", "333"],
+              organiserId: "222",
+              result: "SUCCEED"
+            },
+            {
+              id: 2,
+              requiredPlayers: 2,
+              playerIds: [],
+              organiserId: "",
+              result: ""
+            },
+            {
+              id: 3,
+              requiredPlayers: 4,
+              playerIds: [],
+              organiserId: "",
+              result: ""
+            },
+            {
+              id: 4,
+              requiredPlayers: 3,
+              playerIds: [],
+              organiserId: "",
+              result: ""
+            },
+            {
+              id: 5,
+              requiredPlayers: 4,
+              playerIds: [],
+              organiserId: "",
+              result: ""
+            }
+          ]
+        }
+      },
+      players: [
+        { name: "Ben", id: "111", ready: false, vote: "APPROVE" },
+        { name: "Sidd", id: "222", ready: true, vote: "APPROVE" },
+        { name: "Adam <3", id: "333", ready: false, vote: "REJECT" },
+        { name: "Sam", id: "444", ready: false, vote: "REJECT" },
+        { name: "Rodney", id: "555", ready: false, vote: "REJECT" },
+        { name: "Jim", id: "666", ready: false, vote: "REJECT" },
+        { name: "Max", id: "777", ready: false, vote: "REJECT" }
+      ],
+      team: "EVIL",
+      role: "MINION",
+      metadata: ["111", "222"]
     };
   },
   computed: {
@@ -203,8 +204,8 @@ export default {
       });
     },
     getPlayerId: function() {
-      // return "111";
-      return this.socket.id;
+      return "111";
+      // return this.socket.id;
     },
     morganaEnabled: function(enabled) {
       this.socket.emit("room-updated", {

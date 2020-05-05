@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-12">
-    <div class="row mb-3">
+    <div class="row">
       <QuestLog :questLog="game.questLogs" :players="players" />
     </div>
     <div class="row mb-3">
@@ -147,6 +147,9 @@ export default {
         );
       }
       return members;
+    },
+    proposedQuestMemberNames: function() {
+      return this.game.currentQuest.proposedPlayerIds.map(id => this.getPlayerNameById(id));
     }
   },
   methods: {

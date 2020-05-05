@@ -21,18 +21,18 @@
     <div class="row mb-4">
       <div class="col-12">
         <div class="card">
-          <h5 class="card-header">Things you need to know about your team</h5>
+          <div class="card-header">Things you need to know about your team</div>
           <h5
             v-if="team == 'EVIL' || role == 'MERLIN'"
             class="card-title text-center pt-3"
           >Members of Evil</h5>
-          <h4 v-if="team == 'EVIL' || role == 'MERLIN'" class="card-text text-center">
+          <h5 v-if="team == 'EVIL' || role == 'MERLIN'" class="card-text text-center">
             <span
               v-for="(playerId, index) in metadata"
               :key="index"
-              class="badge badge-pill badge-danger mx-2"
+              class="badge badge badge-danger mx-2"
             >{{findPlayerName(playerId)}}</span>
-          </h4>
+          </h5>
           <h5 v-if="role == 'PERCIVAL'" class="card-title text-center pt-3">Merlin is</h5>
           <h4 v-if="role == 'PERCIVAL'" class="card-text text-center">
             <span class="badge badge-pill badge-info mx-2">{{findPlayerName(metadata[0])}}</span>
@@ -89,7 +89,7 @@
     <div class="row mb-4">
       <div class="col-12">
         <div class="card">
-          <h5 class="card-header">Things you need to know about the game</h5>
+          <div class="card-header">Things you need to know about the game</div>
           <div class="card-body">
             <p
               class="card-text"
@@ -162,7 +162,7 @@
     </div>
     <div class="row">
       <div class="col-6 offset-3">
-        <ReadyButton :large="true" :isPlayerReady="isPlayerReady" v-on="$listeners" />
+        <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
       </div>
     </div>
   </div>
