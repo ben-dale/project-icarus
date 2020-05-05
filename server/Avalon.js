@@ -119,8 +119,10 @@ class Avalon {
     // ids of merlins for percival
     const merlinIds = updatedAllPlayers.players.filter(p => p.role == 'MORGANA' || p.role == 'MERLIN').map(p => p.id);
 
+    // Store roles and team information for each player in Redis
     updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
+
+    allPlayers.resetReadyStatuses().emitToAll(io, roomId);
     updatedAllPlayers.players.forEach(p => {
       if (p.role == 'MERLIN' || p.team == 'EVIL') {
         p.emitToPlayer(io, evilPlayerIds);

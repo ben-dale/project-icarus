@@ -9,7 +9,7 @@
     <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
       <QuestWaiting
         header="Team proposal"
-        line1="The team is being drafted."
+        :line1="currentOrganiser.name + ' is proposing a team.'"
         line2="All players will vote on the team proposal shortly..."
         :questId="game.currentQuest.id"
       />
@@ -74,12 +74,28 @@
       />
     </div>
 
+    <div v-if="game.state == 'MERLIN_ID' && this.role == 'ASSASSIN'" class="row">
+      <MerlinIdentificationInput
+        :requiredPlayers="1"
+        :players="players.filter(p => p.team === 'GOOD')"
+        v-on="$listeners"
+      />
+    </div>
+    <div v-if="game.state == 'MERLIN_ID' && this.role != 'ASSASSIN'" class="row">
+      <QuestWaiting
+        header="Assassination attempt"
+        :line1="this.players.filter(p => p.team == 'EVIL').map(p => p.name).join(', ') + ' are in Evil and now may openly discuss who they believe Merlin is.'"
+        :line2="this.players.find(p => p.role == 'ASSASSIN').name + ' is the Assassin. Their choice will be revealed shortly...'"
+        :questId="game.currentQuest.id"
+      />
+    </div>
+
     <div v-if="game.state == 'GAME_OVER'" class="row">
-      <Outcome winner="evil" outcome="Evil have taken the win!" buttonText="Play Again" />
+      <Outcome winner="EVIL" outcome="Evil have taken the win!" buttonText="Play Again" />
     </div>
     <div v-if="game.state == 'GAME_OVER'" class="row">
       <Outcome
-        winner="good"
+        winner="GOOD"
         outcome="The Assassin was not able to identify Merlin. Good have taken the win!"
         buttonText="Play Again"
       />
@@ -97,6 +113,7 @@ import QuestProposalVoteResult from "@/components/avalon/QuestProposalVoteResult
 import QuestProposalInput from "@/components/avalon/QuestProposalInput.vue";
 import PlayerReadyBar from "@/components/common/PlayerReadyBar.vue";
 import QuestWaiting from "@/components/avalon/QuestWaiting.vue";
+import MerlinIdentificationInput from "@/components/avalon/MerlinIdentificationInput.vue";
 
 export default {
   components: {
@@ -108,7 +125,8 @@ export default {
     QuestProposalVoteResult,
     QuestProposalInput,
     QuestWaiting,
-    PlayerReadyBar
+    PlayerReadyBar,
+    MerlinIdentificationInput
   },
   props: {
     game: Object,
@@ -129,12 +147,6 @@ export default {
     currentOrganiser: function() {
       return this.players.find(o => o.id == this.game.currentQuest.organiserId);
     },
-    playerIsOrganisingTeamText: function() {
-      return (
-        this.currentOrganiser.name +
-        " is currently putting together a team proposal. The proposal will be voted on by all players shortly."
-      );
-    },
     proposedQuestPlayers: function() {
       let members = [];
       for (
@@ -149,7 +161,9 @@ export default {
       return members;
     },
     proposedQuestMemberNames: function() {
-      return this.game.currentQuest.proposedPlayerIds.map(id => this.getPlayerNameById(id));
+      return this.game.currentQuest.proposedPlayerIds.map(id =>
+        this.getPlayerNameById(id)
+      );
     }
   },
   methods: {
