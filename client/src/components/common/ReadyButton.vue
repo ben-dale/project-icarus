@@ -2,7 +2,7 @@
   <button
     @click="click"
     type="button"
-    :class="['btn', 'btn-success', 'btn-block', (large ? 'btn-lg' : ''), (isPlayerReady ? 'btn-warning' : 'btn-success')]"
+    :class="['btn', 'btn-success', 'btn-block', (!large ? '' : 'btn-lg'), (isPlayerReady ? 'btn-warning' : 'btn-success')]"
   >{{isPlayerReady ? 'Not ready' : 'Ready'}}</button>
 </template>
 <script>

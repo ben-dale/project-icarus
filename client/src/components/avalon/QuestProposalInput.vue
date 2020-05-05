@@ -24,7 +24,7 @@
             <button
               v-if="player.id != -1"
               @click="unselect(index)"
-              class="btn btn-dark btn-block"
+              class="btn btn-info btn-block"
             >{{player.name}}</button>
           </div>
         </div>
@@ -40,7 +40,7 @@
             >
               <span><wbr /></span>
             </div>
-            <button v-if="player.id != -1" class="btn btn-light border btn-block" v-on:click="select(index)">{{player.name}}</button>
+            <button v-if="player.id != -1" class="btn btn-info btn-block" v-on:click="select(index)">{{player.name}}</button>
           </div>
         </div>
         <div class="row mb-3">

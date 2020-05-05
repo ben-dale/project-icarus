@@ -93,7 +93,7 @@ export default {
       metadata: []
       // room: {
       //   game: {
-      //     state: "QUEST_PROPOSING",
+      //     state: "QUEST_STARTED",
       //     screen: "GAME",
       //     settings: {
       //       percivalEnabled: false,
@@ -109,7 +109,7 @@ export default {
       //       votes: [
       //         { choice: "SUCCEED", revealed: true },
       //         { choice: "SABOTAGE", revealed: true },
-      //         { choice: "SUCCEED", revealed: true }
+      //         { choice: "SUCCEED", revealed: false }
       //       ],
       //       result: ""
       //     },
@@ -155,7 +155,7 @@ export default {
       // },
       // players: [
       //   { name: "Ben", id: "111", ready: false, vote: "APPROVE" },
-      //   { name: "Sidd", id: "222", ready: true, vote: "REJECT" },
+      //   { name: "Sidd", id: "222", ready: true, vote: "APPROVE" },
       //   { name: "Adam <3", id: "333", ready: false, vote: "REJECT" },
       //   { name: "Sam", id: "444", ready: false, vote: "REJECT" },
       //   { name: "Rodney", id: "555", ready: false, vote: "REJECT" },
@@ -203,6 +203,7 @@ export default {
       });
     },
     getPlayerId: function() {
+      // return "111";
       return this.socket.id;
     },
     morganaEnabled: function(enabled) {

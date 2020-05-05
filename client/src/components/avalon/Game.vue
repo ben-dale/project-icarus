@@ -7,11 +7,11 @@
       <PlayerReadyBar :players="players" />
     </div>
     <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
-      <QuestProposalWaiting
+      <QuestWaiting
+        header="Team proposal"
+        line1="The team is being drafted."
+        line2="All players will vote on the team proposal shortly..."
         :questId="game.currentQuest.id"
-        :organiserName="currentOrganiser.name"
-        :isPlayerReady="isPlayerReady"
-        v-on="$listeners"
       />
     </div>
     <div v-if="game.state == 'QUEST_PROPOSING' && playerIsOrganiser" class="row">
@@ -20,17 +20,23 @@
         :players="players"
         :requiredPlayers="requiredPlayers"
         :isPlayerReady="isPlayerReady"
-        @propose-team="proposeTeam"
+        v-on="$listeners"
       />
-      <!-- todo quest size limitations! -->
     </div>
     <div v-if="game.state == 'QUEST_PROPOSAL'" class="row">
-      <QuestProposalVoteInput :organiser="currentOrganiser.name" :names="proposedQuestMemberNames" />
+      <QuestProposalVoteInput
+        :questId="game.currentQuest.id"
+        :organiser="currentOrganiser.name"
+        :names="proposedQuestMemberNames"
+        v-on="$listeners"
+      />
     </div>
     <div v-if="game.state == 'QUEST_PROPOSAL_RESULT'" class="row">
       <QuestProposalVoteResult
         :players="players"
         :proposalAccepted="game.currentQuest.proposalAccepted"
+        :questId="game.currentQuest.id"
+        v-on="$listeners"
       />
     </div>
 
@@ -38,14 +44,23 @@
       class="row"
       v-if="game.state == 'QUEST_STARTED' && !game.currentQuest.proposedPlayerIds.includes(playerId)"
     >
-      <PlainOutput line="The results of the quest will be revealed shortly." />
+      <QuestWaiting
+        header="Quest underway"
+        line1="The quest is underway!"
+        line2="The result of the quest will be revealed shortly..."
+        :questId="game.currentQuest.id"
+      />
     </div>
 
     <div
       class="row"
       v-if="game.state == 'QUEST_STARTED' && game.currentQuest.proposedPlayerIds.includes(playerId)"
     >
-      <QuestOutcomeVoteInput :members="proposedQuestMembers" :isEvil="team == 'EVIL'" />
+      <QuestOutcomeVoteInput
+        :players="proposedQuestPlayers"
+        :questId="game.currentQuest.id"
+        :isEvil="team == 'EVIL'"
+      />
     </div>
 
     <div v-if="game.state == 'QUEST_RESULT_REVEAL'" class="row mb-3">
@@ -53,17 +68,12 @@
         :organiserName="currentOrganiser.name"
         :playerIsOrganiser="playerIsOrganiser"
         :results="game.currentQuest.votes"
-        @reveal-quest-result="revealQuestResult"
+        :questId="game.currentQuest.id"
+        :questResult="game.currentQuest.result"
+        v-on="$listeners"
       />
     </div>
 
-    <div v-if="game.state == 'QUEST_RESULT'" class="row mb-3">
-      <Outcome result="FAIL" outcome="The quest was sabotaged" buttonText="Ready" />
-    </div>
-    <div v-if="game.state == 'QUEST_RESULT'" class="row mb-3">
-      <Outcome result="SUCCEED" outcome="The quest was completed successfully" buttonText="Ready" />
-    </div>
-    <!-- 
     <div v-if="game.state == 'GAME_OVER'" class="row">
       <Outcome winner="evil" outcome="Evil have taken the win!" buttonText="Play Again" />
     </div>
@@ -73,7 +83,7 @@
         outcome="The Assassin was not able to identify Merlin. Good have taken the win!"
         buttonText="Play Again"
       />
-    </div>-->
+    </div>
   </div>
 </template>
 
@@ -81,25 +91,23 @@
 import QuestLog from "@/components/avalon/QuestLog.vue";
 import QuestResultReveal from "@/components/avalon/QuestResultReveal.vue";
 import QuestProposalVoteInput from "@/components/avalon/QuestProposalVoteInput.vue";
-import PlainOutput from "@/components/avalon/PlainOutput.vue";
 import QuestOutcomeVoteInput from "@/components/avalon/QuestOutcomeVoteInput.vue";
 import Outcome from "@/components/avalon/Outcome.vue";
 import QuestProposalVoteResult from "@/components/avalon/QuestProposalVoteResult.vue";
 import QuestProposalInput from "@/components/avalon/QuestProposalInput.vue";
 import PlayerReadyBar from "@/components/common/PlayerReadyBar.vue";
-import QuestProposalWaiting from "@/components/avalon/QuestProposalWaiting.vue";
+import QuestWaiting from "@/components/avalon/QuestWaiting.vue";
 
 export default {
   components: {
     QuestLog,
     QuestResultReveal,
     QuestProposalVoteInput,
-    PlainOutput,
     QuestOutcomeVoteInput,
     Outcome,
     QuestProposalVoteResult,
     QuestProposalInput,
-    QuestProposalWaiting,
+    QuestWaiting,
     PlayerReadyBar
   },
   props: {
@@ -115,7 +123,8 @@ export default {
       return this.playerId == this.game.currentQuest.organiserId;
     },
     requiredPlayers: function() {
-      return this.game.questLogs.find(ql => ql.id == this.game.currentQuest.id).requiredPlayers;
+      return this.game.questLogs.find(ql => ql.id == this.game.currentQuest.id)
+        .requiredPlayers;
     },
     currentOrganiser: function() {
       return this.players.find(o => o.id == this.game.currentQuest.organiserId);
@@ -126,7 +135,7 @@ export default {
         " is currently putting together a team proposal. The proposal will be voted on by all players shortly."
       );
     },
-    proposedQuestMembers: function() {
+    proposedQuestPlayers: function() {
       let members = [];
       for (
         let i = 0;
@@ -138,11 +147,6 @@ export default {
         );
       }
       return members;
-    },
-    proposedQuestMemberNames: function() {
-      return this.game.currentQuest.proposedPlayerIds.map(id =>
-        this.getPlayerNameById(id)
-      );
     }
   },
   methods: {

@@ -1,26 +1,27 @@
 <template>
   <div class="col-md-12">
     <div class="card">
+      <h5 class="card-header bg-light">Quest {{questId}} - Quest underway</h5>
       <div class="card-body text-center">
-        <div class="row py-5">
+        <div class="row mt-3 mb-5">
           <div class="col-12">
-            <h4 class="card-title">You are on a quest with the following members:</h4>
-            <h3 class="card-title pb-5">
+            <h5 class="card-title">You are on a quest with the following players</h5>
+            <h4 class="card-title pb-5">
               <span
-                v-for="(member, index) in members"
+                v-for="(player, index) in players"
                 :key="index"
-                class="badge badge-pill badge-dark mx-2"
-              >{{member}}</span>
-            </h3>
-            <h4 class="card-title">How would you like to proceed?</h4>
-            <h4 class="card-title">Your decision will be kept anonymous.</h4>
+                class="badge badge-info mx-2"
+              >{{player}}</span>
+            </h4>
+            <h5 class="card-text">How would you like to proceed?</h5>
+            <h5 class="card-text">Your decision will be kept anonymous.</h5>
           </div>
         </div>
-        <div class="row pb-5">
-          <div class="col-4 offset-2">
+        <div class="row mb-3">
+          <div class="col-3 offset-3">
             <button class="btn btn-info btn-block">Succeed</button>
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <button class="btn btn-danger btn-block" :disabled="!isEvil">Sabotage</button>
           </div>
         </div>
@@ -32,7 +33,8 @@
 export default {
   props: {
     isEvil: Boolean,
-    members: Array
+    players: Array,
+    questId: Number
   }
 };
 </script>

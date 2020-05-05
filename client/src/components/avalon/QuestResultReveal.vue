@@ -1,8 +1,9 @@
 <template>
   <div class="col-md-12">
     <div class="card">
+      <h5 class="card-header bg-light">Quest {{questId}} - Quest result</h5>
       <div class="card-body text-center">
-        <div class="row mb-3">
+        <div class="row my-3">
           <div
             v-for="(result, index) in results"
             :key="index"
@@ -20,15 +21,17 @@
             >
               <h5>Sabotage</h5>
             </div>
-            <div v-if="!result.revealed" class="py-5 bg-light border rounded text-center">
-              <h5>Result</h5>
+            <div v-if="!result.revealed" class="py-5 bg-transparent border rounded text-center">
+              <h5><wbr /></h5>
             </div>
           </div>
         </div>
-        <div v-if="!playerIsOrganiser && results.filter(r => !r.revealed).length > 0" class="row">
-          <div class="col-12">{{organiserName}} is revealing the results.</div>
+        <div v-if="!playerIsOrganiser && questResult === ''" class="row mb-3 pt-4">
+          <div class="col-12">
+            <p class="lead"><span class="badge badge-dark">{{organiserName}}</span> is revealing the results...</p>
+          </div>
         </div>
-        <div v-if="playerIsOrganiser && results.filter(r => !r.revealed).length > 0" class="row">
+        <div v-if="playerIsOrganiser && questResult === ''" class="row mb-3">
           <div
             v-for="(result, index) in results"
             :key="index"
@@ -41,9 +44,19 @@
             >Reveal</button>
           </div>
         </div>
-        <div v-if="results.filter(r => !r.revealed).length == 0" class="row">
+        <div v-if="questResult == 'FAIL'" class="row pt-4">
+          <div class="col-12">
+            <p class="lead">The quest was sabotaged!</p>
+          </div>
+        </div>
+        <div v-if="questResult == 'SUCCEED'" class="row pt-4">
+          <div class="col-12">
+            <p class="lead">The quest was completed successfully.</p>
+          </div>
+        </div>
+        <div v-if="questResult !== ''" class="row mb-3">
           <div class="col-4 offset-4">
-            <button class="btn btn-dark btn-block" v-on:click="ready()">Ready</button>
+            <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
           </div>
         </div>
       </div>
@@ -52,12 +65,16 @@
 </template>
 
 <script>
+import ReadyButton from "@/components/common/ReadyButton.vue";
 export default {
   name: "QuestResultReveal",
+  components: { ReadyButton },
   props: {
     playerIsOrganiser: Boolean,
     organiserName: String,
-    results: Array
+    results: Array,
+    questId: Number,
+    questResult: String
   },
   methods: {
     resultOffset: function() {
@@ -71,12 +88,6 @@ export default {
         case 5:
           return 1;
       }
-    },
-    reveal: function(id) {
-      this.$emit("reveal-quest-result", id);
-    },
-    ready: function() {
-      this.$emit("ready-up");
     }
   }
 };
