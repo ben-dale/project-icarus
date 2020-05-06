@@ -2,6 +2,7 @@ class CurrentQuest {
 
   fromRawObject(obj) {
     this.id = obj.id;
+    this.requiredPlayers = obj.requiredPlayers;
     this.disagreements = obj.disagreements;
     this.organiserId = obj.organiserId;
     this.proposedPlayerIds = obj.proposedPlayerIds.slice();
@@ -13,6 +14,7 @@ class CurrentQuest {
 
   init(organiserId) {
     this.id = 1;
+    this.requiredPlayers = 0;
     this.disagreements = 0;
     this.organiserId = organiserId;
     this.proposedPlayerIds = [];
@@ -25,6 +27,7 @@ class CurrentQuest {
   copy() {
     let currentQuest = new CurrentQuest();
     currentQuest.id = this.id;
+    currentQuest.requiredPlayers = this.requiredPlayers;
     currentQuest.disagreements = this.disagreements;
     currentQuest.organiserId = this.organiserId;
     currentQuest.proposedPlayerIds = this.proposedPlayerIds.slice();
@@ -32,6 +35,12 @@ class CurrentQuest {
     currentQuest.votes = this.votes.slice();
     currentQuest.result = this.result;
     return currentQuest;
+  }
+
+  withRequiredPlayers(requiredPlayers) {
+    const copy = this.copy();
+    copy.requiredPlayers = requiredPlayers;
+    return copy;
   }
 
   withOrganiserId(organiserId) {
@@ -64,6 +73,12 @@ class CurrentQuest {
     return copy;
   }
 
+  removeProposedPlayerId(playerId) {
+    const copy = this.copy();
+    copy.proposedPlayerIds.pop(playerId);
+    return copy;
+  }
+
   withAcceptedProposal(proposalAccepted) {
     const copy = this.copy();
     copy.proposalAccepted = proposalAccepted;
@@ -88,10 +103,11 @@ class CurrentQuest {
     return copy;
   }
 
-  startNextQuest(organiserId) {
+  startNextQuest(organiserId, requiredPlayers) {
     const copy = this.copy();
     copy.organiserId = organiserId;
     copy.id = copy.id + 1;
+    copy.requiredPlayers = requiredPlayers;
     copy.votes = [];
     copy.result = '';
     copy.proposedPlayerIds = [];

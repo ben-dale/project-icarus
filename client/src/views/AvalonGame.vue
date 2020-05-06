@@ -95,7 +95,7 @@ export default {
       metadata: []
       // room: {
       //   game: {
-      //     state: "MERLIN_ID",
+      //     state: "QUEST_STARTED",
       //     screen: "GAME",
       //     settings: {
       //       percivalEnabled: false,
@@ -106,7 +106,8 @@ export default {
       //       id: 2,
       //       organiserId: "222",
       //       disagreements: 0,
-      //       proposedPlayerIds: ["111", "333"],
+      //       requiredPlayers: 2,
+      //       proposedPlayerIds: ["555", "333"],
       //       proposalAccepted: false,
       //       votes: [
       //         { choice: "SUCCEED", revealed: true },
@@ -155,11 +156,24 @@ export default {
       //   }
       // },
       // players: [
-      //   { name: "Ben", id: "111", ready: false, vote: "APPROVE", team: "EVIL"},
+      //   { name: "Ben", id: "111", ready: false, vote: "APPROVE", team: "EVIL" },
       //   { name: "Sidd", id: "222", ready: true, vote: "APPROVE", team: "EVIL" },
-      //   { name: "Adam <3", id: "333", ready: false, vote: "REJECT", team: "EVIL", role: "ASSASSIN" },
+      //   {
+      //     name: "Adam <3",
+      //     id: "333",
+      //     ready: false,
+      //     vote: "REJECT",
+      //     team: "EVIL",
+      //     role: "ASSASSIN"
+      //   },
       //   { name: "Sam", id: "444", ready: false, vote: "REJECT", team: "GOOD" },
-      //   { name: "Rodney", id: "555", ready: false, vote: "REJECT", team: "GOOD" },
+      //   {
+      //     name: "Rodney",
+      //     id: "555",
+      //     ready: false,
+      //     vote: "REJECT",
+      //     team: "GOOD"
+      //   },
       //   { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
       //   { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
       // ],

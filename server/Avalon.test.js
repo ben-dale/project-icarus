@@ -46,6 +46,7 @@ test('starts role reveal for five players', () => {
   expect(avalon.state).toBe('');
   expect(['1', '2', '3', '4', '5']).toContain(avalon.currentQuest.organiserId);
   expect(avalon.currentQuest.id).toBe(1);
+  expect(avalon.currentQuest.requiredPlayers).toBe(2);
   expect(avalon.currentQuest.disagreements).toBe(0);
   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
   expect(avalon.currentQuest.proposalAccepted).toBe(false);
@@ -110,6 +111,7 @@ test('starts role reveal for five players with percival and morgana', () => {
   expect(avalon.state).toBe('');
   expect(['1', '2', '3', '4', '5']).toContain(avalon.currentQuest.organiserId);
   expect(avalon.currentQuest.id).toBe(1);
+  expect(avalon.currentQuest.requiredPlayers).toBe(2);
   expect(avalon.currentQuest.disagreements).toBe(0);
   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
   expect(avalon.currentQuest.proposalAccepted).toBe(false);
@@ -178,6 +180,7 @@ test('starts role reveal for sevev players with percival and morgana and oberon'
   expect(avalon.state).toBe('');
   expect(['1', '2', '3', '4', '5', '6', '7']).toContain(avalon.currentQuest.organiserId);
   expect(avalon.currentQuest.id).toBe(1);
+  expect(avalon.currentQuest.requiredPlayers).toBe(2);
   expect(avalon.currentQuest.disagreements).toBe(0);
   expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
   expect(avalon.currentQuest.proposalAccepted).toBe(false);
@@ -246,6 +249,7 @@ test('create instance from raw object', () => {
       organiserId: '393f93',
       proposedPlayerIds: [],
       proposalAccepted: false,
+      requiredPlayers: 0,
       result: '',
       votes: []
     }

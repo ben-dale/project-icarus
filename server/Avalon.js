@@ -78,7 +78,7 @@ class Avalon {
       questLogs.push(new QuestLog().init(i + 1, questConfig[i]));
     }
     this.questLogs = questLogs;
-    this.currentQuest = new CurrentQuest().init(this.randomPlayerId(allPlayers));
+    this.currentQuest = new CurrentQuest().init(this.randomPlayerId(allPlayers)).withRequiredPlayers(questConfig[0]);
     this.closed = true;
     this.screen = 'ROLE_REVEAL';
     this.state = '';

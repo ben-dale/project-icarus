@@ -77,6 +77,22 @@ test('add playerId to proposedPlayerIds', () => {
   expect(currentQuest.proposedPlayerIds).toStrictEqual(['555']);
 });
 
+test('remove playerId from proposedPlayerIds', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withProposedPlayerId('555');
+
+  expect(currentQuest.removeProposedPlayerId('555').proposedPlayerIds).toStrictEqual([]);
+});
+
+test('set required players for quest', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withRequiredPlayers(3);
+
+  expect(currentQuest.requiredPlayers).toBe(3);
+});
+
 test('mark proposal as accepted', () => {
   const organiserId = '333';
 

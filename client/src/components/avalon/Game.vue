@@ -10,15 +10,17 @@
       <QuestWaiting
         header="Team proposal"
         :line1="currentOrganiser.name + ' is proposing a team.'"
-        line2="All players will vote on the team proposal shortly..."
+        line2="Players will vote on the team proposal when it has been drafted and everyone is ready."
         :questId="game.currentQuest.id"
+        :isPlayerReady="isPlayerReady"
+        v-on="$listeners"
       />
     </div>
     <div v-if="game.state == 'QUEST_PROPOSING' && playerIsOrganiser" class="row">
       <QuestProposalInput
         :questId="game.currentQuest.id"
         :players="players"
-        :requiredPlayers="requiredPlayers"
+        :requiredPlayers="game.currentQuest.requiredPlayers"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"
       />
@@ -47,8 +49,10 @@
       <QuestWaiting
         header="Quest underway"
         line1="The quest is underway!"
-        line2="The result of the quest will be revealed shortly..."
+        line2="The result of the quest will be revealed when the quest has been completed and everyone is ready."
         :questId="game.currentQuest.id"
+        :isPlayerReady="isPlayerReady"
+        v-on="$listeners"
       />
     </div>
 
@@ -139,10 +143,6 @@ export default {
   computed: {
     playerIsOrganiser: function() {
       return this.playerId == this.game.currentQuest.organiserId;
-    },
-    requiredPlayers: function() {
-      return this.game.questLogs.find(ql => ql.id == this.game.currentQuest.id)
-        .requiredPlayers;
     },
     currentOrganiser: function() {
       return this.players.find(o => o.id == this.game.currentQuest.organiserId);
