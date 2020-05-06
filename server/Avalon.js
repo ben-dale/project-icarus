@@ -49,11 +49,13 @@ class Avalon {
 
   next(redisClient, io, allPlayers, roomId) {
     if (this.screen == 'LOBBY' && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
-      console.log('starting role reveal...')
+      console.log('starting role reveal...');
       this.startRoleReveal(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'ROLE_REVEAL') {
-      console.log('starting game...')
+      console.log('starting game...');
       return this.startGame(redisClient, io, allPlayers, roomId);
+    } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSING') {
+      console.log('starting proposal vote...');
     }
     // todo 
     // this.screen = 'GAME'

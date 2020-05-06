@@ -14,11 +14,12 @@
             :class="['col-2', (index == 0 ? 'offset-' + resultOffset() : '')]"
             :key="index"
           >
-            <button v-if="player.id == -1" class="btn btn-light btn-sm btn-block" disabled>Required</button>
+            <button v-if="player.id == -1" class="btn btn-light btn-sm btn-block border" disabled>Required</button>
             <button
               v-if="player.id != -1"
-              @click="unselect(index)"
+              @click="unselect(player.id)"
               class="btn btn-info btn-sm btn-block"
+              :disabled="isPlayerReady"
             >{{player.name}}</button>
           </div>
         </div>
@@ -31,18 +32,20 @@
             <button
               v-if="player.id != -1"
               class="btn btn-info btn-sm btn-block"
-              v-on:click="select(index)"
+              v-on:click="select(player.id)"
+              :disabled="isPlayerReady"
             >{{player.name}}</button>
 
-            <button v-if="player.id == -1" class="btn btn-light btn-sm btn-block" disabled>-</button>
+            <button v-if="player.id == -1" class="btn btn-light btn-sm btn-block border" disabled><wbr/></button>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-4 offset-4">
-            <button
-              class="btn btn-dark btn-block btn-sm"
-              :disabled="selected.length != requiredPlayers"
-            >Submit</button>
+            <ReadyButton
+              :isPlayerReady="isPlayerReady"
+              :disabled="requiredPlayers != proposedPlayerIds.length"
+              v-on="$listeners"
+            />
           </div>
         </div>
       </div>
@@ -51,34 +54,39 @@
 </template>
 
 <script>
+import ReadyButton from "@/components/common/ReadyButton.vue";
+
 export default {
   name: "QuestProposalInput",
+  components: { ReadyButton },
   props: {
     players: Array,
     requiredPlayers: Number,
     questId: Number,
-    isPlayerReady: Boolean
-  },
-  data: function() {
-    return {
-      selected: [],
-      notSelected: []
-    };
+    isPlayerReady: Boolean,
+    proposedPlayerIds: Array
   },
   created() {
     this.notSelected = this.players.slice();
   },
   computed: {
     selectedToDisplay: function() {
-      let selectedToDisplay = this.selected.slice();
-      for (let i = 0; i < this.requiredPlayers - this.selected.length; i++) {
+      let selectedToDisplay = this.players.filter(p =>
+        this.proposedPlayerIds.includes(p.id)
+      );
+      const blanksToAdd = this.requiredPlayers - selectedToDisplay.length;
+      for (let i = 0; i < blanksToAdd; i++) {
         selectedToDisplay.push({ id: -1, name: "Required" });
       }
       return selectedToDisplay;
     },
     unselectedToDisplay: function() {
-      let unselectedToDisplay = this.notSelected.slice();
-      for (let i = 0; i < this.selected.length; i++) {
+      let unselectedToDisplay = this.players.filter(
+        p => !this.proposedPlayerIds.includes(p.id)
+      );
+      console.log(unselectedToDisplay);
+      const blanksToAdd = unselectedToDisplay.length;
+      for (let i = blanksToAdd; i < this.players.length; i++) {
         unselectedToDisplay.push({ id: -1, name: "" });
       }
       return unselectedToDisplay;
@@ -97,20 +105,11 @@ export default {
           return 1;
       }
     },
-    select: function(i) {
-      if (this.selected.length < this.requiredPlayers) {
-        this.selected.push(this.notSelected.splice(i, 1)[0]);
-      }
+    select: function(playerId) {
+      this.$emit("propose-player-for-quest", playerId);
     },
-    unselect: function(i) {
-      this.notSelected.push(this.selected.splice(i, 1)[0]);
-    },
-    submit: function() {
-      let ids = [];
-      for (let i = 0; i < this.selected.length; i++) {
-        ids.push(this.selected[i].id);
-      }
-      this.$emit("proposeTeam", ids);
+    unselect: function(playerId) {
+      this.$emit("unpropose-player-for-quest", playerId);
     }
   }
 };

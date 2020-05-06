@@ -41,6 +41,11 @@ test('add second player', () => {
   expect(room.ownerId).toBe('123');
 });
 
+test('has player id', () => {
+  const room = new Room().init('111').addPlayerId('123');
+
+  expect(room.hasPlayerId('123'));
+});
 
 test('emit to all', () => {
   let room = new Room().init('325t3');

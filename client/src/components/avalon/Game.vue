@@ -20,6 +20,7 @@
       <QuestProposalInput
         :questId="game.currentQuest.id"
         :players="players"
+        :proposedPlayerIds="game.currentQuest.proposedPlayerIds"
         :requiredPlayers="game.currentQuest.requiredPlayers"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"
@@ -177,9 +178,7 @@ export default {
     revealQuestResult: function(id) {
       this.$emit("reveal-quest-result", id);
     },
-    proposeTeam: function(memberIds) {
-      this.$emit("propose-team", memberIds);
-    }
+
   }
 };
 </script>

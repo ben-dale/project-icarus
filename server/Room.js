@@ -40,6 +40,10 @@ class Room {
     return this.playerIds.length >= this.game.minPlayers;
   }
 
+  hasPlayerId(playerId) {
+    return this.playerIds.filter(pid => pid == playerId).length != 0;
+  }
+
   storeInRedis(redisClient) {
     redisClient.set(this.id, JSON.stringify(this));
     redisClient.expire(this.id, 86400);

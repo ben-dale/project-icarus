@@ -80,9 +80,9 @@ test('add playerId to proposedPlayerIds', () => {
 test('remove playerId from proposedPlayerIds', () => {
   const organiserId = '333';
 
-  const currentQuest = new CurrentQuest().init(organiserId).withProposedPlayerId('555');
+  const currentQuest = new CurrentQuest().init(organiserId).withProposedPlayerId('555').withProposedPlayerId('222');
 
-  expect(currentQuest.removeProposedPlayerId('555').proposedPlayerIds).toStrictEqual([]);
+  expect(currentQuest.removeProposedPlayerId('555').proposedPlayerIds).toStrictEqual(['222']);
 });
 
 test('set required players for quest', () => {
@@ -147,6 +147,22 @@ test('work out SUCCEED result of quest based on votes', () => {
   const currentQuest = new CurrentQuest().init(organiserId).withSucceedVote().withSucceedVote().revealVote(0).revealVote(1).withResult();
 
   expect(currentQuest.result).toBe('SUCCEED');
+});
+
+test('has proposed player id', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withProposedPlayerId("111");
+
+  expect(currentQuest.hasProposedPlayerId("111")).toBe(true);
+});
+
+test('does not have proposed player id', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withProposedPlayerId("111");
+
+  expect(currentQuest.hasProposedPlayerId("222")).toBe(false);
 });
 
 test('starts next quest', () => {

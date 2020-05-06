@@ -75,8 +75,12 @@ class CurrentQuest {
 
   removeProposedPlayerId(playerId) {
     const copy = this.copy();
-    copy.proposedPlayerIds.pop(playerId);
+    copy.proposedPlayerIds = copy.proposedPlayerIds.filter(id => id != playerId);
     return copy;
+  }
+  
+  hasProposedPlayerId(playerId) {
+    return this.proposedPlayerIds.filter(pid => pid == playerId).length != 0;
   }
 
   withAcceptedProposal(proposalAccepted) {
