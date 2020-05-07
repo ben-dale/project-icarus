@@ -57,6 +57,12 @@ class Player {
     return copy;
   }
 
+  withProposalApproved(proposalApproved) {
+    const copy = this.copy();
+    copy.vote = proposalApproved ? 'APPROVE' : 'REJECT';
+    return copy;
+  }
+
   getFromRedis(redisClient, id, onSuccess, onError) {
     redisClient.get(id, (error, result) => {
       if (error) {

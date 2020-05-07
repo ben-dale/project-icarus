@@ -39,7 +39,7 @@ test('starts role reveal for five players', () => {
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
-    expect(currentLog.organiserId).toBe('');
+    expect(currentLog.organiserId).toBe(i == 0 ? avalon.currentQuest.organiserId : '');
   }
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe('ROLE_REVEAL');
@@ -104,7 +104,7 @@ test('starts role reveal for five players with percival and morgana', () => {
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
-    expect(currentLog.organiserId).toBe('');
+    expect(currentLog.organiserId).toBe(i == 0 ? avalon.currentQuest.organiserId : '');
   }
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe('ROLE_REVEAL');
@@ -173,7 +173,7 @@ test('starts role reveal for sevev players with percival and morgana and oberon'
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
-    expect(currentLog.organiserId).toBe('');
+    expect(currentLog.organiserId).toBe(i == 0 ? avalon.currentQuest.organiserId : '');
   }
   expect(avalon.closed).toBe(true);
   expect(avalon.screen).toBe('ROLE_REVEAL');
@@ -229,6 +229,69 @@ test('starts the game', () => {
   expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('QUEST_PROPOSING');
 })
+
+test('starts proposal vote', () => {
+  const roomId = '293jd9';
+  const allPlayers = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId),
+    new Player().init('2', 'player2', roomId),
+    new Player().init('3', 'player3', roomId),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId),
+  ]);
+  const io = new MockIo();
+  const redisClient = new MockRedisClient();
+
+  const avalon = new Avalon().init();
+  avalon.settings = avalon.settings.withMorganaEnabled(true);
+  avalon.settings = avalon.settings.withPercivalEnabled(true);
+  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
+  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+
+  expect(avalon.screen).toBe('GAME');
+  expect(avalon.state).toBe('QUEST_PROPOSAL');
+});
+
+test('starts proposal vote result', () => {
+  const roomId = '293jd9';
+  const allPlayers = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId),
+    new Player().init('2', 'player2', roomId),
+    new Player().init('3', 'player3', roomId),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId),
+  ]);
+  const io = new MockIo();
+  const redisClient = new MockRedisClient();
+
+  const avalon = new Avalon().init();
+  avalon.settings = avalon.settings.withMorganaEnabled(true);
+  avalon.settings = avalon.settings.withPercivalEnabled(true);
+  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
+  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+ 
+  const allPlayersWithVote = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId).withProposalApproved(true),
+    new Player().init('2', 'player2', roomId).withProposalApproved(true),
+    new Player().init('3', 'player3', roomId).withProposalApproved(true),
+    new Player().init('4', 'player4', roomId).withProposalApproved(true),
+    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+  ]);
+  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+
+  expect(avalon.screen).toBe('GAME');
+  expect(avalon.state).toBe('QUEST_PROPOSAL_RESULT');
+  expect(avalon.questLogs[0].playerIds).toStrictEqual(['1', '2']);
+  expect(avalon.currentQuest.proposalAccepted).toBe(true);
+});
 
 test('create instance from raw object', () => {
   const rawObject = {
