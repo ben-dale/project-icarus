@@ -18,10 +18,18 @@
         </div>
         <div class="row mb-3">
           <div class="col-3 offset-3">
-            <button class="btn btn-dark btn-sm btn-block">Approve</button>
+            <button
+              @click="approve(true)"
+              class="btn btn-dark btn-sm btn-block"
+              :disabled="isPlayerReady"
+            >Approve</button>
           </div>
           <div class="col-3">
-            <button class="btn btn-dark btn-sm btn-block">Reject</button>
+            <button
+              @click="approve(false)"
+              class="btn btn-dark btn-sm btn-block"
+              :disabled="isPlayerReady"
+            >Reject</button>
           </div>
         </div>
       </div>
@@ -34,7 +42,13 @@ export default {
   props: {
     questId: Number,
     organiser: String,
-    names: Array
+    names: Array,
+    isPlayerReady: Boolean
+  },
+  methods: {
+    approve: function(approve) {
+      this.$emit("player-approve-proposal", approve);
+    }
   }
 };
 </script>

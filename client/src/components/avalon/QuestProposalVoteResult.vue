@@ -37,7 +37,7 @@
         </div>
         <div class="row mb-3">
           <div class="col-4 offset-4">
-            <button class="btn btn-dark btn-sm btn-block">OK</button>
+            <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
           </div>
         </div>
       </div>
@@ -46,11 +46,14 @@
 </template>
 
 <script>
+import ReadyButton from "@/components/common/ReadyButton.vue";
 export default {
+  components: { ReadyButton },
   props: {
     players: Array,
     proposalAccepted: Boolean,
-    questId: Number
+    questId: Number,
+    isPlayerReady: Boolean
   }
 };
 </script>

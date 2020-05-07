@@ -31,6 +31,7 @@
         :questId="game.currentQuest.id"
         :organiser="currentOrganiser.name"
         :names="proposedQuestMemberNames"
+        :isPlayerReady="isPlayerReady"
         v-on="$listeners"
       />
     </div>
@@ -39,6 +40,7 @@
         :players="players"
         :proposalAccepted="game.currentQuest.proposalAccepted"
         :questId="game.currentQuest.id"
+        :isPlayerReady="isPlayerReady"
         v-on="$listeners"
       />
     </div>

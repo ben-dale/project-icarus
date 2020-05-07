@@ -105,6 +105,7 @@ class Avalon {
   }
 
   startRoleReveal(redisClient, io, allPlayers, roomId) {
+    // Need to move some of this code out to start next round
     let questLogs = [];
     let questConfig = this.playersRequiredEachQuest(allPlayers.players.length);
     for (let i = 0; i < 5; i++) {

@@ -52,6 +52,7 @@
         @unpropose-player-for-quest="unproposePlayerForQuest"
         @player-ready="readyUp"
         @player-not-ready="notReady"
+        @player-approve-proposal="playerApproveVote"
       />
     </div>
 
@@ -94,93 +95,93 @@ export default {
       team: null,
       role: null,
       metadata: []
-      //   room: {
-      //     game: {
-      //       state: "QUEST_PROPOSING",
-      //       screen: "GAME",
-      //       settings: {
-      //         percivalEnabled: false,
-      //         oberonEnabled: false,
-      //         morganaEnabled: false
-      //       },
-      //       currentQuest: {
-      //         id: 2,
-      //         organiserId: "111",
-      //         disagreements: 0,
-      //         requiredPlayers: 2,
-      //         proposedPlayerIds: ["555", "444"],
-      //         proposalAccepted: false,
-      //         votes: [
-      //           { choice: "SUCCEED", revealed: true },
-      //           { choice: "SABOTAGE", revealed: true },
-      //           { choice: "SUCCEED", revealed: true }
-      //         ],
-      //         result: "SUCCEED"
-      //       },
-      //       questLogs: [
-      //         {
-      //           id: 1,
-      //           requiredPlayers: 2,
-      //           playerIds: ["222", "333"],
-      //           organiserId: "222",
-      //           result: "SUCCEED"
-      //         },
-      //         {
-      //           id: 2,
-      //           requiredPlayers: 2,
-      //           playerIds: [],
-      //           organiserId: "",
-      //           result: ""
-      //         },
-      //         {
-      //           id: 3,
-      //           requiredPlayers: 4,
-      //           playerIds: [],
-      //           organiserId: "",
-      //           result: ""
-      //         },
-      //         {
-      //           id: 4,
-      //           requiredPlayers: 3,
-      //           playerIds: [],
-      //           organiserId: "",
-      //           result: ""
-      //         },
-      //         {
-      //           id: 5,
-      //           requiredPlayers: 4,
-      //           playerIds: [],
-      //           organiserId: "",
-      //           result: ""
-      //         }
-      //       ]
-      //     }
-      //   },
-      //   players: [
-      //     { name: "Ben", id: "111", ready: true, vote: "APPROVE", team: "EVIL" },
-      //     { name: "Sidd", id: "222", ready: true, vote: "APPROVE", team: "EVIL" },
-      //     {
-      //       name: "Adam <3",
-      //       id: "333",
-      //       ready: false,
-      //       vote: "REJECT",
-      //       team: "EVIL",
-      //       role: "ASSASSIN"
-      //     },
-      //     { name: "Sam", id: "444", ready: false, vote: "REJECT", team: "GOOD" },
-      //     {
-      //       name: "Rodney",
-      //       id: "555",
-      //       ready: false,
-      //       vote: "REJECT",
-      //       team: "GOOD"
-      //     },
-      //     { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
-      //     { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
-      //   ],
-      //   team: "EVIL",
-      //   role: "ASSASSIN",
-      //   metadata: ["111", "222"]
+    //     room: {
+    //       game: {
+    //         state: "QUEST_PROPOSAL_RESULT",
+    //         screen: "GAME",
+    //         settings: {
+    //           percivalEnabled: false,
+    //           oberonEnabled: false,
+    //           morganaEnabled: false
+    //         },
+    //         currentQuest: {
+    //           id: 2,
+    //           organiserId: "111",
+    //           disagreements: 0,
+    //           requiredPlayers: 2,
+    //           proposedPlayerIds: ["555", "444"],
+    //           proposalAccepted: false,
+    //           votes: [
+    //             { choice: "SUCCEED", revealed: true },
+    //             { choice: "SABOTAGE", revealed: true },
+    //             { choice: "SUCCEED", revealed: true }
+    //           ],
+    //           result: "SUCCEED"
+    //         },
+    //         questLogs: [
+    //           {
+    //             id: 1,
+    //             requiredPlayers: 2,
+    //             playerIds: ["222", "333"],
+    //             organiserId: "222",
+    //             result: "SUCCEED"
+    //           },
+    //           {
+    //             id: 2,
+    //             requiredPlayers: 2,
+    //             playerIds: [],
+    //             organiserId: "",
+    //             result: ""
+    //           },
+    //           {
+    //             id: 3,
+    //             requiredPlayers: 4,
+    //             playerIds: [],
+    //             organiserId: "",
+    //             result: ""
+    //           },
+    //           {
+    //             id: 4,
+    //             requiredPlayers: 3,
+    //             playerIds: [],
+    //             organiserId: "",
+    //             result: ""
+    //           },
+    //           {
+    //             id: 5,
+    //             requiredPlayers: 4,
+    //             playerIds: [],
+    //             organiserId: "",
+    //             result: ""
+    //           }
+    //         ]
+    //       }
+    //     },
+    //     players: [
+    //       { name: "Ben", id: "111", ready: true, vote: "APPROVE", team: "EVIL" },
+    //       { name: "Sidd", id: "222", ready: true, vote: "APPROVE", team: "EVIL" },
+    //       {
+    //         name: "Adam <3",
+    //         id: "333",
+    //         ready: false,
+    //         vote: "REJECT",
+    //         team: "EVIL",
+    //         role: "ASSASSIN"
+    //       },
+    //       { name: "Sam", id: "444", ready: false, vote: "REJECT", team: "GOOD" },
+    //       {
+    //         name: "Rodney",
+    //         id: "555",
+    //         ready: false,
+    //         vote: "REJECT",
+    //         team: "GOOD"
+    //       },
+    //       { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
+    //       { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
+    //     ],
+    //     team: "EVIL",
+    //     role: "ASSASSIN",
+    //     metadata: ["111", "222"]
     };
   },
   computed: {
@@ -195,11 +196,10 @@ export default {
       this.players = players;
     });
     this.socket.on("player-updated", player => {
+      // Typically it should only be the 'ready' field that is updated here
       console.log(player);
       let playerToUpdate = this.players.find(o => o.id == player.id);
-      for (let k in playerToUpdate) {
-        playerToUpdate[k] = player[k];
-      }
+      playerToUpdate.ready = player.ready;
     });
     this.socket.on("player-assigned", player => {
       console.log(player);
@@ -248,6 +248,10 @@ export default {
         name: this.name,
         roomId: this.roomId
       });
+    },
+    playerApproveVote: function(approve) {
+      console.log('hi');
+      this.socket.emit("player-updated", { ready: true, approveProposal: approve });
     },
     readyUp: function() {
       this.socket.emit("player-updated", { ready: true });
