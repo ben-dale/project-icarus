@@ -751,11 +751,3 @@ test('create instance from raw object', () => {
   expect(avalon.settings).toStrictEqual(new Settings().withMorganaEnabled(true).withOberonEnabled(true).withPercivalEnabled(true));
   expect(avalon.currentQuest).toStrictEqual(new CurrentQuest().init('393f93'));
 });
-
-test('returns 3 good players when there are 5 total players', () => {
-  expect(new Avalon().goodPlayerCount(5)).toBe(3);
-});
-
-test('returns 6 good players when there are 10 total players', () => {
-  expect(new Avalon().goodPlayerCount(10)).toBe(6);
-});

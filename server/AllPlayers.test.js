@@ -90,3 +90,10 @@ test('shuffles all players', () => {
 
   expect(allPlayers.players.length).toBe(2)
 });
+
+test('returns a random player id', () => {
+  const player1 = new Player().init('111', 'Ben', '5t6y');
+  const allPlayers = new AllPlayers().init([player1]);
+
+  expect(allPlayers.selectPlayerAtRandom().id).toBe('111')
+});

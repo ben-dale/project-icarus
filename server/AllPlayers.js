@@ -1,4 +1,5 @@
 const Player = require('./Player');
+const RandomInteger = require('./RandomInteger')
 
 class AllPlayers {
 
@@ -83,6 +84,10 @@ class AllPlayers {
 
   count() {
     return this.players.length;
+  }
+
+  selectPlayerAtRandom() {
+    return this.players[new RandomInteger().between(0, this.players.length - 1)];
   }
 }
 

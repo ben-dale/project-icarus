@@ -2,6 +2,7 @@ const RandomInteger = require('./RandomInteger');
 const CurrentQuest = require('./CurrentQuest');
 const QuestLog = require('./QuestLog');
 const Settings = require('./Settings');
+const AvalonRules = require('./avalon/AvalonRules');
 
 class Avalon {
 
@@ -9,8 +10,6 @@ class Avalon {
     this.minPlayers = 5;
     this.maxPlayers = 10;
   }
-
-  // PUBLIC METHODS
 
   fromRawObject(obj) {
     this.questLogs = obj.questLogs.map(ql => new QuestLog().fromRawObject(ql));
@@ -65,14 +64,13 @@ class Avalon {
       console.log('starting proposal result...');
       return this.startProposalResult(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && this.currentQuest.proposalAccepted) {
-      // TODO PROPOSAL REJECTED!!! restartQuest(...)
       console.log('starting quest...');
       return this.startQuest(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && !this.currentQuest.proposalAccepted) {
       console.log('restarting quest...');
       return this.restartQuest(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_STARTED' && allPlayers.players.filter(p => this.currentQuest.proposedPlayerIds.includes(p.id)).filter(p => p.vote != '').length == this.currentQuest.requiredPlayers) {
-      // console.log('starting quest result reveal');
+      console.log('starting quest result reveal...');
       return this.startQuestResultReveal(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_RESULT_REVEAL' && this.currentQuest.votes.filter(v => v.revealed).length == this.currentQuest.votes.length) {
       console.log('starting next quest...');
@@ -99,9 +97,8 @@ class Avalon {
     const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
 
     this.questLogs[indexOfCurrentQuestLog].organiserId = nextOrganiser.id;
-
-    const questConfig = this.playersRequiredEachQuest(allPlayers.players.length);
-    this.currentQuest = this.currentQuest.restartQuest(nextOrganiser.id, questConfig[this.currentQuest.id - 1]);
+    const avalonRules = new AvalonRules(allPlayers.players.length);
+    this.currentQuest = this.currentQuest.restartQuest(nextOrganiser.id, avalonRules.numberOfPlayersRequiredForQuest(this.currentQuest.id - 1));
     if (this.currentQuest.disagreements >= 5) {
       this.screen = 'GAME';
       this.state = 'GAME_OVER';
@@ -146,8 +143,8 @@ class Avalon {
     if (indexOfCurrentQuestLog < 4) {
       this.questLogs[indexOfCurrentQuestLog + 1].organiserId = nextOrganiser.id;
     }
-    const questConfig = this.playersRequiredEachQuest(allPlayers.players.length);
-    this.currentQuest = this.currentQuest.startNextQuest(nextOrganiser.id, questConfig[this.currentQuest.id]);
+    const avalonRules = new AvalonRules(allPlayers.players.length);
+    this.currentQuest = this.currentQuest.startNextQuest(nextOrganiser.id, avalonRules.numberOfPlayersRequiredForQuest(this.currentQuest.id));
 
     const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
     updatedAllPlayers.storeInRedis(redisClient);
@@ -207,9 +204,6 @@ class Avalon {
     updatedAllPlayers.emitToAllWithVote(io, roomId);
   }
 
-
-  // PRIVATE METHODS
-
   startGame(redisClient, io, allPlayers, roomId) {
     this.screen = 'GAME';
     this.state = 'QUEST_PROPOSING';
@@ -220,14 +214,13 @@ class Avalon {
   }
 
   startRoleReveal(redisClient, io, allPlayers, roomId) {
-    // Need to move some of this code out to start next round
+    const avalonRules = new AvalonRules(allPlayers.players.length);
     let questLogs = [];
-    let questConfig = this.playersRequiredEachQuest(allPlayers.players.length);
     for (let i = 0; i < 5; i++) {
-      questLogs.push(new QuestLog().init(i + 1, questConfig[i]));
+      questLogs.push(new QuestLog().init(i + 1, avalonRules.numberOfPlayersRequiredForQuest(i)));
     }
     this.questLogs = questLogs;
-    this.currentQuest = new CurrentQuest().init(this.randomPlayerId(allPlayers)).withRequiredPlayers(questConfig[0]);
+    this.currentQuest = new CurrentQuest().init(allPlayers.selectPlayerAtRandom().id).withRequiredPlayers(avalonRules.numberOfPlayersRequiredForQuest(0));
     this.closed = true;
     this.screen = 'ROLE_REVEAL';
     this.state = '';
@@ -236,7 +229,7 @@ class Avalon {
 
     const totalPlayerCount = allPlayers.count();
     const updatedAllPlayers = allPlayers.shuffle().resetReadyStatuses();
-    const goodPlayerCount = this.goodPlayerCount(totalPlayerCount);
+    const goodPlayerCount = avalonRules.numberOfGoodPlayers();
     for (let i = 0; i < goodPlayerCount; i++) {
       updatedAllPlayers.players[i] = updatedAllPlayers.players[i].withTeam('GOOD').withRole('GUARD');
     }
@@ -291,33 +284,6 @@ class Avalon {
       this.currentQuest = this.currentQuest.withResult();
       const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
       this.questLogs[indexOfCurrentQuestLog].result = this.currentQuest.result;
-    }
-  }
-
-  randomPlayerId(allPlayers) {
-    const playerIds = allPlayers.players.map(p => p.id);
-    return playerIds[new RandomInteger().between(0, playerIds.length - 1)];
-  }
-
-  playersRequiredEachQuest(totalPlayers) {
-    switch (totalPlayers) {
-      case 5: return [2, 3, 2, 3, 3];
-      case 6: return [2, 3, 4, 3, 4];
-      case 7: return [2, 3, 4, 3, 4];
-      case 8: return [3, 4, 4, 5, 5];
-      case 9: return [3, 4, 4, 5, 5];
-      case 10: return [3, 4, 4, 5, 5];
-    }
-  }
-
-  goodPlayerCount(totalPlayerCount) {
-    switch (totalPlayerCount) {
-      case 5: return 3;
-      case 6: return 4;
-      case 7: return 4;
-      case 8: return 5;
-      case 9: return 6;
-      case 10: return 6;
     }
   }
 
