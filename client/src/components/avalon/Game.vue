@@ -90,8 +90,10 @@
 
     <div v-if="game.state == 'MERLIN_ID' && this.role == 'ASSASSIN'" class="row">
       <MerlinIdentificationInput
-        :requiredPlayers="1"
+        :questId="game.currentQuest.id"
         :players="players.filter(p => p.team === 'GOOD')"
+        :proposedPlayerIds="game.currentQuest.proposedPlayerIds"
+        :requiredPlayers="1"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"
       />

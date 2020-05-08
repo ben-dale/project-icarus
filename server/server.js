@@ -132,6 +132,22 @@ io.on('connection', (socket) => {
             }
           }
 
+          if (data.game && data.game.currentQuest && data.game.currentQuest.hasOwnProperty('merlinIdToPropose')) {
+            console.log(player.role);
+            const merlinIdToPropose = data.game.currentQuest.merlinIdToPropose;
+            if (!updatedRoom.game.currentQuest.hasProposedPlayerId(merlinIdToPropose) && room.hasPlayerId(merlinIdToPropose)) {
+              updatedRoom.game.currentQuest = updatedRoom.game.currentQuest.withProposedPlayerId(merlinIdToPropose);
+            }
+          }
+
+          if (data.game && data.game.currentQuest && data.game.currentQuest.hasOwnProperty('merlinIdToUnpropose')) {
+            console.log(player.role);
+            const merlinIdToUnpropose = data.game.currentQuest.merlinIdToUnpropose;
+            if (updatedRoom.game.currentQuest.hasProposedPlayerId(merlinIdToUnpropose) && room.hasPlayerId(merlinIdToUnpropose)) {
+              updatedRoom.game.currentQuest = updatedRoom.game.currentQuest.removeProposedPlayerId(merlinIdToUnpropose);
+            }
+          }
+
           if (data.game && data.game.currentQuest && data.game.currentQuest.hasOwnProperty('voteToReveal') && room.game.currentQuest.organiserId == player.id) {
             updatedRoom.game.revealVote(data.game.currentQuest.voteToReveal); // MORE MUTATION OH NO
           }

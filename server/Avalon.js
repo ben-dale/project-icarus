@@ -77,6 +77,16 @@ class Avalon {
     } else if (this.screen == 'GAME' && this.state == 'QUEST_RESULT_REVEAL' && this.currentQuest.votes.filter(v => v.revealed).length == this.currentQuest.votes.length) {
       console.log('starting next quest...');
       return this.startNextQuest(redisClient, io, allPlayers, roomId);
+    } else if (this.screen == 'GAME' && this.state == 'MERLIN_ID' && this.currentQuest.proposedPlayerIds.length == 1) {
+      if (allPlayers.players.find(p => p.role == 'MERLIN' && p.id == this.currentQuest.proposedPlayerIds[0])) {
+        this.screen = 'GAME';
+        this.state = 'GAME_OVER';
+        this.result = 'EVIL';
+      } else {
+        this.screen = 'GAME';
+        this.state = 'GAME_OVER';
+        this.result = 'GOOD';
+      }
     }
   }
 
@@ -108,11 +118,12 @@ class Avalon {
     if (questSucceedCount >= 3) {
       this.screen = 'GAME';
       this.state = 'MERLIN_ID';
+      this.currentQuest.proposedPlayerIds = [];
 
       const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
       updatedAllPlayers.storeInRedis(redisClient);
       updatedAllPlayers.emitToAllWithTeamAndRole(io, roomId);
-      return; 
+      return;
     }
 
     if (questFailCount >= 3) {

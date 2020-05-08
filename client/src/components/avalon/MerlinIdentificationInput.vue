@@ -1,6 +1,7 @@
 <template>
   <div class="col-12">
     <div class="card">
+      <div class="card-header bg-light">Quest {{questId}} - Assassination attempt</div>
       <div class="card-body">
         <div class="row mt-3 mb-3">
           <div class="col-12 text-center">
@@ -13,37 +14,32 @@
           </div>
         </div>
         <div class="row mb-5">
-          <div v-for="(player, index) in selectedToDisplay" class="col-2 offset-5" :key="index">
-            <button v-if="player.id == -1" class="btn btn-light btn-sm btn-block" disabled>Required</button>
-            <button
-              v-if="player.id != -1"
-              @click="unselect(index)"
-              class="btn btn-info btn-sm btn-block"
-            >{{player.name}}</button>
-          </div>
-        </div>
-        <div class="row mb-5">
           <div
-            v-for="(player, index) in unselectedToDisplay"
+            v-for="(player, index) in players"
             :key="index"
             :class="['col-2 mb-2', index % 5 === 0 ? 'offset-1' : '']"
           >
             <button
-              v-if="player.id != -1"
-              class="btn btn-info btn-sm btn-block"
-              v-on:click="select(index)"
+              v-if="!proposedPlayerIds.includes(player.id)"
+              class="btn btn-light border btn-sm btn-block"
+              v-on:click="select(player.id)"
+              :disabled="isPlayerReady || requiredPlayers == proposedPlayerIds.length"
             >{{player.name}}</button>
-
-            <button v-if="player.id == -1" class="btn btn-light btn-sm btn-block" disabled>-</button>
+            <button
+              v-if="proposedPlayerIds.includes(player.id)"
+              class="btn btn-info btn-sm btn-block"
+              v-on:click="unselect(player.id)"
+              :disabled="isPlayerReady"
+            >{{player.name}}</button>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-4 offset-4">
-            <button
-              @click="ready"
-              class="btn btn-dark btn-block btn-sm"
-              :disabled="selected.length != requiredPlayers || isPlayerReady"
-            >Submit</button>
+            <ReadyButton
+              :isPlayerReady="isPlayerReady"
+              :disabled="requiredPlayers != proposedPlayerIds.length"
+              v-on="$listeners"
+            />
           </div>
         </div>
       </div>
@@ -52,51 +48,37 @@
 </template>
 
 <script>
+import ReadyButton from "@/components/common/ReadyButton.vue";
+
 export default {
   name: "MerlinIdentificationInput",
+  components: { ReadyButton },
   props: {
     players: Array,
     requiredPlayers: Number,
-    isPlayerReady: Boolean
-  },
-  data: function() {
-    return {
-      selected: [],
-      notSelected: []
-    };
-  },
-  created() {
-    this.notSelected = this.players.slice();
-  },
-  computed: {
-    selectedToDisplay: function() {
-      let selectedToDisplay = this.selected.slice();
-      for (let i = 0; i < 1 - this.selected.length; i++) {
-        selectedToDisplay.push({ id: -1, name: "Required" });
-      }
-      return selectedToDisplay;
-    },
-    unselectedToDisplay: function() {
-      let unselectedToDisplay = this.notSelected.slice();
-      for (let i = 0; i < this.selected.length; i++) {
-        unselectedToDisplay.push({ id: -1, name: "" });
-      }
-      return unselectedToDisplay;
-    }
+    questId: Number,
+    isPlayerReady: Boolean,
+    proposedPlayerIds: Array
   },
   methods: {
-    select: function(i) {
-      if (this.selected.length < this.requiredPlayers) {
-        this.selected.push(this.notSelected.splice(i, 1)[0]);
+    resultOffset: function() {
+      switch (this.requiredPlayers) {
+        case 2:
+          return 4;
+        case 3:
+          return 3;
+        case 4:
+          return 2;
+        case 5:
+          return 1;
       }
     },
-    unselect: function(i) {
-      this.notSelected.push(this.selected.splice(i, 1)[0]);
+    select: function(playerId) {
+      console.log(playerId);
+      this.$emit("select-merlin-for-id", playerId);
     },
-    submit: function() {
-      if (this.selected.length == 1) {
-        this.$emit("identify-merlin", this.selected[0].id);
-      }
+    unselect: function(playerId) {
+      this.$emit("unselect-merlin-for-id", playerId);
     }
   }
 };

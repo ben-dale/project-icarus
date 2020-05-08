@@ -8,35 +8,25 @@
             <p>You are tasked with proposing a team for Quest {{questId}}. Your proposal will be voted on by the other players.</p>
           </div>
         </div>
+        
         <div class="row mb-5">
           <div
-            v-for="(player, index) in selectedToDisplay"
-            :class="['col-2', (index == 0 ? 'offset-' + resultOffset() : '')]"
-            :key="index"
-          >
-            <button v-if="player.id == -1" class="btn btn-light btn-sm btn-block border" disabled>Required</button>
-            <button
-              v-if="player.id != -1"
-              @click="unselect(player.id)"
-              class="btn btn-info btn-sm btn-block"
-              :disabled="isPlayerReady"
-            >{{player.name}}</button>
-          </div>
-        </div>
-        <div class="row mb-5">
-          <div
-            v-for="(player, index) in unselectedToDisplay"
+            v-for="(player, index) in players"
             :key="index"
             :class="['col-2 mb-2', index % 5 === 0 ? 'offset-1' : '']"
           >
             <button
-              v-if="player.id != -1"
-              class="btn btn-info btn-sm btn-block"
+              v-if="!proposedPlayerIds.includes(player.id)"
+              class="btn btn-light border btn-sm btn-block"
               v-on:click="select(player.id)"
+              :disabled="isPlayerReady || requiredPlayers == proposedPlayerIds.length"
+            >{{player.name}}</button>
+            <button
+              v-if="proposedPlayerIds.includes(player.id)"
+              class="btn btn-info btn-sm btn-block"
+              v-on:click="unselect(player.id)"
               :disabled="isPlayerReady"
             >{{player.name}}</button>
-
-            <button v-if="player.id == -1" class="btn btn-light btn-sm btn-block border" disabled><wbr/></button>
           </div>
         </div>
         <div class="row mb-3">
@@ -65,32 +55,6 @@ export default {
     questId: Number,
     isPlayerReady: Boolean,
     proposedPlayerIds: Array
-  },
-  created() {
-    this.notSelected = this.players.slice();
-  },
-  computed: {
-    selectedToDisplay: function() {
-      let selectedToDisplay = this.players.filter(p =>
-        this.proposedPlayerIds.includes(p.id)
-      );
-      const blanksToAdd = this.requiredPlayers - selectedToDisplay.length;
-      for (let i = 0; i < blanksToAdd; i++) {
-        selectedToDisplay.push({ id: -1, name: "Required" });
-      }
-      return selectedToDisplay;
-    },
-    unselectedToDisplay: function() {
-      let unselectedToDisplay = this.players.filter(
-        p => !this.proposedPlayerIds.includes(p.id)
-      );
-      console.log(unselectedToDisplay);
-      const blanksToAdd = unselectedToDisplay.length;
-      for (let i = blanksToAdd; i < this.players.length; i++) {
-        unselectedToDisplay.push({ id: -1, name: "" });
-      }
-      return unselectedToDisplay;
-    }
   },
   methods: {
     resultOffset: function() {
