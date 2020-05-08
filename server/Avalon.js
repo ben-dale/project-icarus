@@ -68,7 +68,22 @@ class Avalon {
     } else if (this.screen == 'GAME' && this.state == 'QUEST_STARTED' && allPlayers.players.filter(p => this.currentQuest.proposedPlayerIds.includes(p.id)).filter(p => p.vote != '').length == this.currentQuest.requiredPlayers) {
       console.log('starting quest result reveal');
       return this.startQuestResultReveal(redisClient, io, allPlayers, roomId);
+    } else if (this.screen == 'GAME' && this.state == 'QUEST_RESULT_REVEAL' && this.currentQuest.votes.filter(v => v.revealed).length == this.currentQuest.votes.length) {
+      console.log('starting next quest...');
+      return this.startNextQuest(redisClient, io, allPlayers, roomId);
     }
+  }
+
+  startNextQuest(redisClient, io, allPlayers, roomId) {
+    this.screen = 'GAME';
+    this.state = 'QUEST_PROPOSING';
+
+    const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
+    this.questLogs[indexOfCurrentQuestLog].result = this.currentQuest.result;
+
+    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
+    updatedAllPlayers.storeInRedis(redisClient);
+    updatedAllPlayers.emitToAll(io, roomId);
   }
 
   startQuestResultReveal(redisClient, io, allPlayers, roomId) {
@@ -116,7 +131,7 @@ class Avalon {
     if (playersThatApproved > playersThatRejected) {
       this.currentQuest.proposalAccepted = true;
       const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
-      this.questLogs[indexOfCurrentQuestLog].playerIds = this.currentQuest.proposedPlayerIds.slice(); 
+      this.questLogs[indexOfCurrentQuestLog].playerIds = this.currentQuest.proposedPlayerIds.slice();
     }
 
     const updatedAllPlayers = allPlayers.resetReadyStatuses();
@@ -200,6 +215,13 @@ class Avalon {
         p.emitToPlayer(io, []);
       }
     });
+  }
+
+  revealVote(index) {
+    this.currentQuest = this.currentQuest.revealVote(index);
+    if (this.currentQuest.allVotesRevealed()) {
+      this.currentQuest = this.currentQuest.withResult();
+    }
   }
 
   randomPlayerId(allPlayers) {

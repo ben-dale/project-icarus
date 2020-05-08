@@ -118,19 +118,24 @@ io.on('connection', (socket) => {
             updatedRoom.game.settings = updatedRoom.game.settings.withMorganaEnabled(data.game.settings.morganaEnabled);
           }
 
-          if (data.game && data.game.currentQuest && data.game.currentQuest.playerIdToPropose && room.game.currentQuest.organiserId == player.id && room.game.currentQuest.proposedPlayerIds.length < room.game.currentQuest.requiredPlayers) {
+          if (data.game && data.game.currentQuest && data.game.currentQuest.hasOwnProperty('playerIdToPropose') && room.game.currentQuest.organiserId == player.id && room.game.currentQuest.proposedPlayerIds.length < room.game.currentQuest.requiredPlayers) {
             const playerIdToPropose = data.game.currentQuest.playerIdToPropose;
             if (!updatedRoom.game.currentQuest.hasProposedPlayerId(playerIdToPropose) && room.hasPlayerId(playerIdToPropose)) {
               updatedRoom.game.currentQuest = updatedRoom.game.currentQuest.withProposedPlayerId(playerIdToPropose);
             }
           }
 
-          if (data.game && data.game.currentQuest && data.game.currentQuest.playerIdToUnpropose && room.game.currentQuest.organiserId == player.id) {
+          if (data.game && data.game.currentQuest && data.game.currentQuest.hasOwnProperty('playerIdToUnpropose') && room.game.currentQuest.organiserId == player.id) {
             const playerIdToUnpropose = data.game.currentQuest.playerIdToUnpropose;
             if (updatedRoom.game.currentQuest.hasProposedPlayerId(playerIdToUnpropose) && room.hasPlayerId(playerIdToUnpropose)) {
               updatedRoom.game.currentQuest = updatedRoom.game.currentQuest.removeProposedPlayerId(playerIdToUnpropose);
             }
           }
+
+          if (data.game && data.game.currentQuest && data.game.currentQuest.hasOwnProperty('voteToReveal') && room.game.currentQuest.organiserId == player.id) {
+            updatedRoom.game.revealVote(data.game.currentQuest.voteToReveal); // MORE MUTATION OH NO
+          }
+
           updatedRoom.storeInRedis(redisClient);
           updatedRoom.emitToAll(io);
         }, () => { });

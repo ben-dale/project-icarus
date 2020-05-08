@@ -125,6 +125,14 @@ test('does not reveal a vote with an invalid index', () => {
   expect(currentQuest.votes).toStrictEqual([{ choice: 'SABOTAGE', revealed: false }]);
 });
 
+test('returns true when all votes are revealed', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withSabotageVote().revealVote(0);
+
+  expect(currentQuest.allVotesRevealed()).toBe(true);
+});
+
 test('does not work out result until all results are revealed', () => {
   const organiserId = '333';
 

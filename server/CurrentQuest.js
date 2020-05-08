@@ -118,6 +118,10 @@ class CurrentQuest {
     return copy;
   }
 
+  allVotesRevealed() {
+    return this.votes.filter(v => v.revealed).length == this.votes.length;
+  }
+
   startNextQuest(organiserId, requiredPlayers) {
     const copy = this.copy();
     copy.organiserId = organiserId;

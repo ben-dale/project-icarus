@@ -79,6 +79,7 @@
         :results="game.currentQuest.votes"
         :questId="game.currentQuest.id"
         :questResult="game.currentQuest.result"
+        :isPlayerReady="isPlayerReady"
         v-on="$listeners"
       />
     </div>

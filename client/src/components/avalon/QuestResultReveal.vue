@@ -35,7 +35,7 @@
           >
             <button
               class="btn btn-dark btn-sm btn-block"
-              v-on:click="reveal(index)"
+              v-on:click="revealQuestVote(index)"
               :disabled="result.revealed"
             >Reveal</button>
           </div>
@@ -70,9 +70,13 @@ export default {
     organiserName: String,
     results: Array,
     questId: Number,
-    questResult: String
+    questResult: String,
+    isPlayerReady: Boolean
   },
   methods: {
+    revealQuestVote: function(index) {
+      this.$emit('reveal-quest-vote', index);
+    },
     resultOffset: function() {
       switch (this.results.length) {
         case 2:

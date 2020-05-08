@@ -47,7 +47,7 @@
         :role="role"
         :playerId="getPlayerId()"
         :isPlayerReady="isPlayerReady"
-        @reveal-quest-result="revealQuestResult"
+        @reveal-quest-vote="revealQuestVote"
         @propose-player-for-quest="proposePlayerForQuest"
         @unpropose-player-for-quest="unproposePlayerForQuest"
         @player-ready="readyUp"
@@ -238,6 +238,11 @@ export default {
         game: { currentQuest: { playerIdToPropose: playerId } }
       });
     },
+    revealQuestVote: function(index) {
+      this.socket.emit("room-updated", {
+        game: { currentQuest: { voteToReveal: index } }
+      });
+    },
     unproposePlayerForQuest: function(playerId) {
       this.socket.emit("room-updated", {
         game: { currentQuest: { playerIdToUnpropose: playerId } }
@@ -264,9 +269,6 @@ export default {
     },
     notReady: function() {
       this.socket.emit("player-updated", { ready: false });
-    },
-    revealQuestResult: function(id) {
-      console.log(id);
     }
   }
 };
