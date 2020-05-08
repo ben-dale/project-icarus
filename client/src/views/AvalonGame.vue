@@ -53,6 +53,7 @@
         @player-ready="readyUp"
         @player-not-ready="notReady"
         @player-approve-proposal="playerApproveVote"
+        @player-succeed-quest="playerSucceedQuest"
       />
     </div>
 
@@ -250,8 +251,10 @@ export default {
       });
     },
     playerApproveVote: function(approve) {
-      console.log('hi');
       this.socket.emit("player-updated", { ready: true, approveProposal: approve });
+    },
+    playerSucceedQuest: function(succeed) {
+      this.socket.emit("player-updated", { ready: true, succeedQuest: succeed });
     },
     readyUp: function() {
       this.socket.emit("player-updated", { ready: true });

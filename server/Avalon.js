@@ -62,8 +62,40 @@ class Avalon {
       console.log('starting proposal result...');
       return this.startProposalResult(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && this.currentQuest.proposalAccepted) {
+      // TODO PROPOSAL REJECTED!!!
       console.log('starting quest...');
+      return this.startQuest(redisClient, io, allPlayers, roomId);
+    } else if (this.screen == 'GAME' && this.state == 'QUEST_STARTED' && allPlayers.players.filter(p => this.currentQuest.proposedPlayerIds.includes(p.id)).filter(p => p.vote != '').length == this.currentQuest.requiredPlayers) {
+      console.log('starting quest result reveal');
+      return this.startQuestResultReveal(redisClient, io, allPlayers, roomId);
     }
+  }
+
+  startQuestResultReveal(redisClient, io, allPlayers, roomId) {
+    this.screen = 'GAME';
+    this.state = 'QUEST_RESULT_REVEAL';
+
+    allPlayers.players.filter(p => p.vote == 'SABOTAGE').forEach(p => {
+      this.currentQuest = this.currentQuest.withSabotageVote();
+    });
+    allPlayers.players.filter(p => p.vote == 'SUCCEED').forEach(p => {
+      this.currentQuest = this.currentQuest.withSucceedVote();
+    });
+
+    this.currentQuest = this.currentQuest.shuffleVotes();
+
+    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
+    updatedAllPlayers.storeInRedis(redisClient);
+    updatedAllPlayers.emitToAll(io, roomId);
+  }
+
+  startQuest(redisClient, io, allPlayers, roomId) {
+    this.screen = 'GAME';
+    this.state = 'QUEST_STARTED';
+
+    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
+    updatedAllPlayers.storeInRedis(redisClient);
+    updatedAllPlayers.emitToAll(io, roomId);
   }
 
   startProposalVote(redisClient, io, allPlayers, roomId) {

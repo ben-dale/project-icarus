@@ -51,13 +51,24 @@ class CurrentQuest {
 
   withSabotageVote() {
     const copy = this.copy();
-    copy.votes.push({choice: 'SABOTAGE', revealed: false});
+    copy.votes.push({ choice: 'SABOTAGE', revealed: false });
     return copy;
   }
 
   withSucceedVote() {
     const copy = this.copy();
-    copy.votes.push({choice: 'SUCCEED', revealed: false});
+    copy.votes.push({ choice: 'SUCCEED', revealed: false });
+    return copy;
+  }
+
+  shuffleVotes() {
+    const copyOfVotes = this.votes.slice();
+    for (let i = copyOfVotes.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copyOfVotes[i], copyOfVotes[j]] = [copyOfVotes[j], copyOfVotes[i]];
+    }
+    const copy = this.copy();
+    copy.votes = copyOfVotes.slice();
     return copy;
   }
 
@@ -78,7 +89,7 @@ class CurrentQuest {
     copy.proposedPlayerIds = copy.proposedPlayerIds.filter(id => id != playerId);
     return copy;
   }
-  
+
   hasProposedPlayerId(playerId) {
     return this.proposedPlayerIds.filter(pid => pid == playerId).length != 0;
   }
@@ -119,7 +130,13 @@ class CurrentQuest {
     copy.disagreements = 0;
     return copy;
   }
-  
+
+  withOnlyRevealedVotes() {
+    const copy = this.copy();
+    copy.votes = copy.votes.map(v => v.revealed ? v : { choice: '', revealed: false })
+    return copy;
+  }
+
 }
 
 module.exports = CurrentQuest;

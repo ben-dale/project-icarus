@@ -16,6 +16,11 @@ class AllPlayers {
     return new AllPlayers().init(alteredPlayers);
   }
 
+  resetVotes() {
+    let alteredPlayers = this.players.map(p => p.copy().clearVote());
+    return new AllPlayers().init(alteredPlayers);
+  }
+
   storeInRedis(redisClient) {
     this.players.forEach(p => p.storeInRedis(redisClient));
   }

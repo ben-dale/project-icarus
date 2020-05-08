@@ -13,15 +13,21 @@
                 class="badge badge-info mx-2"
               >{{player}}</span>
             </h5>
-            <p class="card-text">How would you like to proceed? Your decision will be kept anonymous.</p>
+            <p
+              class="card-text"
+            >How would you like to proceed? Your decision will be kept anonymous.</p>
           </div>
         </div>
         <div class="row mb-3">
           <div class="col-3 offset-3">
-            <button class="btn btn-sm btn-info btn-block">Succeed</button>
+            <button class="btn btn-sm btn-info btn-block" @click="succeed(true)" :disabled="isPlayerReady">Succeed</button>
           </div>
           <div class="col-3">
-            <button class="btn btn-sm btn-danger btn-block" :disabled="!isEvil">Sabotage</button>
+            <button
+              class="btn btn-sm btn-danger btn-block"
+              @click="succeed(false)"
+              :disabled="!isEvil || isPlayerReady"
+            >Sabotage</button>
           </div>
         </div>
       </div>
@@ -33,7 +39,13 @@ export default {
   props: {
     isEvil: Boolean,
     players: Array,
-    questId: Number
+    questId: Number,
+    isPlayerReady: Boolean
+  },
+  methods: {
+    succeed: function(succeed) {
+      this.$emit("player-succeed-quest", succeed);
+    }
   }
 };
 </script>

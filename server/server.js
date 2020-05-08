@@ -81,6 +81,11 @@ io.on('connection', (socket) => {
         if (data.hasOwnProperty('approveProposal')) {
           updatedPlayer = updatedPlayer.withProposalApproved(data.approveProposal);
         }
+
+        if (data.hasOwnProperty('succeedQuest')) {
+          updatedPlayer = updatedPlayer.withSucceedQuest(data.succeedQuest);
+        }
+
         updatedPlayer.storeInRedis(redisClient);
         updatedPlayer.emitToAll(io);
 

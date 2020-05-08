@@ -165,6 +165,22 @@ test('does not have proposed player id', () => {
   expect(currentQuest.hasProposedPlayerId("222")).toBe(false);
 });
 
+test('with no revealed votes', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withSucceedVote().withSabotageVote().withOnlyRevealedVotes();
+
+  expect(currentQuest.votes).toStrictEqual([{ choice: '', revealed: false }, { choice: '', revealed: false }]);
+});
+
+test('with one revealed votes', () => {
+  const organiserId = '333';
+
+  const currentQuest = new CurrentQuest().init(organiserId).withSucceedVote().withSabotageVote().revealVote(0).withOnlyRevealedVotes();
+
+  expect(currentQuest.votes).toStrictEqual([{ choice: 'SUCCEED', revealed: true }, { choice: '', revealed: false }]);
+});
+
 test('starts next quest', () => {
   const rawObject = {
     id: 1,

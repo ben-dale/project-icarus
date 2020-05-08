@@ -63,6 +63,18 @@ class Player {
     return copy;
   }
 
+  withSucceedQuest(succeedQuest) {
+    const copy = this.copy();
+    copy.vote = succeedQuest ? 'SUCCEED' : (copy.team == 'EVIL' ? 'SABOTAGE' : 'SUCCEED');
+    return copy;
+  }
+
+  clearVote() {
+    const copy = this.copy();
+    copy.vote = '';
+    return copy;
+  }
+
   getFromRedis(redisClient, id, onSuccess, onError) {
     redisClient.get(id, (error, result) => {
       if (error) {

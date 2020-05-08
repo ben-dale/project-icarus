@@ -53,6 +53,50 @@ test('sets team', () => {
 });
 
 
+test('sets vote to proposal approved value', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withProposalApproved(true);
+
+  expect(player.vote).toBe('APPROVE');
+});
+
+
+test('sets vote to proposal rejected value', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withProposalApproved(false);
+
+  expect(player.vote).toBe('REJECT');
+})
+
+test('clears vote', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withProposalApproved(true).clearVote();
+
+  expect(player.vote).toBe('');
+});
+
+test('sets vote to succeed quest for good player', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withTeam('GOOD').withSucceedQuest(true);
+
+  expect(player.vote).toBe('SUCCEED');
+});
+
+test('sets vote to succeed quest for evil player', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withTeam('EVIL').withSucceedQuest(true);
+
+  expect(player.vote).toBe('SUCCEED');
+});
+
+test('does not set vote to sabotage quest for good player', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withTeam('GOOD').withSucceedQuest(false);
+
+  expect(player.vote).toBe('SUCCEED');
+});
+
+test('sets vote to sabotage quest for evil player', () => {
+  const player = new Player().init('111', 'Ben', '5t6y').withTeam('EVIL').withSucceedQuest(false);
+
+  expect(player.vote).toBe('SABOTAGE');
+});
+
+
 test('sets role', () => {
   const player = new Player().init('111', 'Ben', '5t6y').withRole('MERLIN');
   expect(player.role).toBe('MERLIN')

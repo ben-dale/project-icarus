@@ -67,6 +67,8 @@
         :players="proposedQuestPlayers"
         :questId="game.currentQuest.id"
         :isEvil="team == 'EVIL'"
+        :isPlayerReady="isPlayerReady"
+        v-on="$listeners"
       />
     </div>
 
