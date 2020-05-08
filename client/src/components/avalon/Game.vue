@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12">
     <div class="row">
-      <QuestLog :questLog="game.questLogs" :players="players" />
+      <QuestLog :questLog="game.questLogs" :players="players" :disagreements="game.currentQuest.disagreements" />
     </div>
     <div class="row mb-3">
       <PlayerReadyBar :players="players" />
@@ -100,10 +100,10 @@
       />
     </div>
 
-    <div v-if="game.state == 'GAME_OVER'" class="row">
+    <div v-if="game.state == 'GAME_OVER' && game.result == 'EVIL'" class="row">
       <Outcome winner="EVIL" outcome="Evil have taken the win!" buttonText="Play Again" />
     </div>
-    <div v-if="game.state == 'GAME_OVER'" class="row">
+    <div v-if="game.state == 'GAME_OVER' && game.result == 'GOOD'" class="row">
       <Outcome
         winner="GOOD"
         outcome="The Assassin was not able to identify Merlin. Good have taken the win!"

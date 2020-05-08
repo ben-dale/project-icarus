@@ -21,6 +21,7 @@ class Avalon {
     this.closed = obj.closed;
     this.minPlayers = obj.minPlayers;
     this.maxPlayers = obj.maxPlayers;
+    this.result = obj.result;
     return this;
   }
 
@@ -34,6 +35,7 @@ class Avalon {
     avalon.questLogs = this.questLogs.map(ql => ql.copy());
     avalon.minPlayers = this.minPlayers;
     avalon.maxPlayers = this.maxPlayers;
+    avalon.result = this.result;
     return avalon;
   }
 
@@ -44,6 +46,7 @@ class Avalon {
     this.currentQuest = new CurrentQuest().init('');
     this.settings = new Settings().init();
     this.questLogs = [];
+    this.result = '';
     return this;
   }
 
@@ -62,11 +65,14 @@ class Avalon {
       console.log('starting proposal result...');
       return this.startProposalResult(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && this.currentQuest.proposalAccepted) {
-      // TODO PROPOSAL REJECTED!!!
+      // TODO PROPOSAL REJECTED!!! restartQuest(...)
       console.log('starting quest...');
       return this.startQuest(redisClient, io, allPlayers, roomId);
+    } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && !this.currentQuest.proposalAccepted) {
+      console.log('restarting quest...');
+      return this.restartQuest(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_STARTED' && allPlayers.players.filter(p => this.currentQuest.proposedPlayerIds.includes(p.id)).filter(p => p.vote != '').length == this.currentQuest.requiredPlayers) {
-      console.log('starting quest result reveal');
+      // console.log('starting quest result reveal');
       return this.startQuestResultReveal(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_RESULT_REVEAL' && this.currentQuest.votes.filter(v => v.revealed).length == this.currentQuest.votes.length) {
       console.log('starting next quest...');
@@ -74,12 +80,41 @@ class Avalon {
     }
   }
 
+  restartQuest(redisClient, io, allPlayers, roomId) {
+    this.screen = 'GAME';
+    this.state = 'QUEST_PROPOSING';
+    const indexOfCurrentOrganiser = allPlayers.players.map(p => p.id).indexOf(this.currentQuest.organiserId);
+    const indexOfNextOrganiser = (indexOfCurrentOrganiser == (allPlayers.players.length - 1) ? 0 : indexOfCurrentOrganiser + 1);
+    const nextOrganiser = allPlayers.players[indexOfNextOrganiser];
+    const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
+
+    this.questLogs[indexOfCurrentQuestLog].organiserId = nextOrganiser.id;
+
+    const questConfig = this.playersRequiredEachQuest(allPlayers.players.length);
+    this.currentQuest = this.currentQuest.restartQuest(nextOrganiser.id, questConfig[this.currentQuest.id - 1]);
+    if (this.currentQuest.disagreements >= 5) {
+      this.screen = 'GAME';
+      this.state = 'GAME_OVER';
+      this.result = 'EVIL';
+    }
+    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
+    updatedAllPlayers.storeInRedis(redisClient);
+    updatedAllPlayers.emitToAll(io, roomId);
+  }
+
   startNextQuest(redisClient, io, allPlayers, roomId) {
     this.screen = 'GAME';
     this.state = 'QUEST_PROPOSING';
+    const indexOfCurrentOrganiser = allPlayers.players.map(p => p.id).indexOf(this.currentQuest.organiserId);
+    const indexOfNextOrganiser = (indexOfCurrentOrganiser == (allPlayers.players.length - 1) ? 0 : indexOfCurrentOrganiser + 1);
+    const nextOrganiser = allPlayers.players[indexOfNextOrganiser];
 
     const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
-    this.questLogs[indexOfCurrentQuestLog].result = this.currentQuest.result;
+    if (indexOfCurrentQuestLog < 4) {
+      this.questLogs[indexOfCurrentQuestLog + 1].organiserId = nextOrganiser.id;
+    }
+    const questConfig = this.playersRequiredEachQuest(allPlayers.players.length);
+    this.currentQuest = this.currentQuest.startNextQuest(nextOrganiser.id, questConfig[this.currentQuest.id]);
 
     const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
     updatedAllPlayers.storeInRedis(redisClient);
@@ -221,6 +256,8 @@ class Avalon {
     this.currentQuest = this.currentQuest.revealVote(index);
     if (this.currentQuest.allVotesRevealed()) {
       this.currentQuest = this.currentQuest.withResult();
+      const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
+      this.questLogs[indexOfCurrentQuestLog].result = this.currentQuest.result;
     }
   }
 

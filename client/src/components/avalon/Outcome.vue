@@ -1,7 +1,7 @@
 <!-- Uses for both game outcome and quest outcomes -->
 <template>
   <div class="col-md-12">
-    <div :class="['card', (result === 'FAIL' ? 'bg-danger' : 'bg-info')]">
+    <div :class="['card', (winner == 'EVIL' ? 'bg-danger' : 'bg-info')]">
       <div class="card-body text-center">
         <div class="row">
           <div class="col-md-12">
@@ -25,7 +25,7 @@
 <script>
 export default {
   props: {
-    result: String,
+    winner: String,
     outcome: String,
     buttonText: String
   }
