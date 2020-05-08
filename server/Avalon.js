@@ -51,7 +51,7 @@ class Avalon {
   }
 
   next(redisClient, io, allPlayers, roomId) {
-    if (this.screen == 'LOBBY' && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
+    if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER')) && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
       console.log('starting role reveal...');
       this.startRoleReveal(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'ROLE_REVEAL') {
@@ -103,6 +103,28 @@ class Avalon {
   }
 
   startNextQuest(redisClient, io, allPlayers, roomId) {
+    const questFailCount = this.questLogs.filter(ql => ql.result == 'FAIL').length;
+    const questSucceedCount = this.questLogs.filter(ql => ql.result == 'SUCCEED').length;
+    if (questSucceedCount >= 3) {
+      this.screen = 'GAME';
+      this.state = 'MERLIN_ID';
+
+      const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
+      updatedAllPlayers.storeInRedis(redisClient);
+      updatedAllPlayers.emitToAllWithTeamAndRole(io, roomId);
+      return; 
+    }
+
+    if (questFailCount >= 3) {
+      this.screen = 'GAME';
+      this.state = 'GAME_OVER';
+      this.result = 'EVIL';
+      const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
+      updatedAllPlayers.storeInRedis(redisClient);
+      updatedAllPlayers.emitToAllWithTeamAndRole(io, roomId);
+      return;
+    }
+
     this.screen = 'GAME';
     this.state = 'QUEST_PROPOSING';
     const indexOfCurrentOrganiser = allPlayers.players.map(p => p.id).indexOf(this.currentQuest.organiserId);

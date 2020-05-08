@@ -40,8 +40,9 @@
         <div class="row mb-3">
           <div class="col-4 offset-4">
             <button
+              @click="ready"
               class="btn btn-dark btn-block btn-sm"
-              :disabled="selected.length != requiredPlayers"
+              :disabled="selected.length != requiredPlayers || isPlayerReady"
             >Submit</button>
           </div>
         </div>
@@ -55,7 +56,8 @@ export default {
   name: "MerlinIdentificationInput",
   props: {
     players: Array,
-    requiredPlayers: Number
+    requiredPlayers: Number,
+    isPlayerReady: Boolean
   },
   data: function() {
     return {
@@ -92,11 +94,9 @@ export default {
       this.notSelected.push(this.selected.splice(i, 1)[0]);
     },
     submit: function() {
-      let ids = [];
-      for (let i = 0; i < this.selected.length; i++) {
-        ids.push(this.selected[i].id);
+      if (this.selected.length == 1) {
+        this.$emit("identify-merlin", this.selected[0].id);
       }
-      this.$emit("proposeTeam", ids);
     }
   }
 };

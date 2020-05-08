@@ -48,6 +48,7 @@
         :playerId="getPlayerId()"
         :isPlayerReady="isPlayerReady"
         @reveal-quest-vote="revealQuestVote"
+        @identify-merlin="identifyMerlin"
         @propose-player-for-quest="proposePlayerForQuest"
         @unpropose-player-for-quest="unproposePlayerForQuest"
         @player-ready="readyUp"

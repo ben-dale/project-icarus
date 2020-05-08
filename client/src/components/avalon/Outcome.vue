@@ -14,7 +14,11 @@
         </div>
         <div class="row pb-5">
           <div class="col-4 offset-4">
-            <button class="btn btn-dark btn-lg btn-block">{{buttonText}}</button>
+            <button
+              @click="ready"
+              class="btn btn-dark btn-lg btn-block"
+              :disabled="isPlayerReady"
+            >{{buttonText}}</button>
           </div>
         </div>
       </div>
@@ -27,7 +31,13 @@ export default {
   props: {
     winner: String,
     outcome: String,
-    buttonText: String
+    buttonText: String,
+    isPlayerReady: Boolean
+  },
+  methods: {
+    ready: function() {
+      this.$emit("player-ready");
+    }
   }
 };
 </script>

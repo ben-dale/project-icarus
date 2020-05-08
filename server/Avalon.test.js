@@ -428,8 +428,6 @@ test('game over with EVIL win when 5 disagreements', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
-
-  console.log(avalon);
 });
 
 test('starts quest result reveal', () => {
@@ -537,6 +535,94 @@ test('starts next quest', () => {
   expect(avalon.currentQuest.proposalAccepted).toBe(false);
   expect(avalon.currentQuest.votes).toStrictEqual([]);
   expect(avalon.currentQuest.result).toBe('');
+});
+
+
+
+test('starts merlin id', () => {
+  const roomId = '293jd9';
+  const allPlayers = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId),
+    new Player().init('2', 'player2', roomId),
+    new Player().init('3', 'player3', roomId),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId),
+  ]);
+  const io = new MockIo();
+  const redisClient = new MockRedisClient();
+
+  const avalon = new Avalon().init();
+  avalon.settings = avalon.settings.withMorganaEnabled(true);
+  avalon.settings = avalon.settings.withPercivalEnabled(true);
+  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
+  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+
+  const allPlayersWithVote = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId).withProposalApproved(true),
+    new Player().init('2', 'player2', roomId).withProposalApproved(true),
+    new Player().init('3', 'player3', roomId).withProposalApproved(true),
+    new Player().init('4', 'player4', roomId).withProposalApproved(true),
+    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+  ]);
+  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
+  let allPlayersWithQuestVote = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new Player().init('3', 'player3', roomId),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId)
+  ]);
+  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon.revealVote(0);
+  avalon.revealVote(1);
+
+  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('3');
+  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  allPlayersWithQuestVote = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new Player().init('3', 'player3', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId)
+  ]);
+  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon.revealVote(0);
+  avalon.revealVote(1);
+  avalon.revealVote(2);
+
+  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
+  avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
+  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  allPlayersWithQuestVote = new AllPlayers().init([
+    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new Player().init('3', 'player3', roomId),
+    new Player().init('4', 'player4', roomId),
+    new Player().init('5', 'player5', roomId)
+  ]);
+  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon.revealVote(0);
+  avalon.revealVote(1);
+
+  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+
+  expect(avalon.screen).toBe('GAME');
+  expect(avalon.state).toBe('MERLIN_ID');
 });
 
 test('create instance from raw object', () => {

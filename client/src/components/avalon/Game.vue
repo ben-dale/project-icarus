@@ -1,7 +1,11 @@
 <template>
   <div class="col-md-12">
     <div class="row">
-      <QuestLog :questLog="game.questLogs" :players="players" :disagreements="game.currentQuest.disagreements" />
+      <QuestLog
+        :questLog="game.questLogs"
+        :players="players"
+        :disagreements="game.currentQuest.disagreements"
+      />
     </div>
     <div class="row mb-3">
       <PlayerReadyBar :players="players" />
@@ -88,6 +92,7 @@
       <MerlinIdentificationInput
         :requiredPlayers="1"
         :players="players.filter(p => p.team === 'GOOD')"
+        :isPlayerReady="isPlayerReady"
         v-on="$listeners"
       />
     </div>
@@ -95,19 +100,29 @@
       <QuestWaiting
         header="Assassination attempt"
         :line1="this.players.filter(p => p.team == 'EVIL').map(p => p.name).join(', ') + ' are in Evil and now may openly discuss who they believe Merlin is.'"
-        :line2="this.players.find(p => p.role == 'ASSASSIN').name + ' is the Assassin. Their choice will be revealed shortly...'"
+        :line2="this.players.find(p => p.role == 'ASSASSIN').name + ' is the Assassin. Their choice will be visible once everyone is ready.'"
         :questId="game.currentQuest.id"
+        :isPlayerReady="isPlayerReady"
+        v-on="$listeners"
       />
     </div>
 
     <div v-if="game.state == 'GAME_OVER' && game.result == 'EVIL'" class="row">
-      <Outcome winner="EVIL" outcome="Evil have taken the win!" buttonText="Play Again" />
+      <Outcome
+        winner="EVIL"
+        outcome="Evil have taken the win!"
+        buttonText="Play Again"
+        :isPlayerReady="isPlayerReady"
+        v-on="$listeners"
+      />
     </div>
     <div v-if="game.state == 'GAME_OVER' && game.result == 'GOOD'" class="row">
       <Outcome
         winner="GOOD"
         outcome="The Assassin was not able to identify Merlin. Good have taken the win!"
         buttonText="Play Again"
+        :isPlayerReady="isPlayerReady"
+        v-on="$listeners"
       />
     </div>
   </div>
@@ -182,8 +197,7 @@ export default {
     },
     revealQuestResult: function(id) {
       this.$emit("reveal-quest-result", id);
-    },
-
+    }
   }
 };
 </script>
