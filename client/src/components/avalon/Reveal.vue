@@ -1,76 +1,10 @@
 <template>
   <div class="col-12">
+    
     <div class="row mb-4">
       <div class="col-12">
         <div class="card">
-          <div class="card-body text-center">
-            <h3 v-if="role == 'GUARD'" class="card-title">You are a guard</h3>
-            <h3 v-if="role == 'MERLIN'" class="card-title">You are Merlin</h3>
-            <h3 v-if="role == 'OBERON'" class="card-title">You are Oberon</h3>
-            <h3 v-if="role == 'PERCIVAL'" class="card-title">You are Percival</h3>
-            <h3 v-if="role == 'ASSASSIN'" class="card-title">You are the Assassin</h3>
-            <h3 v-if="role == 'MINION'" class="card-title">You are a minion</h3>
-            <h3 v-if="role == 'MORGANA'" class="card-title">You are Morgana</h3>
-
-            <p v-if="team == 'EVIL'" class="card-text">You are in Evil</p>
-            <p v-if="team == 'GOOD'" class="card-text">You are in Good</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row mb-4" v-if="role != 'GUARD'">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header">Things that you know</div>
-          <h5
-            v-if="team == 'EVIL' || role == 'MERLIN'"
-            class="card-title text-center pt-3"
-          >Members of Evil</h5>
-          <h5 v-if="team == 'EVIL' || role == 'MERLIN'" class="card-text text-center mb-4">
-            <span
-              v-for="(playerId, index) in metadata"
-              :key="index"
-              class="badge badge badge-danger mx-2"
-            >{{findPlayerName(playerId)}}</span>
-          </h5>
-          <h5 v-if="role == 'PERCIVAL'" class="card-title text-center pt-3">Merlin is</h5>
-          <h5 v-if="role == 'PERCIVAL'" class="card-text text-center">
-            <span class="badge badge-info mx-2">{{findPlayerName(metadata[0])}}</span>
-            <span v-if="metadata.length == 2">or</span>
-            <span
-              v-if="metadata.length == 2"
-              class="badge badge-info mx-2"
-            >{{findPlayerName(metadata[1])}}</span>
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="row mb-4">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header">Who knows what?</div>
-          <div class="card-body">
-            <p
-              class="card-text"
-            >Some players have access to important information about the other players on their screens now.</p>
-            <p class="card-text">All players know which team they are in.</p>
-            <p class="card-text">Evil team members know which players are in Evil.</p>
-            <p class="card-text">Merlin knows which players are in Evil.</p>
-            <p class="card-text">Guards do not know anything about any other player.</p>
-            <p v-if="settings.oberonEnabled" class="card-text">Oberon is only visible to Merlin.</p>
-            <p v-if="settings.percivalEnabled" class="card-text">Percival knows who Merlin is.</p>
-            <p
-              v-if="settings.morganaEnabled"
-              class="card-text"
-            >Morgana confuses Percival by appearing as a second Merlin.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row mb-4">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-header">How the game works</div>
+          <div class="card-header bg-light">How the game works</div>
           <div class="card-body">
             <p
               class="card-text"
@@ -113,7 +47,75 @@
         </div>
       </div>
     </div>
+    
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-light">Your role</div>
+          <div class="card-body text-center">
+            <h3 v-if="role == 'GUARD'" class="card-title">You are a guard</h3>
+            <h3 v-if="role == 'MERLIN'" class="card-title">You are Merlin</h3>
+            <h3 v-if="role == 'OBERON'" class="card-title">You are Oberon</h3>
+            <h3 v-if="role == 'PERCIVAL'" class="card-title">You are Percival</h3>
+            <h3 v-if="role == 'ASSASSIN'" class="card-title">You are the Assassin</h3>
+            <h3 v-if="role == 'MINION'" class="card-title">You are a minion</h3>
+            <h3 v-if="role == 'MORGANA'" class="card-title">You are Morgana</h3>
 
+            <p v-if="team == 'EVIL'" class="card-text">You are in Evil</p>
+            <p v-if="team == 'GOOD'" class="card-text">You are in Good</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-4" v-if="role != 'GUARD'">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-light">Things that you know</div>
+          <h5
+            v-if="team == 'EVIL' || role == 'MERLIN'"
+            class="card-title text-center pt-3"
+          >Members of Evil</h5>
+          <h5 v-if="team == 'EVIL' || role == 'MERLIN'" class="card-text text-center mb-4">
+            <span
+              v-for="(playerId, index) in metadata"
+              :key="index"
+              class="badge badge badge-danger mx-2"
+            >{{findPlayerName(playerId)}}</span>
+          </h5>
+          <h5 v-if="role == 'PERCIVAL'" class="card-title text-center pt-3">Merlin is</h5>
+          <h5 v-if="role == 'PERCIVAL'" class="card-text text-center">
+            <span class="badge badge-info mx-2">{{findPlayerName(metadata[0])}}</span>
+            <span v-if="metadata.length == 2">or</span>
+            <span
+              v-if="metadata.length == 2"
+              class="badge badge-info mx-2"
+            >{{findPlayerName(metadata[1])}}</span>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-light">Who knows what?</div>
+          <div class="card-body">
+            <p
+              class="card-text"
+            >Some players have access to important information about the other players on their screens now.</p>
+            <p class="card-text">All players know which team they are in.</p>
+            <p class="card-text">Evil team members know which players are in Evil.</p>
+            <p class="card-text">Merlin knows which players are in Evil.</p>
+            <p class="card-text">Guards do not know anything about any other player.</p>
+            <p v-if="settings.oberonEnabled" class="card-text">Oberon is only visible to Merlin.</p>
+            <p v-if="settings.percivalEnabled" class="card-text">Percival knows who Merlin is.</p>
+            <p
+              v-if="settings.morganaEnabled"
+              class="card-text"
+            >Morgana confuses Percival by appearing as a second Merlin.</p>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="row mb-4">
       <PlayerReadyBar :players="players" />
     </div>

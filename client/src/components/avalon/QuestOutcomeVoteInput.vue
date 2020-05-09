@@ -24,7 +24,7 @@
           </div>
           <div class="col-3">
             <button
-              class="btn btn-sm btn-danger btn-block"
+              :class="['btn', 'btn-sm', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
               @click="succeed(false)"
               :disabled="!isEvil || isPlayerReady"
             >Sabotage</button>
