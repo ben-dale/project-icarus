@@ -7,7 +7,7 @@
           <div class="col-md-12">
             <div class="row py-5">
               <div class="col-12">
-                <h3 class="card-title text-white">{{outcome}}</h3>
+                <h4 class="card-title text-white">{{outcome}}</h4>
               </div>
             </div>
           </div>
@@ -16,7 +16,7 @@
           <div class="col-4 offset-4">
             <button
               @click="ready"
-              class="btn btn-dark btn-lg btn-block"
+              class="btn btn-dark btn-block"
               :disabled="isPlayerReady"
             >{{buttonText}}</button>
           </div>

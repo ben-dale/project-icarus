@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-header bg-light">Quest {{questId}} - Assassination attempt</div>
       <div class="card-body">
-        <div class="row mt-3 mb-3">
+        <div class="row mt-3 mb-5">
           <div class="col-12 text-center">
             <p
               class="card-text"
@@ -17,7 +17,7 @@
           <div
             v-for="(player, index) in players"
             :key="index"
-            :class="['col-2 mb-2', index % 5 === 0 ? 'offset-1' : '']"
+            :class="['col-2 mb-2', index == 0 && players.length == 3 ? 'offset-3' : '', index == 0 && players.length == 4 ? 'offset-2' : '']"
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"

@@ -215,7 +215,7 @@ export default {
       this.metadata = player.metadata.slice();
     });
     this.socket.on("room-updated", room => {
-      console.log(room);
+      // console.log(room);
       this.room = room;
     });
   },
