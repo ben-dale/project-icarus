@@ -31,7 +31,7 @@ redisClient.on('connect', () => { console.log('Redis client connected') });
 
 // Socket listening configuration
 io.on('connection', (socket) => {
-  console.log(socket.id + ' connected')
+  console.log(socket.id + ' connected');
   socket.on('disconnect', function () {
     // player.leave(redis, socket, io);
     // what to do if player leaves half way through game? can we generate a code for them to come back in?
@@ -56,15 +56,20 @@ io.on('connection', (socket) => {
         let player = new Player().init(playerId, data.name, data.roomId);
         player.storeInRedis(redisClient);
 
-        const updatedRoom = room.addPlayerId(socket.id);
-        updatedRoom.storeInRedis(redisClient);
+        if (!room.game.closed) {
+          console.log('player joined room ' + socket.id);
+          const updatedRoom = room.addPlayerId(socket.id);
+          updatedRoom.storeInRedis(redisClient);
 
-        socket.join(data.roomId);
+          socket.join(data.roomId);
 
-        new AllPlayers().getFromRedis(redisClient, updatedRoom.playerIds, (allPlayers) => {
-          updatedRoom.emitToAll(io);
-          allPlayers.emitToAll(io, data.roomId);
-        }, () => { });
+          new AllPlayers().getFromRedis(redisClient, updatedRoom.playerIds, (allPlayers) => {
+            updatedRoom.emitToAll(io);
+            allPlayers.emitToAll(io, data.roomId);
+          }, () => { });
+        } else {
+          socket.emit('room-updated', room);
+        }
       });
     }
   });

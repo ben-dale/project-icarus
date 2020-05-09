@@ -4,9 +4,14 @@
       <NameInput buttonText="Join" @submit="joinSession" />
     </div>
     <div
-      v-if="room && room.game"
+      v-if="room && room.game && room.game.closed && !room.playerIds.includes(getPlayerId())"
       class="row"
-      v-bind:class="{ 'visible': room && room.game.screen === 'LOBBY', 'hidden': !room || room.game.screen !== 'LOBBY' }"
+    >
+      <RoomClosed />
+    </div>
+    <div
+      v-if="room && room.game && room.playerIds.includes(getPlayerId()) && room.game.screen == 'LOBBY'"
+      class="row"
     >
       <Lobby
         :socket="socket"
@@ -22,9 +27,8 @@
     </div>
 
     <div
-      v-if="room && room.game"
+      v-if="room && room.game  && room.playerIds.includes(getPlayerId()) && room.game.screen == 'ROLE_REVEAL'"
       class="row"
-      v-bind:class="{ 'visible': room && room.game.screen === 'ROLE_REVEAL', 'hidden': !room || room.game.screen !== 'ROLE_REVEAL' }"
     >
       <Reveal
         :players="players"
@@ -39,9 +43,8 @@
     </div>
 
     <div
-      v-if="room && room.game"
+      v-if="room && room.game && room.playerIds.includes(getPlayerId()) && room.game.screen == 'GAME'"
       class="row"
-      v-bind:class="{ 'visible': room.game.screen === 'GAME', 'hidden': room.game.screen !== 'GAME' }"
     >
       <Game
         :game="room.game"
@@ -68,6 +71,7 @@
 
 <script>
 import io from "socket.io-client";
+import RoomClosed from "@/components/common/RoomClosed.vue";
 import NameInput from "@/components/avalon/NameInput.vue";
 import Lobby from "@/components/avalon/Lobby.vue";
 import Reveal from "@/components/avalon/Reveal.vue";
@@ -75,7 +79,7 @@ import Game from "@/components/avalon/Game.vue";
 
 export default {
   name: "AvalonGame",
-  components: { NameInput, Lobby, Reveal, Game },
+  components: { NameInput, Lobby, Reveal, Game, RoomClosed },
   props: {
     socket: {
       type: Object,
@@ -211,6 +215,7 @@ export default {
       this.metadata = player.metadata.slice();
     });
     this.socket.on("room-updated", room => {
+      console.log(room);
       this.room = room;
     });
   },
