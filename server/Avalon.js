@@ -1,8 +1,14 @@
-const RandomInteger = require('./RandomInteger');
 const CurrentQuest = require('./CurrentQuest');
 const QuestLog = require('./QuestLog');
 const Settings = require('./Settings');
-const AvalonRules = require('./avalon/AvalonRules');
+const RoleReveal = require('./avalon/RoleReveal');
+const QuestResultReveal = require('./avalon/QuestResultReveal');
+const NextQuest = require('./avalon/NextQuest');
+const RestartQuest = require('./avalon/RestartQuest');
+const ProposalResult = require('./avalon/ProposalResult');
+const ProposalVote = require('./avalon/ProposalVote');
+const QuestProposing = require('./avalon/QuestProposing');
+const QuestStarting = require('./avalon/QuestStarting');
 
 class Avalon {
 
@@ -52,29 +58,30 @@ class Avalon {
   next(redisClient, io, allPlayers, roomId) {
     if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER')) && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
       console.log('starting role reveal...');
-      this.startRoleReveal(redisClient, io, allPlayers, roomId);
+      new RoleReveal(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'ROLE_REVEAL') {
       console.log('starting game...');
-      return this.startGame(redisClient, io, allPlayers, roomId);
+      new QuestProposing(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSING' && this.currentQuest.proposedPlayerIds.length == this.currentQuest.requiredPlayers) {
       // check that the proposal is valid (no duplicates, of length required and the player ids are players in the room)
+      // maybe this could be ProposalVote.canStart(blah)...
       console.log('starting proposal vote...');
-      return this.startProposalVote(redisClient, io, allPlayers, roomId);
+      return new ProposalVote(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL') {
       console.log('starting proposal result...');
-      return this.startProposalResult(redisClient, io, allPlayers, roomId);
+      new ProposalResult(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && this.currentQuest.proposalAccepted) {
       console.log('starting quest...');
-      return this.startQuest(redisClient, io, allPlayers, roomId);
+      new QuestStarting(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && !this.currentQuest.proposalAccepted) {
       console.log('restarting quest...');
-      return this.restartQuest(redisClient, io, allPlayers, roomId);
+      new RestartQuest(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_STARTED' && allPlayers.players.filter(p => this.currentQuest.proposedPlayerIds.includes(p.id)).filter(p => p.vote != '').length == this.currentQuest.requiredPlayers) {
       console.log('starting quest result reveal...');
-      return this.startQuestResultReveal(redisClient, io, allPlayers, roomId);
+      new QuestResultReveal(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_RESULT_REVEAL' && this.currentQuest.votes.filter(v => v.revealed).length == this.currentQuest.votes.length) {
       console.log('starting next quest...');
-      return this.startNextQuest(redisClient, io, allPlayers, roomId);
+      new NextQuest(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'MERLIN_ID' && this.currentQuest.proposedPlayerIds.length == 1) {
       if (allPlayers.players.find(p => p.role == 'MERLIN' && p.id == this.currentQuest.proposedPlayerIds[0])) {
         this.screen = 'GAME';
@@ -85,197 +92,10 @@ class Avalon {
         this.state = 'GAME_OVER';
         this.result = 'GOOD';
       }
-    }
-  }
-
-  restartQuest(redisClient, io, allPlayers, roomId) {
-    this.screen = 'GAME';
-    this.state = 'QUEST_PROPOSING';
-    const indexOfCurrentOrganiser = allPlayers.players.map(p => p.id).indexOf(this.currentQuest.organiserId);
-    const indexOfNextOrganiser = (indexOfCurrentOrganiser == (allPlayers.players.length - 1) ? 0 : indexOfCurrentOrganiser + 1);
-    const nextOrganiser = allPlayers.players[indexOfNextOrganiser];
-    const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
-
-    this.questLogs[indexOfCurrentQuestLog].organiserId = nextOrganiser.id;
-    const avalonRules = new AvalonRules(allPlayers.players.length);
-    this.currentQuest = this.currentQuest.restartQuest(nextOrganiser.id, avalonRules.numberOfPlayersRequiredForQuest(this.currentQuest.id - 1));
-    if (this.currentQuest.disagreements >= 5) {
-      this.screen = 'GAME';
-      this.state = 'GAME_OVER';
-      this.result = 'EVIL';
-    }
-    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
-  }
-
-  startNextQuest(redisClient, io, allPlayers, roomId) {
-    const questFailCount = this.questLogs.filter(ql => ql.result == 'FAIL').length;
-    const questSucceedCount = this.questLogs.filter(ql => ql.result == 'SUCCEED').length;
-    if (questSucceedCount >= 3) {
-      this.screen = 'GAME';
-      this.state = 'MERLIN_ID';
-      this.currentQuest.proposedPlayerIds = [];
-
-      const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
+      const updatedAllPlayers = allPlayers.resetReadyStatuses();
       updatedAllPlayers.storeInRedis(redisClient);
       updatedAllPlayers.emitToAllWithTeamAndRole(io, roomId);
-      return;
     }
-
-    if (questFailCount >= 3) {
-      this.screen = 'GAME';
-      this.state = 'GAME_OVER';
-      this.result = 'EVIL';
-      const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
-      updatedAllPlayers.storeInRedis(redisClient);
-      updatedAllPlayers.emitToAllWithTeamAndRole(io, roomId);
-      return;
-    }
-
-    this.screen = 'GAME';
-    this.state = 'QUEST_PROPOSING';
-    const indexOfCurrentOrganiser = allPlayers.players.map(p => p.id).indexOf(this.currentQuest.organiserId);
-    const indexOfNextOrganiser = (indexOfCurrentOrganiser == (allPlayers.players.length - 1) ? 0 : indexOfCurrentOrganiser + 1);
-    const nextOrganiser = allPlayers.players[indexOfNextOrganiser];
-
-    const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
-    if (indexOfCurrentQuestLog < 4) {
-      this.questLogs[indexOfCurrentQuestLog + 1].organiserId = nextOrganiser.id;
-    }
-    const avalonRules = new AvalonRules(allPlayers.players.length);
-    this.currentQuest = this.currentQuest.startNextQuest(nextOrganiser.id, avalonRules.numberOfPlayersRequiredForQuest(this.currentQuest.id));
-
-    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
-  }
-
-  startQuestResultReveal(redisClient, io, allPlayers, roomId) {
-    this.screen = 'GAME';
-    this.state = 'QUEST_RESULT_REVEAL';
-
-    allPlayers.players.filter(p => p.vote == 'SABOTAGE').forEach(p => {
-      this.currentQuest = this.currentQuest.withSabotageVote();
-    });
-    allPlayers.players.filter(p => p.vote == 'SUCCEED').forEach(p => {
-      this.currentQuest = this.currentQuest.withSucceedVote();
-    });
-
-    this.currentQuest = this.currentQuest.shuffleVotes();
-
-    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
-  }
-
-  startQuest(redisClient, io, allPlayers, roomId) {
-    this.screen = 'GAME';
-    this.state = 'QUEST_STARTED';
-
-    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
-  }
-
-  startProposalVote(redisClient, io, allPlayers, roomId) {
-    this.screen = 'GAME';
-    this.state = 'QUEST_PROPOSAL';
-
-    const updatedAllPlayers = allPlayers.resetReadyStatuses();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
-  }
-
-  startProposalResult(redisClient, io, allPlayers, roomId) {
-    this.screen = 'GAME';
-    this.state = 'QUEST_PROPOSAL_RESULT';
-
-    const playersThatApproved = allPlayers.players.filter(p => p.vote == 'APPROVE').length;
-    const playersThatRejected = allPlayers.players.filter(p => p.vote == 'REJECT').length;
-    if (playersThatApproved > playersThatRejected) {
-      this.currentQuest.proposalAccepted = true;
-      const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
-      this.questLogs[indexOfCurrentQuestLog].playerIds = this.currentQuest.proposedPlayerIds.slice();
-    }
-
-    const updatedAllPlayers = allPlayers.resetReadyStatuses();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAllWithVote(io, roomId);
-  }
-
-  startGame(redisClient, io, allPlayers, roomId) {
-    this.screen = 'GAME';
-    this.state = 'QUEST_PROPOSING';
-
-    const updatedAllPlayers = allPlayers.resetReadyStatuses();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
-  }
-
-  startRoleReveal(redisClient, io, allPlayers, roomId) {
-    const avalonRules = new AvalonRules(allPlayers.players.length);
-    let questLogs = [];
-    for (let i = 0; i < 5; i++) {
-      questLogs.push(new QuestLog().init(i + 1, avalonRules.numberOfPlayersRequiredForQuest(i)));
-    }
-    this.questLogs = questLogs;
-    this.currentQuest = new CurrentQuest().init(allPlayers.selectPlayerAtRandom().id).withRequiredPlayers(avalonRules.numberOfPlayersRequiredForQuest(0));
-    this.closed = true;
-    this.screen = 'ROLE_REVEAL';
-    this.state = '';
-
-    this.questLogs[0] = this.questLogs[0].withOrganiserId(this.currentQuest.organiserId);
-
-    const totalPlayerCount = allPlayers.count();
-    const updatedAllPlayers = allPlayers.shuffle().resetReadyStatuses();
-    const goodPlayerCount = avalonRules.numberOfGoodPlayers();
-    for (let i = 0; i < goodPlayerCount; i++) {
-      updatedAllPlayers.players[i] = updatedAllPlayers.players[i].withTeam('GOOD').withRole('GUARD');
-    }
-    for (let i = goodPlayerCount; i < totalPlayerCount; i++) {
-      updatedAllPlayers.players[i] = updatedAllPlayers.players[i].withTeam('EVIL').withRole('MINION');
-    }
-
-    updatedAllPlayers.players[0] = updatedAllPlayers.players[0].withRole('MERLIN');
-    if (this.settings.percivalEnabled) {
-      updatedAllPlayers.players[1] = updatedAllPlayers.players[1].withRole('PERCIVAL');
-    }
-
-    updatedAllPlayers.players[goodPlayerCount] = updatedAllPlayers.players[goodPlayerCount].withRole('ASSASSIN');
-
-    if (this.settings.morganaEnabled && !this.settings.oberonEnabled) {
-      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] = updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('MORGANA');
-    }
-
-    if (this.settings.oberonEnabled && !this.settings.morganaEnabled) {
-      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] = updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('OBERON');
-    }
-
-    if (this.settings.oberonEnabled && this.settings.morganaEnabled && totalPlayerCount >= 7) {
-      updatedAllPlayers.players[updatedAllPlayers.players.length - 1] = updatedAllPlayers.players[updatedAllPlayers.players.length - 1].withRole('MORGANA');
-      updatedAllPlayers.players[updatedAllPlayers.players.length - 2] = updatedAllPlayers.players[updatedAllPlayers.players.length - 2].withRole('OBERON');
-    }
-
-    // evil player information to send to certain players
-    const evilPlayerIds = updatedAllPlayers.players.filter(p => p.team == 'EVIL').map(p => p.id);
-
-    // ids of merlins for percival
-    const merlinIds = updatedAllPlayers.players.filter(p => p.role == 'MORGANA' || p.role == 'MERLIN').map(p => p.id);
-
-    // Store roles and team information for each player in Redis
-    updatedAllPlayers.storeInRedis(redisClient);
-
-    allPlayers.resetReadyStatuses().emitToAll(io, roomId);
-    updatedAllPlayers.players.forEach(p => {
-      if (p.role == 'MERLIN' || p.team == 'EVIL') {
-        p.emitToPlayer(io, evilPlayerIds);
-      } else if (p.role == 'PERCIVAL') {
-        p.emitToPlayer(io, merlinIds);
-      } else {
-        p.emitToPlayer(io, []);
-      }
-    });
   }
 
   revealVote(index) {
