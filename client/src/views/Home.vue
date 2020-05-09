@@ -36,22 +36,22 @@
         <GameOption name="Coming Soon" description="More games are on the way!" image="coming-soon.jpeg" />
       </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
       <Footer />
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
   import GameOption from '@/components/index/GameOption.vue'
-  import Footer from '@/components/index/Footer.vue'
+  // import Footer from '@/components/index/Footer.vue'
   import Title from '@/components/index/Title.vue'
 
   export default {
     name: 'App',
     components: {
       GameOption,
-      Footer,
+      // Footer,
       Title
     }
   }
