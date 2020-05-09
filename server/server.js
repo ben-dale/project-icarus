@@ -166,5 +166,12 @@ io.on('connection', (socket) => {
 
 });
 
+process.on('uncaughtException', (err, origin) => {
+  console.log(
+    `Caught exception: ${err}\n` +
+    `Exception origin: ${origin}`
+  );
+});
+
 // Run the damn thing!
 http.listen(process.env.PORT || 3000);
