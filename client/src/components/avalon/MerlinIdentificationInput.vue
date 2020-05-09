@@ -74,7 +74,6 @@ export default {
       }
     },
     select: function(playerId) {
-      console.log(playerId);
       this.$emit("select-merlin-for-id", playerId);
     },
     unselect: function(playerId) {

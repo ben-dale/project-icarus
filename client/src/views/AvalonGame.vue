@@ -4,6 +4,7 @@
       <NameInput buttonText="Join" @submit="joinSession" />
     </div>
     <div
+      v-if="room && room.game"
       class="row"
       v-bind:class="{ 'visible': room && room.game.screen === 'LOBBY', 'hidden': !room || room.game.screen !== 'LOBBY' }"
     >
@@ -21,6 +22,7 @@
     </div>
 
     <div
+      v-if="room && room.game"
       class="row"
       v-bind:class="{ 'visible': room && room.game.screen === 'ROLE_REVEAL', 'hidden': !room || room.game.screen !== 'ROLE_REVEAL' }"
     >
@@ -29,7 +31,7 @@
         :isPlayerReady="isPlayerReady"
         :team="team"
         :role="role"
-        :settings="room && room.game ? room.game.settings : {}"
+        :settings="room.game.settings"
         :metadata="metadata"
         @player-ready="readyUp"
         @player-not-ready="notReady"
@@ -37,11 +39,12 @@
     </div>
 
     <div
+      v-if="room && room.game"
       class="row"
-      v-bind:class="{ 'visible': room && room.game.screen === 'GAME', 'hidden': !room || room.game.screen !== 'GAME' }"
+      v-bind:class="{ 'visible': room.game.screen === 'GAME', 'hidden': room.game.screen !== 'GAME' }"
     >
       <Game
-        :game="room && room.game ? room.game : {}"
+        :game="room.game"
         :players="players"
         :team="team"
         :role="role"
@@ -195,23 +198,19 @@ export default {
   },
   created() {
     this.socket.on("players-updated", players => {
-      console.log(players);
       this.players = players;
     });
     this.socket.on("player-updated", player => {
       // Typically it should only be the 'ready' field that is updated here
-      console.log(player);
       let playerToUpdate = this.players.find(o => o.id == player.id);
       playerToUpdate.ready = player.ready;
     });
     this.socket.on("player-assigned", player => {
-      console.log(player);
       this.team = player.team;
       this.role = player.role;
       this.metadata = player.metadata.slice();
     });
     this.socket.on("room-updated", room => {
-      console.log(room);
       this.room = room;
     });
   },
