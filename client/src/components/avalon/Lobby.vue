@@ -36,7 +36,7 @@
                   v-on:click="morganaEnabled(!room.game.settings.morganaEnabled)"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-light'), (room && room.game.settings.morganaEnabled ? 'border-danger' : 'border')]"
-                  :disabled="!isRoomOwner"
+                  :disabled="!isRoomOwner || (room.game.settings.oberonEnabled && players.length < 7)"
                 >
                   Morgana
                   <br />Appears as a second Merlin to Percival
@@ -47,7 +47,7 @@
                   v-on:click="oberonEnabled(!room.game.settings.oberonEnabled)"
                   type="button"
                   v-bind:class="['btn', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-light'), (room && room.game.settings.oberonEnabled ? 'border-danger' : 'border')]"
-                  :disabled="!isRoomOwner"
+                  :disabled="!isRoomOwner || (room.game.settings.morganaEnabled && players.length < 7)"
                 >
                   Oberon
                   <br />Invisible to all but Merlin
@@ -118,10 +118,7 @@ export default {
   props: {
     socket: Object,
     room: Object,
-    players: {
-      type: Array,
-      default: () => []
-    },
+    players: Array,
     isPlayerReady: Boolean
   },
   data: function() {

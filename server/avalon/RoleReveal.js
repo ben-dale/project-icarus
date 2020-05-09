@@ -54,6 +54,7 @@ class RoleReveal {
 
     // evil player information to send to certain players
     const evilPlayerIds = updatedAllPlayers.players.filter(p => p.team == 'EVIL').map(p => p.id);
+    const evilPlayerIdsWithoutOberon = updatedAllPlayers.players.filter(p => p.team == 'EVIL' && p.role != 'OBERON').map(p => p.id);
 
     // ids of merlins for percival
     const merlinIds = updatedAllPlayers.players.filter(p => p.role == 'MORGANA' || p.role == 'MERLIN').map(p => p.id);
@@ -63,8 +64,10 @@ class RoleReveal {
 
     allPlayers.resetReadyStatuses().emitToAll(io, roomId);
     updatedAllPlayers.players.forEach(p => {
-      if (p.role == 'MERLIN' || p.team == 'EVIL') {
+      if (p.role == 'MERLIN' || p.role == 'OBERON') {
         p.emitToPlayer(io, evilPlayerIds);
+      } else if (p.team == 'EVIL') {
+        p.emitToPlayer(io, evilPlayerIdsWithoutOberon);
       } else if (p.role == 'PERCIVAL') {
         p.emitToPlayer(io, merlinIds);
       } else {
