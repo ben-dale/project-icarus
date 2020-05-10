@@ -85,14 +85,14 @@
                 <p v-if="!player.ready" class="py-2 mb-3 rounded bg-secondary">{{player.name}}</p>
               </div>
               <div v-for="index in playersStillNeeded" class="col-3" :key="index">
-                <p class="text-light py-2 border rounded">Required</p>
+                <p class="text-light py-2 border border-secondary rounded">Required</p>
               </div>
               <div
                 v-for="index in (maxPlayers - (players.length + playersStillNeeded))"
                 class="col-3"
                 :key="index+100"
               >
-                <p class="text-light border rounded py-2">Optional</p>
+                <p class="text-light border border-secondary rounded py-2">Optional</p>
               </div>
             </div>
           </div>

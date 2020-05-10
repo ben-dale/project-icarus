@@ -18,7 +18,7 @@
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"
-              class="btn btn-transparent text-light border btn-sm btn-block"
+              class="btn btn-secondary btn-sm btn-block"
               v-on:click="select(player.id)"
               :disabled="isPlayerReady || requiredPlayers == proposedPlayerIds.length"
             >{{player.name}}</button>

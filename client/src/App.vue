@@ -11,14 +11,14 @@
 </style>
 <style lang="scss">
 /* change the colors */
-$danger: #c0392b;
-$success: #27ae60;
+$danger: #d63031;
+$success:#16a085;
 $warning: #f1c40f;
-$info: #2980b9;
+$info: #0984e3;
 $primary: #485460;
 $dark: #485460;
 $secondary: #808e9b;
 
-$body-bg: #1e272e;
+$body-bg: #2C3A47;
 @import "bootstrap";
 </style>

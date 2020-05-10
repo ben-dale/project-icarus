@@ -100,7 +100,7 @@
             >{{findPlayerName(playerId)}}</span>
           </h5>
           <h5 v-if="role == 'PERCIVAL'" class="card-title text-center pt-3">Merlin is</h5>
-          <h5 v-if="role == 'PERCIVAL'" class="card-text pb-3 text-center">
+          <h5 v-if="role == 'PERCIVAL'" class="card-text pb-4 text-center">
             <span class="badge badge-info mx-2">{{findPlayerName(metadata[0])}}</span>
             <span v-if="metadata.length == 2">or</span>
             <span
