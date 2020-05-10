@@ -1,7 +1,6 @@
 <template>
   <div class="col-12">
-    
-    <div class="row mb-4">
+    <!-- <div class="row mb-4">
       <div class="col-12">
         <div class="card">
           <div class="card-header bg-light">How the game works</div>
@@ -46,31 +45,39 @@
           </div>
         </div>
       </div>
+    </div>-->
+    <div class="row mb-5">
+      <div class="col-6 offset-3 text-center">
+        <h2 class="pt-2">
+          <span class="badge badge badge-info mx-2">{{goodPlayerCount()}}</span> vs
+          <span class="badge badge badge-danger mx-2">{{players.length - goodPlayerCount()}}</span>
+        </h2>
+      </div>
     </div>
-    
     <div class="row mb-4">
-      <div class="col-12">
+      <div class="col-6 offset-3">
         <div class="card">
-          <div class="card-header bg-light">Your role</div>
-          <div class="card-body text-center">
-            <h3 v-if="role == 'GUARD'" class="card-title">You are a guard</h3>
+          <div
+            :class="['card-body', 'text-center', team == 'EVIL' ? 'bg-danger' : 'bg-info', 'text-white']"
+          >
+            <h3 v-if="role == 'GUARD'" class="card-title">You are a Royal Guard</h3>
             <h3 v-if="role == 'MERLIN'" class="card-title">You are Merlin</h3>
             <h3 v-if="role == 'OBERON'" class="card-title">You are Oberon</h3>
             <h3 v-if="role == 'PERCIVAL'" class="card-title">You are Percival</h3>
             <h3 v-if="role == 'ASSASSIN'" class="card-title">You are the Assassin</h3>
-            <h3 v-if="role == 'MINION'" class="card-title">You are a minion</h3>
+            <h3 v-if="role == 'MINION'" class="card-title">You are a Minion</h3>
             <h3 v-if="role == 'MORGANA'" class="card-title">You are Morgana</h3>
-
-            <p v-if="team == 'EVIL'" class="card-text">You are in Evil</p>
-            <p v-if="team == 'GOOD'" class="card-text">You are in Good</p>
+            <p v-if="team == 'GOOD' && role === 'MERLIN'" class="card-text">You know who is in Evil. Evil will win if they can identify you.</p>
+            <p v-if="team == 'GOOD' && role !== 'MERLIN'" class="card-text">Your goal is to complete three quests.</p>
+            <p v-if="team == 'EVIL' && role === 'ASSASSIN'" class="card-text">You will be given an opportunity to assassinate Merlin after three successful quests.</p>
+            <p v-if="team == 'EVIL' && role !== 'ASSASSIN'" class="card-text">Your goal is to disrupt the flow of the game.</p>
           </div>
         </div>
       </div>
     </div>
     <div class="row mb-4" v-if="role != 'GUARD'">
-      <div class="col-12">
+      <div class="col-6 offset-3">
         <div class="card">
-          <div class="card-header bg-light">Things that you know</div>
           <h5
             v-if="team == 'EVIL' || role == 'MERLIN'"
             class="card-title text-center pt-3"
@@ -94,7 +101,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-4">
+    <!-- <div class="row mb-4">
       <div class="col-12">
         <div class="card">
           <div class="card-header bg-light">Who knows what?</div>
@@ -115,9 +122,9 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
     <div class="row mb-4">
-      <PlayerReadyBar :players="players" />
+      <PlayerReadyBar :width="6" :namesPerRow="2" :players="players" />
     </div>
     <div class="row">
       <div class="col-6 offset-3">
@@ -145,6 +152,22 @@ export default {
   methods: {
     findPlayerName: function(id) {
       return this.players.find(p => p.id == id).name;
+    },
+    goodPlayerCount: function() {
+      switch (this.players.length) {
+        case 5:
+          return 3;
+        case 6:
+          return 4;
+        case 7:
+          return 4;
+        case 8:
+          return 5;
+        case 9:
+          return 6;
+        case 10:
+          return 6;
+      }
     }
   }
 };

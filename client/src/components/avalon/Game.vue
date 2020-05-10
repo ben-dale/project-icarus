@@ -13,8 +13,8 @@
     <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
       <QuestWaiting
         header="Team proposal"
-        :line1="currentOrganiser.name + ' is proposing a team.'"
-        line2="Players will vote on the team proposal when it has been drafted and everyone is ready."
+        :line1="'There are five quests to complete. Each quest has a nominated player that acts as the quest\'s leader.'"
+        :line2="currentOrganiser.name + ' is the current quest leader and is proposing a team for Quest ' + game.currentQuest.id +  '.'"
         :questId="game.currentQuest.id"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"
@@ -42,6 +42,7 @@
     <div v-if="game.state == 'QUEST_PROPOSAL_RESULT'" class="row">
       <QuestProposalVoteResult
         :players="players"
+        :names="proposedQuestMemberNames"
         :proposalAccepted="game.currentQuest.proposalAccepted"
         :questId="game.currentQuest.id"
         :isPlayerReady="isPlayerReady"

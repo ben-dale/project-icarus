@@ -5,7 +5,7 @@
       <div class="card-body">
         <div class="row mt-3 mb-3">
           <div class="col-12 text-center">
-            <p>You are tasked with proposing a team for Quest {{questId}}. Your proposal will be voted on by the other players.</p>
+            <p>You are tasked with proposing a team for Quest {{questId}}. All players will vote to either 'Accept' or 'Reject' your proposal.</p>
           </div>
         </div>
         

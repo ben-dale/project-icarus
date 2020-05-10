@@ -13,7 +13,7 @@
                 class="badge badge-info mx-2"
               >{{name}}</span>
             </h5>
-            <p class="card-text">What do you think? Your vote will be seen by the other players.</p>
+            <p class="card-text">Your vote will be seen by the other players. This is a majority vote.</p>
           </div>
         </div>
         <div class="row mb-3">
