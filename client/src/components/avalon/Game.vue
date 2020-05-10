@@ -113,7 +113,7 @@
     <div v-if="game.state == 'GAME_OVER' && game.result == 'EVIL'" class="row">
       <Outcome
         winner="EVIL"
-        outcome="Evil have taken the win!"
+        outcome="Evil has taken the win!"
         buttonText="Play Again"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"
@@ -122,7 +122,7 @@
     <div v-if="game.state == 'GAME_OVER' && game.result == 'GOOD'" class="row">
       <Outcome
         winner="GOOD"
-        outcome="The Assassin was not able to identify Merlin. Good have taken the win!"
+        outcome="The Assassin was not able to identify Merlin. Good has taken the win!"
         buttonText="Play Again"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"

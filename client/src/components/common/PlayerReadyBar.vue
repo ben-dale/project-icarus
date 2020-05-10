@@ -1,11 +1,11 @@
 <template>
   <div :class="['col-'+width, 'offset-' + getCardOffset()]">
-    <div class="card">
+    <div class="card bg-dark">
       <div class="card-body">
         <div class="row text-center">
           <div v-for="(player) in players" :class="['col-' + getNameWidth()]" :key="player.id">
             <button
-              :class="[(player.ready ? 'btn-success' : 'btn-light'), 'mb-3', 'btn btn-sm btn-block']"
+              :class="[(player.ready ? 'btn-success' : 'btn-dark border'), 'mb-3', 'btn btn-sm btn-block']"
               disabled
             >{{player.name}}</button>
           </div>

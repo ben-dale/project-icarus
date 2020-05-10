@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12">
-    <div class="card">
-      <div class="card-header bg-light">Quest {{questId}} - Quest underway</div>
+    <div class="card bg-dark text-light">
+      <div class="card-header">Quest {{questId}} - Quest underway</div>
       <div class="card-body text-center">
         <div class="row mt-3 mb-4">
           <div class="col-12">

@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12">
-    <div class="card">
-      <div class="card-header bg-light">Quest {{questId}} - Result</div>
+    <div class="card bg-dark text-light">
+      <div class="card-header">Quest {{questId}} - Result</div>
       <div class="card-body text-center">
         <div class="row my-3">
           <div
@@ -34,7 +34,7 @@
             :class="['col-2', index === 0 ? 'offset-' + resultOffset(): '']"
           >
             <button
-              class="btn btn-dark btn-sm btn-block"
+              class="btn btn-secondary btn-sm btn-block"
               v-on:click="revealQuestVote(index)"
               :disabled="result.revealed"
             >Reveal</button>

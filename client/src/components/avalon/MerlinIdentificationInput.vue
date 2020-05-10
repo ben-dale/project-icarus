@@ -1,7 +1,7 @@
 <template>
   <div class="col-12">
-    <div class="card">
-      <div class="card-header bg-light">Quest {{questId}} - Assassination attempt</div>
+    <div class="card bg-dark text-light">
+      <div class="card-header">Quest {{questId}} - Assassination attempt</div>
       <div class="card-body">
         <div class="row mt-3 mb-5">
           <div class="col-12 text-center">
@@ -21,7 +21,7 @@
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"
-              class="btn btn-light border btn-sm btn-block"
+              class="btn text-light border btn-sm btn-block"
               v-on:click="select(player.id)"
               :disabled="isPlayerReady || requiredPlayers == proposedPlayerIds.length"
             >{{player.name}}</button>

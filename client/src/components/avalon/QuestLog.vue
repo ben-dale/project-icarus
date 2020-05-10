@@ -2,8 +2,8 @@
   <div class="col-12">
     <div class="row">
       <div class="col-12">
-        <table class="table text-center table-bordered table-sm">
-          <thead class="thead-dark">
+        <table class="table table-dark table-bordered text-center text-light table-sm">
+          <thead class="thead">
             <tr>
               <th scope="col">Quest</th>
               <th scope="col">Players required</th>
@@ -30,8 +30,8 @@
     </div>
     <div class="row mb-3">
       <div class="col-12">
-        <div class="card">
-          <div class="card-body">
+        <div class="card bg-dark">
+          <div class="card-body text-light">
             <div
               class="card-text text-center"
               v-if="disagreements < 5"

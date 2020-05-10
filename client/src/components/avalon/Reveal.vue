@@ -47,7 +47,7 @@
       </div>
     </div>-->
     <div class="row mb-5">
-      <div class="col-6 offset-3 text-center">
+      <div class="col-6 offset-3 text-center text-light">
         <h2 class="pt-2">
           <span class="badge badge badge-info mx-2">{{goodPlayerCount()}}</span> vs
           <span class="badge badge badge-danger mx-2">{{players.length - goodPlayerCount()}}</span>
@@ -56,10 +56,8 @@
     </div>
     <div class="row mb-4">
       <div class="col-6 offset-3">
-        <div class="card">
-          <div
-            :class="['card-body', 'text-center', team == 'EVIL' ? 'bg-danger' : 'bg-info', 'text-white']"
-          >
+        <div :class="['card', 'text-center', team == 'EVIL' ? 'bg-danger' : 'bg-info']">
+          <div class="card-body text-white">
             <h3 v-if="role == 'GUARD'" class="card-title">You are a Royal Guard</h3>
             <h3 v-if="role == 'MERLIN'" class="card-title">You are Merlin</h3>
             <h3 v-if="role == 'OBERON'" class="card-title">You are Oberon</h3>
@@ -67,21 +65,33 @@
             <h3 v-if="role == 'ASSASSIN'" class="card-title">You are the Assassin</h3>
             <h3 v-if="role == 'MINION'" class="card-title">You are a Minion</h3>
             <h3 v-if="role == 'MORGANA'" class="card-title">You are Morgana</h3>
-            <p v-if="team == 'GOOD' && role === 'MERLIN'" class="card-text">You know who is in Evil. Evil will win if they can identify you.</p>
-            <p v-if="team == 'GOOD' && role !== 'MERLIN'" class="card-text">Your goal is to complete three quests.</p>
-            <p v-if="team == 'EVIL' && role === 'ASSASSIN'" class="card-text">You will be given an opportunity to assassinate Merlin after three successful quests.</p>
-            <p v-if="team == 'EVIL' && role !== 'ASSASSIN'" class="card-text">Your goal is to disrupt the flow of the game.</p>
+            <p
+              v-if="team == 'GOOD' && role === 'MERLIN'"
+              class="card-text"
+            >You know who is in Evil. Evil will win if they can identify you.</p>
+            <p
+              v-if="team == 'GOOD' && role !== 'MERLIN'"
+              class="card-text"
+            >Your goal is to complete three quests.</p>
+            <p
+              v-if="team == 'EVIL' && role === 'ASSASSIN'"
+              class="card-text"
+            >You will be given an opportunity to assassinate Merlin after three successful quests.</p>
+            <p
+              v-if="team == 'EVIL' && role !== 'ASSASSIN'"
+              class="card-text"
+            >Your goal is to disrupt the flow of the game.</p>
           </div>
         </div>
       </div>
     </div>
     <div class="row mb-4" v-if="role != 'GUARD'">
       <div class="col-6 offset-3">
-        <div class="card">
+        <div class="card bg-dark text-light">
           <h5
             v-if="team == 'EVIL' || role == 'MERLIN'"
             class="card-title text-center pt-3"
-          >Members of Evil</h5>
+          >Evil Team</h5>
           <h5 v-if="team == 'EVIL' || role == 'MERLIN'" class="card-text text-center mb-4">
             <span
               v-for="(playerId, index) in metadata"
@@ -90,7 +100,7 @@
             >{{findPlayerName(playerId)}}</span>
           </h5>
           <h5 v-if="role == 'PERCIVAL'" class="card-title text-center pt-3">Merlin is</h5>
-          <h5 v-if="role == 'PERCIVAL'" class="card-text text-center">
+          <h5 v-if="role == 'PERCIVAL'" class="card-text pb-3 text-center">
             <span class="badge badge-info mx-2">{{findPlayerName(metadata[0])}}</span>
             <span v-if="metadata.length == 2">or</span>
             <span

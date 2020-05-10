@@ -4,7 +4,7 @@
       <input
         v-model="name"
         type="text"
-        class="form-control"
+        class="form-control rounded-0"
         placeholder="Name"
         aria-label="Name"
         aria-describedby="button-start"

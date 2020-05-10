@@ -2,8 +2,8 @@
   <div class="col-12">
     <div class="row">
       <div class="col-12">
-        <div class="card">
-          <p class="card-header text-center">Game settings</p>
+        <div class="card  bg-dark text-light">
+          <p class="card-header">Game settings</p>
           <div class="card-body">
             <div class="row mb-3">
               <div class="col-6">
@@ -24,7 +24,7 @@
                 <button
                   v-on:click="percivalEnabled(!room.game.settings.percivalEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-light'), (room && room.game.settings.percivalEnabled ? 'border-info' : 'border')]"
+                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-secondary'), (room && room.game.settings.percivalEnabled ? 'border-info' : 'border')]"
                   :disabled="!isRoomOwner"
                 >
                   Percival
@@ -35,7 +35,7 @@
                 <button
                   v-on:click="morganaEnabled(!room.game.settings.morganaEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-light'), (room && room.game.settings.morganaEnabled ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-secondary'), (room && room.game.settings.morganaEnabled ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner || (room.game.settings.oberonEnabled && players.length < 7)"
                 >
                   Morgana
@@ -46,7 +46,7 @@
                 <button
                   v-on:click="oberonEnabled(!room.game.settings.oberonEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-light'), (room && room.game.settings.oberonEnabled ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-secondary'), (room && room.game.settings.oberonEnabled ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner || (room.game.settings.morganaEnabled && players.length < 7)"
                 >
                   Oberon
@@ -59,7 +59,7 @@
       </div>
     </div>
     <div class="row pt-4 pb-3">
-      <div class="col-12 text-center">
+      <div class="col-12 text-center text-light">
         <p>Further instruction and explanation will be provided as you play through The Resistance: Avalon.</p>
         <p>The next screen will reveal which team you are in and which role you will play.</p>
         <p
@@ -74,28 +74,25 @@
 
     <div class="row mb-5">
       <div class="col-12">
-        <div class="card">
+        <div class="card bg-dark text-light">
           <div class="card-body">
             <div class="row text-center">
               <div v-for="player in players" class="col-3" :key="player.id">
                 <p
                   v-if="player.ready"
-                  class="bg-success text-white py-2 mb-3 border border-success rounded"
+                  class="bg-success text-white py-2 mb-3 border-success rounded"
                 >{{player.name}}</p>
-                <p
-                  v-if="!player.ready"
-                  class="text-dark py-2 mb-3 border bg-light rounded"
-                >{{player.name}}</p>
+                <p v-if="!player.ready" class="py-2 mb-3 rounded bg-secondary">{{player.name}}</p>
               </div>
               <div v-for="index in playersStillNeeded" class="col-3" :key="index">
-                <p class="text-secondary py-2 border rounded">Required</p>
+                <p class="text-light py-2 border rounded">Required</p>
               </div>
               <div
                 v-for="index in (maxPlayers - (players.length + playersStillNeeded))"
                 class="col-3"
                 :key="index+100"
               >
-                <p class="text-secondary border rounded py-2">Optional</p>
+                <p class="text-light border rounded py-2">Optional</p>
               </div>
             </div>
           </div>

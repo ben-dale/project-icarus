@@ -1,7 +1,7 @@
 <template>
   <div class="col-12">
-    <div class="card">
-      <div class="card-header bg-light">Quest {{questId}} - Proposal vote</div>
+    <div class="card bg-dark text-light">
+      <div class="card-header">Quest {{questId}} - Proposal vote</div>
       <div class="card-body text-center">
         <div class="row mt-3 mb-4">
           <div class="col-12">
@@ -20,14 +20,14 @@
           <div class="col-3 offset-3">
             <button
               @click="approve(true)"
-              class="btn btn-dark btn-sm btn-block"
+              class="btn btn-secondary btn-sm btn-block"
               :disabled="isPlayerReady"
             >Approve</button>
           </div>
           <div class="col-3">
             <button
               @click="approve(false)"
-              class="btn btn-dark btn-sm btn-block"
+              class="btn btn-secondary btn-sm btn-block"
               :disabled="isPlayerReady"
             >Reject</button>
           </div>

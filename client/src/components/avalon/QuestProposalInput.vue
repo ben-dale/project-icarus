@@ -1,11 +1,12 @@
 <template>
   <div class="col-12">
-    <div class="card">
-      <div class="card-header bg-light">Quest {{questId}} - Team proposal</div>
+    <div class="card bg-dark text-light">
+      <div class="card-header">Quest {{questId}} - Team proposal</div>
       <div class="card-body">
         <div class="row mt-3 mb-3">
           <div class="col-12 text-center">
             <p>You are tasked with proposing a team for Quest {{questId}}. All players will vote to either 'Accept' or 'Reject' your proposal.</p>
+            <p>Click on the players you wish to nominate.</p>
           </div>
         </div>
         
@@ -17,7 +18,7 @@
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"
-              class="btn btn-light border btn-sm btn-block"
+              class="btn btn-transparent text-light border btn-sm btn-block"
               v-on:click="select(player.id)"
               :disabled="isPlayerReady || requiredPlayers == proposedPlayerIds.length"
             >{{player.name}}</button>
