@@ -63,6 +63,6 @@ export default {
 </script>
 <style scoped>
 th, td, thead th {
-  border-color: white;
+  border-color: #707070;
 }
 </style>
