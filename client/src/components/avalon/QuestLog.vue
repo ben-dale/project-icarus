@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="row">
       <div class="col-12">
-        <table class="table table-dark table-bordered text-center text-light table-sm">
+        <table class="table table-dark table-bordered bg-dark text-center text-light table-sm">
           <thead class="thead">
             <tr>
               <th scope="col">Quest</th>
@@ -61,3 +61,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+th, td, thead th {
+  border-color: white;
+}
+</style>
