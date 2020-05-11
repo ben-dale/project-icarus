@@ -1,11 +1,11 @@
 <template>
   <div class="col-md-12">
-    <div class="card bg-dark text-light">
+    <div class="card bg-primary text-light">
       <div class="card-header">Quest {{questId}} - Quest underway</div>
       <div class="card-body text-center">
-        <div class="row mt-3 mb-4">
+        <div class="row">
           <div class="col-12">
-            <p class="card-text">You are on a quest with the following players:</p>
+            <p class="card-text">This quest contains the following players:</p>
             <h5 class="card-text mb-5">
               <span
                 v-for="(player, index) in players"
@@ -18,19 +18,26 @@
             >How would you like to proceed? Your decision will be kept anonymous.</p>
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col-3 offset-3">
-            <button class="btn btn-sm btn-info btn-block" @click="succeed(true)" :disabled="isPlayerReady">Succeed</button>
-          </div>
-          <div class="col-3">
-            <button
-              :class="['btn', 'btn-sm', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
-              @click="succeed(false)"
-              :disabled="!isEvil || isPlayerReady"
-            >Sabotage</button>
+        
+      </div>
+      <div class="card-footer">
+          <div class="row">
+            <div class="col-6">
+              <button
+                class="btn btn-sm btn-info btn-block"
+                @click="succeed(true)"
+                :disabled="isPlayerReady"
+              >Succeed</button>
+            </div>
+            <div class="col-6">
+              <button
+                :class="['btn', 'btn-sm', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
+                @click="succeed(false)"
+                :disabled="!isEvil || isPlayerReady"
+              >Sabotage</button>
+            </div>
           </div>
         </div>
-      </div>
     </div>
   </div>
 </template>

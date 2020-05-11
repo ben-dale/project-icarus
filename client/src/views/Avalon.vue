@@ -12,7 +12,7 @@
     </div>
     <div class="row">
       <div class="col-md-6 offset-md-3">
-        <button v-on:click="startNewGame(socket)" class="btn btn-dark btn-block">Start a new game</button>
+        <button v-on:click="startNewGame(socket)" class="btn btn-primary btn-block">Start a new game</button>
       </div>
     </div>
   </div>

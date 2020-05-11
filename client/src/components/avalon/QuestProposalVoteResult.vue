@@ -1,9 +1,9 @@
 <template>
   <div class="col-md-12">
-    <div class="card bg-dark text-light">
+    <div class="card bg-primary text-light">
       <div class="card-header">Quest {{questId}} - Proposal result</div>
       <div class="card-body text-center">
-        <div class="row mb-5">
+        <div class="row">
           <div class="col-5 offset-1">
             <h5>Approve</h5>
             <hr />
@@ -27,17 +27,15 @@
             </h5>
           </div>
         </div>
-        <div class="row mt-3 mb-4">
+        <!-- <div class="row mt-3 mb-4">
           <div class="col-12">
             <p class="card-text" v-if="proposalAccepted">The proposal has been approved.</p>
             <p class="card-text" v-if="!proposalAccepted">The proposal has been rejected.</p>
           </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-4 offset-4">
-            <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
-          </div>
-        </div>
+        </div> -->
+      </div>
+      <div class="card-footer">
+        <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
       </div>
     </div>
   </div>

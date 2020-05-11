@@ -1,13 +1,13 @@
 <template>
   <div class="col-md-12">
-    <div class="card bg-dark text-light">
+    <div class="card bg-primary text-light">
       <div class="card-header">Quest {{questId}} - Result</div>
       <div class="card-body text-center">
-        <div class="row my-3">
+        <div class="row">
           <div
             v-for="(result, index) in results"
             :key="index"
-            :class="['col-2', index === 0 ? 'offset-' + resultOffset(): '']"
+            :class="['col-2 mb-2', index === 0 ? 'offset-' + resultOffset(): '']"
           >
             <div
               v-if="result.revealed && result.choice === 'SUCCEED'"
@@ -18,16 +18,12 @@
               class="py-5 bg-danger border border-danger rounded text-center text-white"
             >Sabotage</div>
             <div v-if="!result.revealed" class="py-5 bg-transparent border rounded text-center">
-              <wbr />
+              Result
             </div>
           </div>
         </div>
-        <div v-if="!playerIsOrganiser && questResult === ''" class="row mb-3 pt-4">
-          <div class="col-12">
-            <p>{{organiserName}} is revealing the results...</p>
-          </div>
-        </div>
-        <div v-if="playerIsOrganiser && questResult === ''" class="row mb-3">
+       
+        <div v-if="playerIsOrganiser" class="row">
           <div
             v-for="(result, index) in results"
             :key="index"
@@ -40,7 +36,7 @@
             >Reveal</button>
           </div>
         </div>
-        <div v-if="questResult == 'FAIL'" class="row pt-4">
+        <!-- <div v-if="questResult == 'FAIL'" class="row pt-4">
           <div class="col-12">
             <p>The quest was sabotaged!</p>
           </div>
@@ -49,12 +45,10 @@
           <div class="col-12">
             <p>The quest was completed successfully.</p>
           </div>
-        </div>
-        <div v-if="questResult !== ''" class="row mb-3">
-          <div class="col-4 offset-4">
-            <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
-          </div>
-        </div>
+        </div>-->
+      </div>
+      <div class="card-footer">
+        <ReadyButton :isPlayerReady="isPlayerReady" :disabled="questResult == ''" v-on="$listeners" />
       </div>
     </div>
   </div>
@@ -75,7 +69,7 @@ export default {
   },
   methods: {
     revealQuestVote: function(index) {
-      this.$emit('reveal-quest-vote', index);
+      this.$emit("reveal-quest-vote", index);
     },
     resultOffset: function() {
       switch (this.results.length) {

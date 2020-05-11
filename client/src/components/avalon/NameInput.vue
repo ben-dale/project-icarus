@@ -4,7 +4,7 @@
       <input
         v-model="name"
         type="text"
-        class="form-control rounded-0"
+        class="form-control"
         placeholder="Name"
         aria-label="Name"
         aria-describedby="button-start"
@@ -14,7 +14,7 @@
       <div class="input-group-append">
         <button
           v-on:click="submit"
-          class="btn btn-dark"
+          class="btn btn-primary"
           type="button"
           id="button-start"
         >{{buttonText}}</button>

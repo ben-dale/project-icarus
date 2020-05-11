@@ -87,7 +87,7 @@
     </div>
     <div class="row mb-4" v-if="role != 'GUARD'">
       <div class="col-6 offset-3">
-        <div class="card bg-dark text-light">
+        <div class="card bg-primary text-light">
           <h5
             v-if="team == 'EVIL' || role == 'MERLIN'"
             class="card-title text-center pt-3"

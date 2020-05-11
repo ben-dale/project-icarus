@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-dark text-light rounded-0">
+  <div class="card bg-primary text-light">
     <!-- <img :src="require('@/assets/' + image)" class="card-img-top"> -->
     <div class="card-header">{{name}}</div>
     <div class="card-body text-center">

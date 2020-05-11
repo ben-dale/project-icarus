@@ -1,19 +1,17 @@
 <template>
   <div class="col-12">
-    <div class="card bg-dark text-light">
+    <div class="card bg-primary text-light">
       <div class="card-header">Quest {{questId}} - {{header}}</div>
       <div class="card-body text-center">
-        <div class="row mb-5">
+        <div class="row">
           <div class="col-12">
             <p class="card-text">{{line1}}</p>
             <p class="card-text">{{line2}}</p>
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col-4 offset-4">
-            <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
-          </div>
-        </div>
+      </div>
+      <div class="card-footer">
+        <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
       </div>
     </div>
   </div>

@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="row">
       <div class="col-12">
-        <div class="card  bg-dark text-light">
+        <div class="card bg-primary text-light">
           <p class="card-header">Game settings</p>
           <div class="card-body">
             <div class="row mb-3">
@@ -74,7 +74,7 @@
 
     <div class="row mb-5">
       <div class="col-12">
-        <div class="card bg-dark text-light">
+        <div class="card bg-primary text-light">
           <div class="card-body">
             <div class="row text-center">
               <div v-for="player in players" class="col-3" :key="player.id">
@@ -82,7 +82,7 @@
                   v-if="player.ready"
                   class="bg-success text-white py-2 mb-3 border-success rounded"
                 >{{player.name}}</p>
-                <p v-if="!player.ready" class="py-2 mb-3 rounded bg-secondary">{{player.name}}</p>
+                <p v-if="!player.ready" class="py-2 mb-3 text-dark rounded bg-secondary">{{player.name}}</p>
               </div>
               <div v-for="index in playersStillNeeded" class="col-3" :key="index">
                 <p class="text-light py-2 border border-secondary rounded">Required</p>
@@ -96,12 +96,15 @@
               </div>
             </div>
           </div>
+          <div class="card-footer">
+            <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+          </div>
         </div>
       </div>
     </div>
     <div class="row mb-5">
       <div class="col-6 offset-3">
-        <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+        
       </div>
     </div>
   </div>

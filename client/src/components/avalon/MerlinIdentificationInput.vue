@@ -1,9 +1,9 @@
 <template>
   <div class="col-12">
-    <div class="card bg-dark text-light">
+    <div class="card bg-primary text-light">
       <div class="card-header">Quest {{questId}} - Assassination attempt</div>
       <div class="card-body">
-        <div class="row mt-3 mb-5">
+        <div class="row mb-4">
           <div class="col-12 text-center">
             <p
               class="card-text"
@@ -13,7 +13,7 @@
             >If you manage to successfully identify Merlin you will steal the win.</p>
           </div>
         </div>
-        <div class="row mb-5">
+        <div class="row mb-4">
           <div
             v-for="(player, index) in players"
             :key="index"
@@ -21,7 +21,7 @@
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"
-              class="btn text-light border btn-sm btn-block"
+              class="btn btn-secondary btn-sm btn-block"
               v-on:click="select(player.id)"
               :disabled="isPlayerReady || requiredPlayers == proposedPlayerIds.length"
             >{{player.name}}</button>
@@ -33,15 +33,13 @@
             >{{player.name}}</button>
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col-4 offset-4">
-            <ReadyButton
-              :isPlayerReady="isPlayerReady"
-              :disabled="requiredPlayers != proposedPlayerIds.length"
-              v-on="$listeners"
-            />
-          </div>
-        </div>
+      </div>
+      <div class="card-footer">
+        <ReadyButton
+          :isPlayerReady="isPlayerReady"
+          :disabled="requiredPlayers != proposedPlayerIds.length"
+          v-on="$listeners"
+        />
       </div>
     </div>
   </div>

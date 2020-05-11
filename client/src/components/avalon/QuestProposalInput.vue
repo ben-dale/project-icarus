@@ -1,16 +1,16 @@
 <template>
   <div class="col-12">
-    <div class="card bg-dark text-light">
+    <div class="card bg-primary text-light">
       <div class="card-header">Quest {{questId}} - Team proposal</div>
       <div class="card-body">
-        <div class="row mt-3 mb-3">
+        <div class="row mb-4">
           <div class="col-12 text-center">
             <p>You are tasked with proposing a team for Quest {{questId}}. All players will vote to either 'Accept' or 'Reject' your proposal.</p>
-            <p>Click on the players you wish to nominate.</p>
+            <p>{{requiredPlayers}} players are required for this quest. Click on the players you wish to nominate.</p>
           </div>
         </div>
-        
-        <div class="row mb-5">
+
+        <div class="row mb-4">
           <div
             v-for="(player, index) in players"
             :key="index"
@@ -30,15 +30,13 @@
             >{{player.name}}</button>
           </div>
         </div>
-        <div class="row mb-3">
-          <div class="col-4 offset-4">
-            <ReadyButton
-              :isPlayerReady="isPlayerReady"
-              :disabled="requiredPlayers != proposedPlayerIds.length"
-              v-on="$listeners"
-            />
-          </div>
-        </div>
+      </div>
+      <div class="card-footer">
+        <ReadyButton
+          :isPlayerReady="isPlayerReady"
+          :disabled="requiredPlayers != proposedPlayerIds.length"
+          v-on="$listeners"
+        />
       </div>
     </div>
   </div>

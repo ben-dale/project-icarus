@@ -2,8 +2,8 @@
   <div class="col-12">
     <div class="row">
       <div class="col-12">
-        <table class="table table-dark table-bordered bg-dark text-center text-light table-sm">
-          <thead class="thead">
+        <table class="table table-dark table-bordered bg-primary text-center text-light table-sm">
+          <thead class="thead bg-dark">
             <tr>
               <th scope="col">Quest</th>
               <th scope="col">Players required</th>
@@ -30,7 +30,7 @@
     </div>
     <div class="row mb-3">
       <div class="col-12">
-        <div class="card bg-dark">
+        <div class="card bg-primary">
           <div class="card-body text-light">
             <div
               class="card-text text-center"
@@ -63,6 +63,6 @@ export default {
 </script>
 <style scoped>
 th, td, thead th {
-  border-color: #707070;
+  border-color: #8e969c;
 }
 </style>

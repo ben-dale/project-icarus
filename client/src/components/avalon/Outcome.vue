@@ -16,7 +16,7 @@
           <div class="col-4 offset-4">
             <button
               @click="ready"
-              class="btn btn-dark btn-block"
+              class="btn btn-primary btn-block"
               :disabled="isPlayerReady"
             >{{buttonText}}</button>
           </div>
