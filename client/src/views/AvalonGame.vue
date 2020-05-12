@@ -30,7 +30,7 @@
       v-if="room && room.game  && room.playerIds.includes(getPlayerId()) && room.game.screen == 'ROLE_REVEAL'"
       class="row"
     >
-      <Reveal
+      <RoleReveal
         :players="players"
         :isPlayerReady="isPlayerReady"
         :team="team"
@@ -72,14 +72,14 @@
 <script>
 import io from "socket.io-client";
 import RoomClosed from "@/components/common/RoomClosed.vue";
-import NameInput from "@/components/avalon/NameInput.vue";
-import Lobby from "@/components/avalon/Lobby.vue";
-import Reveal from "@/components/avalon/Reveal.vue";
+import NameInput from "@/components/common/NameInput.vue";
+import Lobby from "@/components/common/Lobby.vue";
+import RoleReveal from "@/components/avalon/RoleReveal.vue";
 import Game from "@/components/avalon/Game.vue";
 
 export default {
   name: "AvalonGame",
-  components: { NameInput, Lobby, Reveal, Game, RoomClosed },
+  components: { NameInput, Lobby, RoleReveal, Game, RoomClosed },
   props: {
     socket: {
       type: Object,
@@ -108,7 +108,8 @@ export default {
       // room: {
       //   playerIds: ["111", "222", "333"],
       //   game: {
-      //     state: "MERLIN_ID",
+      //     result: "GOOD",
+      //     state: "GAME_OVER",
       //     screen: "GAME",
       //     settings: {
       //       percivalEnabled: false,
@@ -120,7 +121,7 @@ export default {
       //       organiserId: "111",
       //       disagreements: 0,
       //       requiredPlayers: 2,
-      //       proposedPlayerIds: [],
+      //       proposedPlayerIds: ["333", "222"],
       //       proposalAccepted: false,
       //       votes: [
       //         { choice: "SUCCEED", revealed: true },

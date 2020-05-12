@@ -2,25 +2,15 @@
 <template>
   <div class="col-md-12">
     <div :class="['card', (winner == 'EVIL' ? 'bg-danger' : 'bg-info')]">
-      <div class="card-body text-center">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="row py-5">
-              <div class="col-12">
-                <h4 class="card-title text-white">{{outcome}}</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row pb-5">
-          <div class="col-4 offset-4">
-            <button
-              @click="ready"
-              class="btn btn-primary btn-block"
-              :disabled="isPlayerReady"
-            >{{buttonText}}</button>
-          </div>
-        </div>
+      <div class="card-body text-center py-5">
+        <h4 class="card-title text-white">{{outcome}}</h4>
+      </div>
+      <div class="card-footer">
+        <button
+          @click="ready"
+          class="btn btn-primary btn-block"
+          :disabled="isPlayerReady"
+        >{{buttonText}}</button>
       </div>
     </div>
   </div>

@@ -60,7 +60,7 @@
       class="row"
       v-if="game.state == 'QUEST_STARTED' && !game.currentQuest.proposedPlayerIds.includes(playerId)"
     >
-      <QuestWaiting
+      <Waiting
         header="Quest underway"
         line1="The quest is underway!"
         line2="The result of the quest will be revealed when the quest has been completed and everyone is ready."
@@ -112,7 +112,7 @@
       />
     </div>
     <div v-if="game.state == 'MERLIN_ID' && this.role != 'ASSASSIN'" class="row">
-      <QuestWaiting
+      <Waiting
         header="Assassination attempt"
         :line1="this.players.filter(p => p.team == 'EVIL').map(p => p.name).join(', ') + ' are in Evil and now may openly discuss who they believe Merlin is.'"
         :line2="this.players.find(p => p.role == 'ASSASSIN').name + ' is the Assassin. Their choice will be visible once everyone is ready.'"
@@ -151,7 +151,7 @@ import QuestOutcomeVoteInput from "@/components/avalon/QuestOutcomeVoteInput.vue
 import Outcome from "@/components/avalon/Outcome.vue";
 import QuestProposalVoteResult from "@/components/avalon/QuestProposalVoteResult.vue";
 import PlayerReadyBar from "@/components/common/PlayerReadyBar.vue";
-import QuestWaiting from "@/components/avalon/QuestWaiting.vue";
+import Waiting from "@/components/common/Waiting.vue";
 import PlayerSelection from "@/components/common/PlayerSelection.vue";
 
 export default {
@@ -162,7 +162,7 @@ export default {
     QuestOutcomeVoteInput,
     Outcome,
     QuestProposalVoteResult,
-    QuestWaiting,
+    Waiting,
     PlayerReadyBar,
     PlayerSelection
   },

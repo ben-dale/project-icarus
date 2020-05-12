@@ -20,7 +20,7 @@
 <script>
 import ReadyButton from "@/components/common/ReadyButton.vue";
 export default {
-  name: "QuestWaiting",
+  name: "Waiting",
   components: { ReadyButton },
   props: {
     questId: Number,
