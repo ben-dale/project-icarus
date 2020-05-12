@@ -1,15 +1,13 @@
 <template>
   <div class="col-12">
     <div class="card bg-primary text-light">
-      <div class="card-header">Quest {{questId}} - Team proposal</div>
+      <div class="card-header">{{header}}</div>
       <div class="card-body">
         <div class="row mb-4">
           <div class="col-12 text-center">
-            <p>You are tasked with proposing a team for Quest {{questId}}. All players will vote to either 'Accept' or 'Reject' your proposal.</p>
-            <p>{{requiredPlayers}} players are required for this quest. Click on the players you wish to nominate.</p>
+            <p v-for="(line, index) in body" :key="index">{{line}}</p>
           </div>
         </div>
-
         <div class="row mb-4">
           <div
             v-for="(player, index) in players"
@@ -19,13 +17,13 @@
             <button
               v-if="!proposedPlayerIds.includes(player.id)"
               class="btn btn-secondary btn-sm btn-block"
-              v-on:click="select(player.id)"
+              v-on:click="onPlayerSelected(player.id)"
               :disabled="isPlayerReady || requiredPlayers == proposedPlayerIds.length"
             >{{player.name}}</button>
             <button
               v-if="proposedPlayerIds.includes(player.id)"
               class="btn btn-info btn-sm btn-block"
-              v-on:click="unselect(player.id)"
+              v-on:click="onPlayerDeselected(player.id)"
               :disabled="isPlayerReady"
             >{{player.name}}</button>
           </div>
@@ -46,34 +44,17 @@
 import ReadyButton from "@/components/common/ReadyButton.vue";
 
 export default {
-  name: "QuestProposalInput",
+  name: "PlayerSelection",
   components: { ReadyButton },
   props: {
+    header: String,
+    body: Array,
     players: Array,
     requiredPlayers: Number,
-    questId: Number,
     isPlayerReady: Boolean,
-    proposedPlayerIds: Array
-  },
-  methods: {
-    resultOffset: function() {
-      switch (this.requiredPlayers) {
-        case 2:
-          return 4;
-        case 3:
-          return 3;
-        case 4:
-          return 2;
-        case 5:
-          return 1;
-      }
-    },
-    select: function(playerId) {
-      this.$emit("propose-player-for-quest", playerId);
-    },
-    unselect: function(playerId) {
-      this.$emit("unpropose-player-for-quest", playerId);
-    }
+    proposedPlayerIds: Array,
+    onPlayerSelected: Function,
+    onPlayerDeselected: Function
   }
 };
 </script>

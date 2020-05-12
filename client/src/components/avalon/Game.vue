@@ -21,12 +21,18 @@
       />
     </div>
     <div v-if="game.state == 'QUEST_PROPOSING' && playerIsOrganiser" class="row">
-      <QuestProposalInput
-        :questId="game.currentQuest.id"
+      <PlayerSelection
+        :header="'Quest ' + game.currentQuest.id + ' - Team proposal'"
+        :body="[
+          'You are tasked with proposing a team for Quest ' +game.currentQuest.id+ '. All players will vote to either \'Accept\' or \'Reject\' your proposal.', 
+          game.currentQuest.requiredPlayers + ' players are required for this quest. Click on the players you wish to nominate.'
+        ]"
         :players="players"
         :proposedPlayerIds="game.currentQuest.proposedPlayerIds"
         :requiredPlayers="game.currentQuest.requiredPlayers"
         :isPlayerReady="isPlayerReady"
+        :onPlayerSelected="(playerId) => this.$emit('propose-player-for-quest', playerId)"
+        :onPlayerDeselected="(playerId) => this.$emit('unpropose-player-for-quest', playerId)"
         v-on="$listeners"
       />
     </div>
@@ -90,12 +96,18 @@
     </div>
 
     <div v-if="game.state == 'MERLIN_ID' && this.role == 'ASSASSIN'" class="row">
-      <MerlinIdentificationInput
-        :questId="game.currentQuest.id"
+      <PlayerSelection
+        :header="'Quest ' + game.currentQuest.id + ' - Assassination attempt'"
+        :body="[
+          'Your identity has been revealed to all players. You may now discuss openly with your team members who you believe Merlin is.', 
+          'If you manage to successfully identify Merlin you will steal the win.'
+        ]"
         :players="players.filter(p => p.team === 'GOOD')"
         :proposedPlayerIds="game.currentQuest.proposedPlayerIds"
         :requiredPlayers="1"
         :isPlayerReady="isPlayerReady"
+        :onPlayerSelected="(playerId) => this.$emit('select-merlin-for-id', playerId)"
+        :onPlayerDeselected="(playerId) => this.$emit('unselect-merlin-for-id', playerId)"
         v-on="$listeners"
       />
     </div>
@@ -138,10 +150,9 @@ import QuestProposalVoteInput from "@/components/avalon/QuestProposalVoteInput.v
 import QuestOutcomeVoteInput from "@/components/avalon/QuestOutcomeVoteInput.vue";
 import Outcome from "@/components/avalon/Outcome.vue";
 import QuestProposalVoteResult from "@/components/avalon/QuestProposalVoteResult.vue";
-import QuestProposalInput from "@/components/avalon/QuestProposalInput.vue";
 import PlayerReadyBar from "@/components/common/PlayerReadyBar.vue";
 import QuestWaiting from "@/components/avalon/QuestWaiting.vue";
-import MerlinIdentificationInput from "@/components/avalon/MerlinIdentificationInput.vue";
+import PlayerSelection from "@/components/common/PlayerSelection.vue";
 
 export default {
   components: {
@@ -151,10 +162,9 @@ export default {
     QuestOutcomeVoteInput,
     Outcome,
     QuestProposalVoteResult,
-    QuestProposalInput,
     QuestWaiting,
     PlayerReadyBar,
-    MerlinIdentificationInput
+    PlayerSelection
   },
   props: {
     game: Object,

@@ -106,6 +106,7 @@ export default {
       role: null,
       metadata: []
       // room: {
+      //   playerIds: ["111", "222", "333"],
       //   game: {
       //     state: "MERLIN_ID",
       //     screen: "GAME",
