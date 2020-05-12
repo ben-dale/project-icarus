@@ -8,7 +8,7 @@
       <div class="card-footer">
         <button
           @click="ready"
-          class="btn btn-primary btn-block"
+          class="btn btn-secondary btn-block"
           :disabled="isPlayerReady"
         >{{buttonText}}</button>
       </div>

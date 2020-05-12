@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="card bg-primary text-light">
       <div class="card-header">Quest {{questId}} - Proposal vote</div>
-      <div class="card-body text-center">
+      <div class="card-body bg-dark text-center">
         <p class="card-text">{{organiser}} has proposed the following team:</p>
         <h5 class="card-text mb-4">
           <span v-for="(name, index) in names" :key="index" class="badge badge-info mx-2">{{name}}</span>

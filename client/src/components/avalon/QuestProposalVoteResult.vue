@@ -2,11 +2,11 @@
   <div class="col-md-12">
     <div class="card bg-primary text-light">
       <div class="card-header">Quest {{questId}} - Proposal result</div>
-      <div class="card-body text-center">
+      <div class="card-body bg-dark text-center">
         <div class="row">
           <div class="col-5 offset-1">
             <h5>Approve</h5>
-            <hr />
+            <hr class="border border-primary" />
             <h5>
               <span
                 v-for="(player, index) in players.filter(p => p.vote == 'APPROVE')"
@@ -17,7 +17,7 @@
           </div>
           <div class="col-5">
             <h5>Reject</h5>
-            <hr />
+             <hr class="border border-primary" />
             <h5>
               <span
                 v-for="(player, index) in players.filter(p => p.vote == 'REJECT')"

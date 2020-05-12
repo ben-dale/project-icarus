@@ -2,12 +2,18 @@
   <div class="col-md-12">
     <div class="card bg-primary text-light">
       <div class="card-header">Quest {{questId}} - Result</div>
-      <div class="card-body text-center">
+      <div class="card-body bg-dark text-center">
+        <div class="row">
+          <div class="col-12">
+            <p v-if="!playerIsOrganiser">{{organiserName}} is revealing the results...</p>
+            <p v-if="playerIsOrganiser">Reveal the results of the quest by clicking 'Reveal' under each result.</p>
+          </div>
+        </div>
         <div class="row">
           <div
             v-for="(result, index) in results"
             :key="index"
-            :class="['col-2 mb-2', index === 0 ? 'offset-' + resultOffset(): '']"
+            :class="['col-2', index === 0 ? 'offset-' + resultOffset(): '']"
           >
             <div
               v-if="result.revealed && result.choice === 'SUCCEED'"
@@ -27,7 +33,7 @@
           <div
             v-for="(result, index) in results"
             :key="index"
-            :class="['col-2', index === 0 ? 'offset-' + resultOffset(): '']"
+            :class="['col-2 mt-2', index === 0 ? 'offset-' + resultOffset(): '']"
           >
             <button
               class="btn btn-secondary btn-sm btn-block"

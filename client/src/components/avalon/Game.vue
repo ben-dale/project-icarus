@@ -11,7 +11,7 @@
       <PlayerReadyBar :players="players" />
     </div>
     <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
-      <QuestWaiting
+      <Waiting
         header="Team proposal"
         :line1="'There are five quests to complete. Each quest has a nominated player that acts as the quest\'s leader.'"
         :line2="currentOrganiser.name + ' is the current quest leader and is proposing a team for Quest ' + game.currentQuest.id +  '.'"
