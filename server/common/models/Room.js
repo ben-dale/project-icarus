@@ -50,8 +50,6 @@ class Room {
     copy.playerIds = this.playerIds.filter(pid => pid !== playerId);
     if (copy.ownerId == playerId && copy.playerIds.length > 0) {
       copy.ownerId = copy.playerIds[0];
-    } else {
-      copy.game.closed = true;
     }
     return copy;
   }
@@ -64,6 +62,16 @@ class Room {
       copy.game.currentQuest.organiserId = newPlayerId;
     }
     copy.game.currentQuest.proposedPlayerIds = copy.game.currentQuest.proposedPlayerIds.map(pid => pid == oldPlayerId ? newPlayerId : pid);
+    copy.game.questLogs.forEach(ql => {
+      ql.playerIds = ql.playerIds.map(pid => pid == oldPlayerId ? newPlayerId : pid);
+      if (ql.organiserId == oldPlayerId) {
+        ql.organiserId = newPlayerId;
+      }
+    });
+
+    // Need to do some research to make sure all ID's are updated here
+    // e.g. metadata stored on the player
+    // e.g. 
     return copy;
   }
 
