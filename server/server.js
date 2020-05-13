@@ -1,6 +1,6 @@
-const Room = require('./Room.js');
-const Player = require('./Player.js');
-const AllPlayers = require('./AllPlayers.js');
+const Room = require('./common/models/Room.js');
+const Player = require('./common/models/Player.js');
+const AllPlayers = require('./common/models/AllPlayers.js');
 const { v4: uuidv4 } = require('uuid');
 
 // Setup express app

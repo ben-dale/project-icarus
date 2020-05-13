@@ -1,4 +1,4 @@
-const AvalonRules = require('./AvalonRules');
+const AvalonRules = require('../models/AvalonRules');
 
 class RestartQuest {
   constructor(avalon) {

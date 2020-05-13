@@ -1,6 +1,6 @@
 const Player = require('./Player');
-const MockRedisClient = require('./mocks/MockRedisClient');
-const MockIo = require('./mocks/MockIo')
+const MockRedisClient = require('../../mocks/MockRedisClient');
+const MockIo = require('../../mocks/MockIo')
 
 test('init creates new player', () => {
   const player = new Player().init('2930e', 'ben', '5t6y');

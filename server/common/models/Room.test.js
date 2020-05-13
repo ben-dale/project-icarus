@@ -1,6 +1,6 @@
 const Room = require('./Room');
-const MockRedisClient = require('./mocks/MockRedisClient');
-const MockIo = require('./mocks/MockIo')
+const MockRedisClient = require('../../mocks/MockRedisClient');
+const MockIo = require('../../mocks/MockIo')
 
 test('store in redis', () => {
   let redisClient = new MockRedisClient();

@@ -1,4 +1,4 @@
-const Avalon = require('./Avalon');
+const Avalon = require('../../avalon/Avalon');
 
 class Room {
 

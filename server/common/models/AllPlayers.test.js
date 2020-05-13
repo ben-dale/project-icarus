@@ -1,7 +1,7 @@
 const AllPlayers = require('./AllPlayers');
 const Player = require('./Player');
-const MockRedisClient = require('./mocks/MockRedisClient');
-const MockIo = require('./mocks/MockIo')
+const MockRedisClient = require('../../mocks/MockRedisClient');
+const MockIo = require('../../mocks/MockIo')
 
 test('returns false when all players are not ready', () => {
   let players = [new Player('111', 'Ben').withReady(false)];

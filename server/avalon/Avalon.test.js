@@ -1,11 +1,11 @@
 const Avalon = require('./Avalon');
-const Settings = require('./Settings');
-const CurrentQuest = require('./CurrentQuest');
-const AllPlayers = require('./AllPlayers');
-const Player = require('./Player');
-const QuestLog = require('./QuestLog');
-const MockRedisClient = require('./mocks/MockRedisClient');
-const MockIo = require('./mocks/MockIo')
+const Settings = require('./models/Settings');
+const CurrentQuest = require('./models/CurrentQuest');
+const AllPlayers = require('../common/models/AllPlayers');
+const Player = require('../common/models/Player');
+const QuestLog = require('./models/QuestLog');
+const MockRedisClient = require('../mocks/MockRedisClient');
+const MockIo = require('../mocks/MockIo')
 
 test('init instance', () => {
   const avalon = new Avalon().init();

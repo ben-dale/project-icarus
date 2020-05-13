@@ -1,14 +1,14 @@
-const CurrentQuest = require('./CurrentQuest');
-const QuestLog = require('./QuestLog');
-const Settings = require('./Settings');
-const RoleReveal = require('./avalon/RoleReveal');
-const QuestResultReveal = require('./avalon/QuestResultReveal');
-const NextQuest = require('./avalon/NextQuest');
-const RestartQuest = require('./avalon/RestartQuest');
-const ProposalResult = require('./avalon/ProposalResult');
-const ProposalVote = require('./avalon/ProposalVote');
-const QuestProposing = require('./avalon/QuestProposing');
-const QuestStarting = require('./avalon/QuestStarting');
+const CurrentQuest = require('./models/CurrentQuest');
+const QuestLog = require('./models/QuestLog');
+const Settings = require('./models/Settings');
+const RoleReveal = require('./states/RoleReveal');
+const QuestResultReveal = require('./states/QuestResultReveal');
+const NextQuest = require('./states/NextQuest');
+const RestartQuest = require('./states/RestartQuest');
+const ProposalResult = require('./states/ProposalResult');
+const ProposalVote = require('./states/ProposalVote');
+const QuestProposing = require('./states/QuestProposing');
+const QuestStarting = require('./states/QuestStarting');
 
 class Avalon {
 

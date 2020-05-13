@@ -1,7 +1,7 @@
 
-const AvalonRules = require('./AvalonRules');
-const QuestLog = require('../QuestLog');
-const CurrentQuest = require('../CurrentQuest');
+const AvalonRules = require('../models/AvalonRules');
+const QuestLog = require('../models/QuestLog');
+const CurrentQuest = require('../models/CurrentQuest');
 
 class RoleReveal {
   constructor(avalon) {
