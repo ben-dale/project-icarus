@@ -47,6 +47,7 @@ class AllPlayers {
       delete copy.team;
       delete copy.role;
       delete copy.vote;
+      delete copy.metadata;
       return copy;
     });
     io.in(roomId).emit('players-updated', playersToEmit);
@@ -58,6 +59,7 @@ class AllPlayers {
       delete copy.roomId;
       delete copy.team;
       delete copy.role;
+      delete copy.metadata;
       return copy;
     });
     io.in(roomId).emit('players-updated', playersToEmit);
@@ -67,6 +69,7 @@ class AllPlayers {
     const playersToEmit = this.players.map(p => {
       const copy = p.copy();
       delete copy.roomId;
+      delete copy.metadata;
       delete copy.vote;
       return copy;
     });

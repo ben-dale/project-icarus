@@ -33,8 +33,23 @@ redisClient.on('connect', () => { console.log('Redis client connected') });
 io.on('connection', (socket) => {
   console.log(socket.id + ' connected');
   socket.on('disconnect', function () {
-    // player.leave(redis, socket, io);
-    // what to do if player leaves half way through game? can we generate a code for them to come back in?
+    new Player().getFromRedis(redisClient, socket.id, (player) => {
+      new Room().getFromRedis(redisClient, player.roomId, (room) => {
+        var updatedRoom = room.copy();
+        if (updatedRoom.game.closed) {
+          updatedRoom = updatedRoom.withActiveDisconnectedPlayer(player.id);
+        } else {
+          updatedRoom = updatedRoom.disconnectPlayer(player.id);
+          // todo also delete player from Redis at this point I think?
+        }
+
+        updatedRoom.storeInRedis(redisClient);
+        new AllPlayers().getFromRedis(redisClient, updatedRoom.playerIds, (allPlayers) => {
+          updatedRoom.emitToAll(io);
+          allPlayers.emitToAll(io, room.id);
+        }, () => { });
+      }, () => { });
+    }, () => { });
     console.log(socket.id + ' disconnected');
   });
 
@@ -51,25 +66,40 @@ io.on('connection', (socket) => {
     console.log(data);
     if (data && data.name && data.name.length > 0 && data.roomId) {
       new Room().getFromRedis(redisClient, data.roomId, (room) => {
-        const playerId = socket.id;
-
-        let player = new Player().init(playerId, data.name, data.roomId);
-        player.storeInRedis(redisClient);
-
-        if (!room.game.closed) {
-          console.log('player joined room ' + socket.id);
-          const updatedRoom = room.addPlayerId(socket.id);
+        new Player().getFromRedis(redisClient, data.name, (existingPlayer) => {
+          var updatedRoom = room.reconnectPlayer(existingPlayer.id, socket.id);
           updatedRoom.storeInRedis(redisClient);
+          socket.join(updatedRoom.id);
 
-          socket.join(data.roomId);
-
+          var newPlayer = existingPlayer.copy().withId(socket.id);
+          newPlayer.storeInRedis(redisClient);
+          newPlayer.emitToPlayer(io);
           new AllPlayers().getFromRedis(redisClient, updatedRoom.playerIds, (allPlayers) => {
             updatedRoom.emitToAll(io);
             allPlayers.emitToAll(io, data.roomId);
           }, () => { });
-        } else {
-          socket.emit('room-updated', room);
-        }
+        }, (error, result) => {
+          const playerId = socket.id;
+
+          let player = new Player().init(playerId, data.name, data.roomId);
+          player.storeInRedis(redisClient);
+
+          if (!room.game.closed) {
+            console.log('player joined room ' + socket.id);
+            const updatedRoom = room.addPlayerId(socket.id);
+            updatedRoom.storeInRedis(redisClient);
+
+            socket.join(data.roomId);
+
+            new AllPlayers().getFromRedis(redisClient, updatedRoom.playerIds, (allPlayers) => {
+              updatedRoom.emitToAll(io);
+              allPlayers.emitToAll(io, data.roomId);
+            }, () => { });
+          } else {
+            // Player is attempting to join a closed room so just emit the current room state to them for now
+            socket.emit('room-updated', room);
+          }
+        });
       });
     }
   });
@@ -166,12 +196,12 @@ io.on('connection', (socket) => {
 
 });
 
-process.on('uncaughtException', (err, origin) => {
-  console.log(
-    `Caught exception: ${err}\n` +
-    `Exception origin: ${origin}`
-  );
-});
+// process.on('uncaughtException', (err, origin) => {
+//   console.log(
+//     `Caught exception: ${err}\n` +
+//     `Exception origin: ${origin}`
+//   );
+// });
 
 // Run the damn thing!
 http.listen(process.env.PORT || 3000);

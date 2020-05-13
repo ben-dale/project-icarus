@@ -8,6 +8,7 @@ class Player {
     this.ready = false;
     this.team = '';
     this.role = '';
+    this.metadata = [];
     return this;
   }
 
@@ -19,6 +20,7 @@ class Player {
     this.ready = obj.ready;
     this.team = obj.team;
     this.role = obj.role;
+    this.metadata = obj.metadata.slice();
     return this;
   }
 
@@ -31,12 +33,19 @@ class Player {
     copy.ready = this.ready;
     copy.team = this.team;
     copy.role = this.role;
+    copy.metadata = this.metadata.slice();
     return copy;
   }
 
   storeInRedis(redisClient) {
     redisClient.set(this.id, JSON.stringify(this));
     redisClient.expire(this.id, 86400);
+  }
+
+  withId(id) {
+    const copy = this.copy();
+    copy.id = id;
+    return copy;
   }
 
   withReady(ready) {
@@ -69,6 +78,12 @@ class Player {
     return copy;
   }
 
+  withMetadata(metadata) {
+    const copy = this.copy();
+    copy.metadata = metadata.slice();
+    return copy;
+  }
+
   clearVote() {
     const copy = this.copy();
     copy.vote = '';
@@ -77,8 +92,8 @@ class Player {
 
   getFromRedis(redisClient, id, onSuccess, onError) {
     redisClient.get(id, (error, result) => {
-      if (error) {
-        onError();
+      if (error || !result) {
+        onError(error, result);
       } else {
         onSuccess(new Player().fromRawObject(JSON.parse(result)));
       }
@@ -90,13 +105,13 @@ class Player {
     delete copy.team;
     delete copy.role;
     delete copy.vote;
+    delete copy.metadata;
     delete copy.roomId;
     io.in(this.roomId).emit('player-updated', copy);
   }
 
-  emitToPlayer(io, metadata) {
+  emitToPlayer(io) {
     const copy = this.copy();
-    copy.metadata = metadata;
     delete copy.roomId;
     delete copy.vote;
     io.to(this.id).emit('player-assigned', copy);

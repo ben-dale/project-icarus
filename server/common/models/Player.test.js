@@ -24,7 +24,7 @@ test('store in redis', () => {
 });
 
 test('get from redis', () => {
-  let result = '{"id": "2930e", "name": "Ben", "vote": "", "ready": false}';
+  let result = '{"id": "2930e", "name": "Ben", "vote": "", "ready": false, "metadata": []}';
   let redisClient = new MockRedisClient();
   redisClient.resultToReturn(result);
 
@@ -103,7 +103,7 @@ test('sets role', () => {
 });
 
 test('emits all data to player', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withRole('MERLIN').withTeam('GOOD');
+  const player = new Player().init('111', 'Ben', '5t6y').withMetadata(['444', '555']).withRole('MERLIN').withTeam('GOOD');
   const io = new MockIo();
 
   player.emitToPlayer(io, ['444', '555']);
@@ -114,7 +114,8 @@ test('emits all data to player', () => {
   expected.ready = false;
   expected.role = 'MERLIN';
   expected.team = 'GOOD';
-  expected.metadata = [ '444', '555' ]
+  expected.metadata = [ '444', '555' ];
+
   expect(io.toPlayerId).toBe('111');
   expect(io.message).toBe('player-assigned');
   expect(io.obj).toStrictEqual(expected);

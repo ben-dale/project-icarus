@@ -3,6 +3,19 @@
     <div class="row" v-bind:class="{ 'visible': !room, 'hidden': room }">
       <NameInput buttonText="Join" @submit="joinSession" />
     </div>
+
+    <div v-if="room && room.game.closed && room.disconnectedPlayerIds.length > 0">
+      <h1 class="text-white display-5 text-center pb-5">The game has been paused</h1>
+      <div v-for="player in getDisconnectedPlayers()" class="card bg-primary" :key="player.id">
+        <div class="card-body text-light text-center">
+          <p class="card-text">{{player.name}} has disconnected from the game</p>
+          <p
+            class="card-text"
+          >They may rejoin the game by visiting {{getPageUrl()}} and entering the name {{player.id}}</p>
+        </div>
+      </div>
+    </div>
+
     <div
       v-if="room && room.game && room.game.closed && !room.playerIds.includes(getPlayerId())"
       class="row"
@@ -27,7 +40,7 @@
     </div>
 
     <div
-      v-if="room && room.game  && room.playerIds.includes(getPlayerId()) && room.game.screen == 'ROLE_REVEAL'"
+      v-if="room && room.game  && room.playerIds.includes(getPlayerId()) && room.game.screen == 'ROLE_REVEAL' && room.disconnectedPlayerIds.length == 0"
       class="row"
     >
       <RoleReveal
@@ -43,7 +56,7 @@
     </div>
 
     <div
-      v-if="room && room.game && room.playerIds.includes(getPlayerId()) && room.game.screen == 'GAME'"
+      v-if="room && room.game && room.playerIds.includes(getPlayerId()) && room.game.screen == 'GAME' && room.disconnectedPlayerIds.length == 0"
       class="row"
     >
       <Game
@@ -107,9 +120,11 @@ export default {
       metadata: []
       // room: {
       //   playerIds: ["111", "222", "333"],
+      //   disconnectedPlayerIds: ["111"],
+      //   closed: true,
       //   game: {
       //     result: "GOOD",
-      //     state: "GAME_OVER",
+      //     state: "QUEST_PROPOSAL",
       //     screen: "GAME",
       //     settings: {
       //       percivalEnabled: false,
@@ -217,11 +232,22 @@ export default {
       this.metadata = player.metadata.slice();
     });
     this.socket.on("room-updated", room => {
-      // console.log(room);
+      console.log(room);
       this.room = room;
     });
   },
   methods: {
+    getPageUrl: function() {
+      return window.location.href;
+    },
+    getDisconnectedPlayers: function() {
+      return this.room.disconnectedPlayerIds.map(pid =>
+        this.getPlayerById(pid)
+      );
+    },
+    getPlayerById: function(playerId) {
+      return this.players.find(p => p.id == playerId);
+    },
     percivalEnabled: function(enabled) {
       this.socket.emit("room-updated", {
         game: { settings: { percivalEnabled: enabled } }

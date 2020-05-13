@@ -1,8 +1,8 @@
 <template>
   <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="card-text text-center">Sorry! The game has already started.</div>
+    <div class="card bg-primary">
+      <div class="card-body text-light">
+        <div class="card-text text-center">Sorry! The game can no longer be joined.</div>
       </div>
     </div>
   </div>

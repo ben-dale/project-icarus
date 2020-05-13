@@ -6,6 +6,7 @@ class Room {
     this.id = id;
     this.ownerId = '';
     this.playerIds = [];
+    this.disconnectedPlayerIds = [];
     this.game = new Avalon().init();
     return this;
   }
@@ -14,6 +15,7 @@ class Room {
     this.id = obj.id;
     this.ownerId = obj.ownerId;
     this.playerIds = obj.playerIds.slice();
+    this.disconnectedPlayerIds = obj.disconnectedPlayerIds.slice();
     this.game = new Avalon().fromRawObject(obj.game);
     return this;
   }
@@ -23,6 +25,7 @@ class Room {
     copy.id = this.id;
     copy.ownerId = this.ownerId;
     copy.playerIds = this.playerIds.slice();
+    copy.disconnectedPlayerIds = this.disconnectedPlayerIds.slice();
     copy.game = this.game.copy();
     return copy;
   }
@@ -33,6 +36,34 @@ class Room {
     if (copy.ownerId == '') {
       copy.ownerId = playerId;
     }
+    return copy;
+  }
+
+  withActiveDisconnectedPlayer(playerId) {
+    const copy = this.copy();
+    copy.disconnectedPlayerIds.push(playerId);
+    return copy;
+  }
+
+  disconnectPlayer(playerId) {
+    const copy = this.copy();
+    copy.playerIds = this.playerIds.filter(pid => pid !== playerId);
+    if (copy.ownerId == playerId && copy.playerIds.length > 0) {
+      copy.ownerId = copy.playerIds[0];
+    } else {
+      copy.game.closed = true;
+    }
+    return copy;
+  }
+
+  reconnectPlayer(oldPlayerId, newPlayerId) {
+    const copy = this.copy();
+    copy.playerIds = this.playerIds.map(pid => pid == oldPlayerId ? newPlayerId : pid);
+    copy.disconnectedPlayerIds = this.disconnectedPlayerIds.filter(pid => pid != oldPlayerId);
+    if (copy.game.currentQuest.organiserId == oldPlayerId) {
+      copy.game.currentQuest.organiserId = newPlayerId;
+    }
+    copy.game.currentQuest.proposedPlayerIds = copy.game.currentQuest.proposedPlayerIds.map(pid => pid == oldPlayerId ? newPlayerId : pid);
     return copy;
   }
 
@@ -53,7 +84,7 @@ class Room {
     redisClient.get(id, (error, result) => {
       if (error) {
         onError();
-      } else {
+      } else if (result) {
         onSuccess(new Room().fromRawObject(JSON.parse(result)));
       }
     });

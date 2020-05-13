@@ -15,7 +15,7 @@ test('store in redis', () => {
 });
 
 test('get from redis', () => {
-  let result = '{"ownerId":"123","playerIds":[],"game":{"closed":false,"screen":"LOBBY","state":"","currentQuest":{"id":1,"disagreements":0,"organiserId":"","proposedPlayerIds":[],"proposalAccepted":false,"votes":[],"result":""},"settings":{"morganaEnabled":false,"percivalEnabled":false,"oberonEnabled":false},"questLogs":[]}}'
+  let result = '{"ownerId":"123","playerIds":[],"disconnectedPlayerIds":[],"game":{"closed":false,"screen":"LOBBY","state":"","currentQuest":{"id":1,"disagreements":0,"organiserId":"","proposedPlayerIds":[],"proposalAccepted":false,"votes":[],"result":""},"settings":{"morganaEnabled":false,"percivalEnabled":false,"oberonEnabled":false},"questLogs":[]}}'
   let redisClient = new MockRedisClient();
   redisClient.resultToReturn(result);
 

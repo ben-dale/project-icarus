@@ -59,21 +59,21 @@ class RoleReveal {
     // ids of merlins for percival
     const merlinIds = updatedAllPlayers.players.filter(p => p.role == 'MORGANA' || p.role == 'MERLIN').map(p => p.id);
 
+    updatedAllPlayers.players.forEach(p => {
+      if (p.role == 'MERLIN' || p.role == 'OBERON') { 
+        p.metadata = evilPlayerIds.slice();
+      } else if (p.team == 'EVIL') {
+        p.metadata = evilPlayerIdsWithoutOberon.slice();
+      } else if (p.role == 'PERCIVAL') {
+        p.metadata = merlinIds.slice();
+      }
+    });
+
     // Store roles and team information for each player in Redis
     updatedAllPlayers.storeInRedis(redisClient);
 
     allPlayers.resetReadyStatuses().emitToAll(io, roomId);
-    updatedAllPlayers.players.forEach(p => {
-      if (p.role == 'MERLIN' || p.role == 'OBERON') {
-        p.emitToPlayer(io, evilPlayerIds);
-      } else if (p.team == 'EVIL') {
-        p.emitToPlayer(io, evilPlayerIdsWithoutOberon);
-      } else if (p.role == 'PERCIVAL') {
-        p.emitToPlayer(io, merlinIds);
-      } else {
-        p.emitToPlayer(io, []);
-      }
-    });
+    updatedAllPlayers.players.forEach(p => p.emitToPlayer(io));
   }
 }
 
