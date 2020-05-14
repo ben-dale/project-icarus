@@ -12,6 +12,10 @@ class AllPlayers {
     return this.players.filter(p => !p.ready).length == 0;
   }
 
+  reconnectPlayer(oldPlayerId, newPlayerId) {
+    return new AllPlayers().init(this.players.map(p => p.reconnect(oldPlayerId, newPlayerId)));
+  }
+
   resetReadyStatuses() {
     let alteredPlayers = this.players.map(p => p.copy().withReady(false));
     return new AllPlayers().init(alteredPlayers);

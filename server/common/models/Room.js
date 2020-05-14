@@ -56,6 +56,7 @@ class Room {
 
   reconnectPlayer(oldPlayerId, newPlayerId) {
     const copy = this.copy();
+    copy.ownerId = this.ownerId == oldPlayerId ? newPlayerId : this.ownerId;
     copy.playerIds = this.playerIds.map(pid => pid == oldPlayerId ? newPlayerId : pid);
     copy.disconnectedPlayerIds = this.disconnectedPlayerIds.filter(pid => pid != oldPlayerId);
     if (copy.game.currentQuest.organiserId == oldPlayerId) {

@@ -84,6 +84,13 @@ class Player {
     return copy;
   }
 
+  reconnect(oldPlayerId, newPlayerId) {
+    const copy = this.copy();
+    copy.id = this.id == oldPlayerId ? newPlayerId : this.id;
+    copy.metadata = this.metadata.slice().map(pid => pid == oldPlayerId ? newPlayerId : pid);
+    return copy;
+  }
+
   clearVote() {
     const copy = this.copy();
     copy.vote = '';

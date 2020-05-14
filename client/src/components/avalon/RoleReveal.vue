@@ -93,6 +93,8 @@ export default {
   },
   methods: {
     findPlayerName: function(id) {
+      console.log("findPlayerName: " + id);
+      console.log(this.players);
       return this.players.find(p => p.id == id).name;
     },
     goodPlayerCount: function() {

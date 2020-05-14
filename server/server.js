@@ -67,16 +67,25 @@ io.on('connection', (socket) => {
     if (data && data.name && data.name.length > 0 && data.roomId) {
       new Room().getFromRedis(redisClient, data.roomId, (room) => {
         new Player().getFromRedis(redisClient, data.name, (existingPlayer) => {
-          var updatedRoom = room.reconnectPlayer(existingPlayer.id, socket.id);
-          updatedRoom.storeInRedis(redisClient);
-          socket.join(updatedRoom.id);
+          const oldPlayerId = existingPlayer.id;
+          const newPlayerId = socket.id;
+          new AllPlayers().getFromRedis(redisClient, room.playerIds, (allPlayers) => {
+            // Add player with new socket id to room
+            socket.join(room.id);
 
-          var newPlayer = existingPlayer.copy().withId(socket.id);
-          newPlayer.storeInRedis(redisClient);
-          newPlayer.emitToPlayer(io);
-          new AllPlayers().getFromRedis(redisClient, updatedRoom.playerIds, (allPlayers) => {
+            // update refs across all players
+            const updatedPlayers = allPlayers.reconnectPlayer(oldPlayerId, newPlayerId);
+            updatedPlayers.storeInRedis(redisClient);
+            updatedPlayers.emitToAll(io, room.id);
+
+            // Emit sensitive player info back to each player as this may have been updated
+            // todo mark all players as not ready when player has left the game?
+            updatedPlayers.players.forEach(p => p.emitToPlayer(io));
+
+            // update refs across the room and game
+            var updatedRoom = room.reconnectPlayer(oldPlayerId, newPlayerId);
+            updatedRoom.storeInRedis(redisClient);
             updatedRoom.emitToAll(io);
-            allPlayers.emitToAll(io, data.roomId);
           }, () => { });
         }, (error, result) => {
           const playerId = socket.id;
@@ -196,12 +205,13 @@ io.on('connection', (socket) => {
 
 });
 
-// process.on('uncaughtException', (err, origin) => {
-//   console.log(
-//     `Caught exception: ${err}\n` +
-//     `Exception origin: ${origin}`
-//   );
-// });
+// TODO only enable in prod?
+process.on('uncaughtException', (err, origin) => {
+  console.log(
+    `Caught exception: ${err}\n` +
+    `Exception origin: ${origin}`
+  );
+});
 
 // Run the damn thing!
 http.listen(process.env.PORT || 3000);
