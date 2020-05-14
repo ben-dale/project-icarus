@@ -62,12 +62,17 @@
       <div class="col-12">
         <div class="card bg-dark border border-primary text-center text-light">
           <div class="card-body">
-            <p>Further instruction and explanation will be provided as you play through The Resistance: Avalon.</p>
-            <p>The next screen will reveal which team you are in and which role you will play.</p>
             <p
+              class="card-text"
+            >Further instruction and explanation will be provided as you play through The Resistance: Avalon.</p>
+            <p
+              class="card-text"
+            >The next screen will reveal which team you are in and which role you will play.</p>
+            <p
+              class="card-text"
               v-if="playersStillNeeded > 0"
             >We are still waiting for {{playersStillNeeded}} more {{playersStillNeeded == 1 ? 'player' : 'players'}} to join the lobby.</p>
-            <p v-if="playersStillNeeded == 0">
+            <p class="card-text" v-if="playersStillNeeded == 0">
               Waiting for all players to click
               <span class="badge badge-success">Ready</span>
             </p>
@@ -84,22 +89,22 @@
               <div v-for="player in players" class="col-3" :key="player.id">
                 <p
                   v-if="player.ready"
-                  class="bg-success text-white py-2 mb-3 border-success rounded"
+                  class="card-text bg-success text-white py-2 mb-3 border-success rounded"
                 >{{player.name}}</p>
                 <p
                   v-if="!player.ready"
-                  class="py-2 mb-3 text-dark rounded bg-secondary"
+                  class="card-text py-2 mb-3 text-dark rounded bg-secondary"
                 >{{player.name}}</p>
               </div>
               <div v-for="index in playersStillNeeded" class="col-3" :key="index">
-                <p class="text-light py-2 border border-secondary rounded">Required</p>
+                <p class="card-text text-light py-2 mb-3 border border-secondary rounded">Required</p>
               </div>
               <div
                 v-for="index in (maxPlayers - (players.length + playersStillNeeded))"
                 class="col-3"
                 :key="index+100"
               >
-                <p class="text-light border border-secondary rounded py-2">Optional</p>
+                <p class="card-text text-light border border-secondary rounded py-2">Optional</p>
               </div>
             </div>
           </div>
