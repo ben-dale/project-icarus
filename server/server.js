@@ -90,7 +90,7 @@ io.on('connection', (socket) => {
         }, (error, result) => {
           const playerId = socket.id;
 
-          let player = new Player().init(playerId, data.name, data.roomId);
+          let player = new Player().init(playerId, data.name.substring(0, 8), data.roomId);
           player.storeInRedis(redisClient);
 
           if (!room.game.closed) {
