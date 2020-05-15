@@ -250,7 +250,8 @@ export default {
     getDisconnectedPlayers: function() {
       return this.room.disconnectedPlayerIds
         .filter(pid => this.room.playerIds.includes(pid))
-        .map(pid => this.getPlayerById(pid));
+        .map(pid => this.getPlayerById(pid))
+        .filter(p => p);
     },
     getPlayerById: function(playerId) {
       return this.players.find(p => p.id == playerId);
