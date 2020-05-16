@@ -5,8 +5,7 @@
       <div class="card-body bg-dark text-center">
         <div class="row">
           <div class="col-12">
-            <p class="card-text">{{line1}}</p>
-            <p class="card-text">{{line2}}</p>
+            <p v-for="(line, index) in lines" :key="index" class="card-text">{{line}}</p>
           </div>
         </div>
       </div>
@@ -25,8 +24,7 @@ export default {
   props: {
     questId: Number,
     organiserName: String,
-    line1: String,
-    line2: String,
+    lines: Array,
     header: String,
     isPlayerReady: Boolean
   }

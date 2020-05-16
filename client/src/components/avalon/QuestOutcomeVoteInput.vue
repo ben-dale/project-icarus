@@ -13,6 +13,8 @@
                 class="badge badge-info mx-2"
               >{{player}}</span>
             </h5>
+            <p v-if="!isEvil" class="card-text">You are in Good and can only vote 'Succeed'. Evil players on this quest may vote either 'Succeed' or 'Sabotage'.</p>
+            <p v-if="isEvil" class="card-text">You are in Evil and may vote either 'Succeed' or 'Sabotage'. Good players on this quest can only vote 'Succeed'.</p>
             <p
               class="card-text"
             >How would you like to proceed? Your decision will be kept anonymous.</p>

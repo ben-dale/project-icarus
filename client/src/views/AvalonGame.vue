@@ -120,11 +120,11 @@ export default {
       metadata: []
       // room: {
       //   playerIds: ["111", "222", "333"],
-      //   disconnectedPlayerIds: ["111"],
+      //   disconnectedPlayerIds: [],
       //   closed: true,
       //   game: {
       //     result: "GOOD",
-      //     state: "QUEST_PROPOSAL",
+      //     state: "QUEST_PROPOSING",
       //     screen: "GAME",
       //     settings: {
       //       percivalEnabled: false,
@@ -206,8 +206,8 @@ export default {
       //   { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
       //   { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
       // ],
-      // team: "EVIL",
-      // role: "ASSASSIN",
+      // team: "GOOD",
+      // role: "MERLIN",
       // metadata: ["111", "222"]
     };
   },

@@ -13,8 +13,7 @@
     <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
       <Waiting
         header="Team proposal"
-        :line1="'There are five quests to complete. Each quest has a nominated player that acts as the quest\'s leader.'"
-        :line2="currentOrganiser.name + ' is the current quest leader and is proposing a team for Quest ' + game.currentQuest.id +  '.'"
+        :lines="['There are five quests to complete. Each quest has a nominated player that acts as the quest\'s leader.', 'Evil players sent on a quest have the option to \'Sabotage\' the quest. If any \'Sabotage\' votes are cast the quest will fail.', currentOrganiser.name + ' is the current quest leader and is choosing a team for Quest ' + game.currentQuest.id +  '.']"
         :questId="game.currentQuest.id"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"
@@ -24,7 +23,8 @@
       <PlayerSelection
         :header="'Quest ' + game.currentQuest.id + ' - Team proposal'"
         :body="[
-          'You are tasked with proposing a team for Quest ' +game.currentQuest.id+ '. All players will vote to either \'Accept\' or \'Reject\' your proposal.', 
+          'You are tasked with proposing a team for Quest ' +game.currentQuest.id+ '. All players will vote to either \'Accept\' or \'Reject\' your proposal.',
+          'Evil players sent on a quest have the option to \'Sabotage\' the quest. If any \'Sabotage\' votes are cast the quest will fail.',
           game.currentQuest.requiredPlayers + ' players are required for this quest. Click on the players you wish to nominate.'
         ]"
         :players="players"
@@ -62,8 +62,7 @@
     >
       <Waiting
         header="Quest underway"
-        line1="The quest is underway!"
-        line2="The result of the quest will be revealed when the quest has been completed and everyone is ready."
+        :lines="['The quest is underway!', 'The result of the quest will be revealed when the quest has been completed and everyone is ready.']"
         :questId="game.currentQuest.id"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"
@@ -114,8 +113,7 @@
     <div v-if="game.state == 'MERLIN_ID' && this.role != 'ASSASSIN'" class="row">
       <Waiting
         header="Assassination attempt"
-        :line1="this.players.filter(p => p.team == 'EVIL').map(p => p.name).join(', ') + ' are in Evil and now may openly discuss who they believe Merlin is.'"
-        :line2="this.players.find(p => p.role == 'ASSASSIN').name + ' is the Assassin. Their choice will be visible once everyone is ready.'"
+        :lines="[this.players.filter(p => p.team == 'EVIL').map(p => p.name).join(', ') + ' are in Evil and now may openly discuss who they believe Merlin is.', this.players.find(p => p.role == 'ASSASSIN').name + ' is the Assassin. Their choice will be visible when everyone is ready.']"
         :questId="game.currentQuest.id"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"

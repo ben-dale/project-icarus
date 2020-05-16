@@ -22,19 +22,27 @@
             <p
               v-if="team == 'GOOD' && role === 'MERLIN'"
               class="card-text"
-            >You know who is in Evil. Evil will win if they can identify you.</p>
+            >Your goal is to complete three quests. You know who is in Evil. The Assassin will have an opportunity to identify you after three successful quests. If the Assassin can identify you Evil will win.</p>
             <p
-              v-if="team == 'GOOD' && role !== 'MERLIN'"
+              v-if="team == 'GOOD' && role === 'PERCIVAL' && metadata.length == 1"
+              class="card-text"
+            >Your goal is to complete three quests. You know who Merlin is.</p>
+            <p
+              v-if="team == 'GOOD' && role === 'PERCIVAL' && metadata.length == 2"
+              class="card-text"
+            >Your goal is to complete three quests. You know who Merlin is but Morgana is appearing as a second Merlin which confuses you.</p>
+            <p
+              v-if="team == 'GOOD' && role !== 'MERLIN' && role !== 'PERCIVAL'"
               class="card-text"
             >Your goal is to complete three quests.</p>
             <p
               v-if="team == 'EVIL' && role === 'ASSASSIN'"
               class="card-text"
-            >You will be given an opportunity to assassinate Merlin after three successful quests.</p>
+            >Your goal is to disrupt the flow of the game and stay undercover. You will be given an opportunity to identify Merlin after three successful quests. If you successfully identify Merlin you will steal the win.</p>
             <p
               v-if="team == 'EVIL' && role !== 'ASSASSIN'"
               class="card-text"
-            >Your goal is to disrupt the flow of the game.</p>
+            >Your goal is to disrupt the flow of the game and stay undercover.</p>
           </div>
         </div>
       </div>
