@@ -2,7 +2,7 @@
   <div class="card bg-primary text-light">
     <!-- <img :src="require('@/assets/' + image)" class="card-img-top"> -->
     <h5 class="card-header text-center">{{name}}</h5>
-    <div class="card-body text-center">
+    <div class="card-body text-center bg-dark">
       <p v-if="description" class="card-text">{{description}}</p>
       <p
         v-if="minPlayers && maxPlayers && teams"

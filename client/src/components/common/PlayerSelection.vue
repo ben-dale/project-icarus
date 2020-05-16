@@ -1,7 +1,6 @@
 <template>
   <div class="col-12">
     <div class="card bg-primary text-light">
-      <div class="card-header">{{header}}</div>
       <div class="card-body bg-dark">
         <div class="row mb-4">
           <div class="col-12 text-center">

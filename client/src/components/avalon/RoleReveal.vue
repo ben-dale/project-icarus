@@ -47,7 +47,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-4" v-if="role != 'GUARD'">
+    <div class="row mb-2" v-if="role != 'GUARD'">
       <div class="col-6 offset-3">
         <div class="card bg-dark border border-primary text-light">
           <h5

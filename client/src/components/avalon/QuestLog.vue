@@ -6,7 +6,7 @@
           <thead class="thead bg-primary">
             <tr>
               <th scope="col">Quest</th>
-              <th scope="col">Players required</th>
+              <th scope="col">Required</th>
               <th scope="col">Organiser</th>
               <th scope="col" colspan="5" class="text-center">Members</th>
             </tr>
@@ -28,7 +28,7 @@
         </table>
       </div>
     </div>
-    <div class="row mb-3">
+    <div class="row">
       <div class="col-12">
         <div class="card bg-dark border border-primary">
           <div class="card-body text-light">

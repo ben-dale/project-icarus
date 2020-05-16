@@ -7,13 +7,13 @@
           <div class="card-body">
             <div class="row mb-3">
               <div class="col-6">
-                <button type="button" class="btn btn-info btn-block" disabled>
+                <button type="button" class="btn btn-info btn-block">
                   Merlin
                   <br />Knows which team each player is a member of
                 </button>
               </div>
               <div class="col-6">
-                <button type="button" class="btn btn-danger btn-block" disabled>
+                <button type="button" class="btn btn-danger btn-block">
                   Assassin
                   <br />Has an opportunity to steal the win after three successful quests
                 </button>
@@ -24,7 +24,7 @@
                 <button
                   v-on:click="percivalEnabled(!room.game.settings.percivalEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-secondary'), (room && room.game.settings.percivalEnabled ? 'border-info' : 'border')]"
+                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-outline-secondary'), (room && room.game.settings.percivalEnabled ? 'border-info' : 'border')]"
                   :disabled="!isRoomOwner"
                 >
                   Percival
@@ -35,7 +35,7 @@
                 <button
                   v-on:click="morganaEnabled(!room.game.settings.morganaEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-secondary'), (room && room.game.settings.morganaEnabled ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-outline-secondary'), (room && room.game.settings.morganaEnabled ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner || (room.game.settings.oberonEnabled && players.length < 7)"
                 >
                   Morgana
@@ -46,7 +46,7 @@
                 <button
                   v-on:click="oberonEnabled(!room.game.settings.oberonEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-secondary'), (room && room.game.settings.oberonEnabled ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-outline-secondary'), (room && room.game.settings.oberonEnabled ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner || (room.game.settings.morganaEnabled && players.length < 7)"
                 >
                   Oberon

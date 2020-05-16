@@ -1,7 +1,6 @@
 <template>
   <div class="col-12">
     <div class="card bg-primary text-light">
-      <div class="card-header">Quest {{questId}} - Proposal vote</div>
       <div class="card-body bg-dark text-center">
         <p class="card-text">{{organiser}} has proposed the following team:</p>
         <h5 class="card-text mb-4">

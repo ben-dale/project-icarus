@@ -124,7 +124,7 @@ export default {
       //   closed: true,
       //   game: {
       //     result: "GOOD",
-      //     state: "QUEST_PROPOSING",
+      //     state: "QUEST_RESULT_REVEAL",
       //     screen: "GAME",
       //     settings: {
       //       percivalEnabled: false,
@@ -185,7 +185,7 @@ export default {
       //   }
       // },
       // players: [
-      //   { name: "Ben", id: "111", ready: false, vote: "APPROVE", team: "EVIL" },
+      //   { name: "Ben", id: "111", ready: true, vote: "APPROVE", team: "EVIL" },
       //   { name: "Sidd", id: "222", ready: false, vote: "APPROVE", team: "EVIL" },
       //   {
       //     name: "Adam <3",

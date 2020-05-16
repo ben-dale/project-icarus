@@ -1,5 +1,9 @@
 <template>
-  <div class="col-md-12">
+  <div class="col-12">
+    <div class="row">
+      <PlayerReadyBar :width="12" :players="players" />
+    </div>
+    <hr class="border border-primary" />
     <div class="row">
       <QuestLog
         :questLog="game.questLogs"
@@ -7,9 +11,7 @@
         :disagreements="game.currentQuest.disagreements"
       />
     </div>
-    <div class="row mb-3">
-      <PlayerReadyBar :players="players" />
-    </div>
+    <hr class="border border-primary" />
     <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
       <Waiting
         header="Team proposal"
