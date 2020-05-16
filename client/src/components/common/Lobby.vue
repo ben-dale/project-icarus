@@ -5,22 +5,22 @@
         <div class="card bg-primary text-light">
           <p class="card-header">Game settings</p>
           <div class="card-body">
-            <div class="row mb-3">
-              <div class="col-6">
+            <div class="row">
+              <div class="col-lg-6 col-md-12 mb-3">
                 <button type="button" class="btn btn-info btn-block">
                   Merlin
-                  <br />Knows which team each player is a member of
+                  <br />Knows which team each player is in
                 </button>
               </div>
-              <div class="col-6">
+              <div class="col-lg-6 col-md-12 mb-3">
                 <button type="button" class="btn btn-danger btn-block">
                   Assassin
-                  <br />Has an opportunity to steal the win after three successful quests
+                  <br />Has an opportunity to steal the win
                 </button>
               </div>
             </div>
             <div class="row">
-              <div class="col-4">
+              <div class="col-md-12 col-lg-4 mb-3">
                 <button
                   v-on:click="percivalEnabled(!room.game.settings.percivalEnabled)"
                   type="button"
@@ -31,7 +31,7 @@
                   <br />Knows Merlin's identity
                 </button>
               </div>
-              <div class="col-4">
+              <div class="col-md-12 col-lg-4 mb-3">
                 <button
                   v-on:click="morganaEnabled(!room.game.settings.morganaEnabled)"
                   type="button"
@@ -39,10 +39,10 @@
                   :disabled="!isRoomOwner || (room.game.settings.oberonEnabled && players.length < 7)"
                 >
                   Morgana
-                  <br />Appears as a second Merlin to Percival
+                  <br />Disguised as Merlin
                 </button>
               </div>
-              <div class="col-4">
+              <div class="col-md-12 col-lg-4">
                 <button
                   v-on:click="oberonEnabled(!room.game.settings.oberonEnabled)"
                   type="button"
@@ -81,43 +81,47 @@
       </div>
     </div>
 
-    <div class="row mb-5">
+    <div class="row">
       <div class="col-12">
         <div class="card bg-primary text-light">
           <div class="card-body">
             <div class="row text-center">
-              <div v-for="player in players" class="col-3" :key="player.id">
+              <div v-for="player in players" class="col-lg-3 col-md-12" :key="player.id">
                 <p
                   v-if="player.ready"
-                  class="card-text bg-success text-white py-2 mb-3 border-success rounded"
+                  class="card-text bg-success text-white py-2 border-success rounded"
                 >{{player.name}}</p>
                 <p
                   v-if="!player.ready"
-                  class="card-text py-2 mb-3 text-dark rounded bg-secondary"
+                  class="card-text py-2 text-dark rounded bg-secondary"
                 >{{player.name}}</p>
               </div>
-              <div v-for="index in playersStillNeeded" class="col-3" :key="index">
-                <p class="card-text text-light py-2 mb-3 border border-secondary rounded">Required</p>
+              <div v-for="index in playersStillNeeded" class="col-lg-3 col-md-12" :key="index">
+                <p
+                  class="card-text text-light py-2 mb-3 border border-secondary rounded d-none d-lg-block"
+                >Required</p>
               </div>
               <div
                 v-for="index in (maxPlayers - (players.length + playersStillNeeded))"
-                class="col-3"
+                class="col-lg-3 col-md-12"
                 :key="index+100"
               >
-                <p class="card-text text-light border border-secondary rounded py-2">Optional</p>
+                <p
+                  class="card-text text-light border border-secondary rounded py-2 mb-3 d-none d-lg-block"
+                >Optional</p>
               </div>
             </div>
           </div>
-          <div class="card-footer">
-            <!-- <div class="row"> -->
-            <!-- <div class="col-6"> -->
+          <div class="card-footer d-none d-lg-block">
             <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
-            <!-- </div> -->
-            <!-- <div class="col-6">
-                <button class="btn btn-secondary btn-block">How to play</button>
-            </div>-->
-            <!-- </div> -->
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="fixed-bottom">
+      <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
+        <div class="card-body">
+          <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
         </div>
       </div>
     </div>
