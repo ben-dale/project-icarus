@@ -7,21 +7,21 @@
             <p v-for="(line, index) in body" :key="index">{{line}}</p>
           </div>
         </div>
-        <div class="row mb-4">
+        <div class="row">
           <div
             v-for="(player, index) in players"
             :key="index"
-            :class="['col-md-12 col-lg-2 mb-2', (index % 5 === 0 ? 'offset-lg-1' : ''), (index % 3 === 0 && players.length == 3 ? 'offset-lg-3' : '')]"
+            :class="['col-md-12 col-lg-2 mb-3', (index % 5 === 0 ? 'offset-lg-1' : ''), (index % 3 === 0 && players.length == 3 ? 'offset-lg-3' : '')]"
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"
-              class="btn btn-secondary btn-sm btn-block"
+              class="btn btn-secondary btn-block"
               v-on:click="onPlayerSelected(player.id)"
               :disabled="isPlayerReady || requiredPlayers == proposedPlayerIds.length"
             >{{player.name}}</button>
             <button
               v-if="proposedPlayerIds.includes(player.id)"
-              class="btn btn-info btn-sm btn-block"
+              class="btn btn-info btn-block"
               v-on:click="onPlayerDeselected(player.id)"
               :disabled="isPlayerReady"
             >{{player.name}}</button>
@@ -39,7 +39,11 @@
     <div class="fixed-bottom">
       <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
         <div class="card-body">
-          <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+          <ReadyButton
+            :isPlayerReady="isPlayerReady"
+            :disabled="requiredPlayers != proposedPlayerIds.length"
+            v-on="$listeners"
+          />
         </div>
       </div>
     </div>

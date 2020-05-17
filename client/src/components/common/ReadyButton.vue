@@ -2,7 +2,7 @@
   <button
     @click="click"
     type="button"
-    :class="['btn', 'btn-success', 'btn-block', (!large ? '' : 'btn-lg'), (isPlayerReady ? 'btn-warning' : 'btn-success')]"
+    :class="['btn', 'btn-success', 'btn-block', (isPlayerReady ? 'btn-warning' : 'btn-success')]"
     :disabled="disabled"
   >{{isPlayerReady ? 'Not ready' : 'Ready'}}</button>
 </template>
@@ -11,7 +11,6 @@ export default {
   name: "ReadyButton",
   props: {
     isPlayerReady: Boolean,
-    large: Boolean,
     disabled: Boolean
   },
   methods: {

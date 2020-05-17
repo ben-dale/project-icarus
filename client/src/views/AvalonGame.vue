@@ -118,97 +118,97 @@ export default {
       team: null,
       role: null,
       metadata: []
-      //     room: {
-      //       playerIds: ["111", "222", "333"],
-      //       disconnectedPlayerIds: [],
-      //       closed: true,
-      //       game: {
-      //         result: "GOOD",
-      //         state: "GAME_OVER",
-      //         screen: "ROLE_REVEAL",
-      //         settings: {
-      //           percivalEnabled: false,
-      //           oberonEnabled: false,
-      //           morganaEnabled: false
-      //         },
-      //         currentQuest: {
-      //           id: 2,
-      //           organiserId: "222",
-      //           disagreements: 0,
-      //           requiredPlayers: 2,
-      //           proposedPlayerIds: ["111", "222"],
-      //           proposalAccepted: false,
-      //           votes: [
-      //             { choice: "SUCCEED", revealed: false },
-      //             { choice: "SABOTAGE", revealed: true },
-      //             { choice: "SUCCEED", revealed: true }
-      //           ],
-      //           result: "SUCCEED"
-      //         },
-      //         questLogs: [
-      //           {
-      //             id: 1,
-      //             requiredPlayers: 2,
-      //             playerIds: ["222", "333"],
-      //             organiserId: "222",
-      //             result: "SUCCEED"
-      //           },
-      //           {
-      //             id: 2,
-      //             requiredPlayers: 2,
-      //             playerIds: [],
-      //             organiserId: "",
-      //             result: ""
-      //           },
-      //           {
-      //             id: 3,
-      //             requiredPlayers: 4,
-      //             playerIds: [],
-      //             organiserId: "",
-      //             result: ""
-      //           },
-      //           {
-      //             id: 4,
-      //             requiredPlayers: 3,
-      //             playerIds: [],
-      //             organiserId: "",
-      //             result: ""
-      //           },
-      //           {
-      //             id: 5,
-      //             requiredPlayers: 4,
-      //             playerIds: [],
-      //             organiserId: "",
-      //             result: ""
-      //           }
-      //         ]
-      //       }
+      // room: {
+      //   playerIds: ["111", "222", "333"],
+      //   disconnectedPlayerIds: [],
+      //   closed: true,
+      //   game: {
+      //     result: "GOOD",
+      //     state: "QUEST_STARTED",
+      //     screen: "GAME",
+      //     settings: {
+      //       percivalEnabled: false,
+      //       oberonEnabled: false,
+      //       morganaEnabled: false
       //     },
-      //     players: [
-      //       { name: "Ben", id: "111", ready: true, vote: "APPROVE", team: "EVIL" },
-      //       { name: "Sidd", id: "222", ready: false, vote: "APPROVE", team: "EVIL" },
+      //     currentQuest: {
+      //       id: 2,
+      //       organiserId: "111",
+      //       disagreements: 0,
+      //       requiredPlayers: 2,
+      //       proposedPlayerIds: ["111", "222"],
+      //       proposalAccepted: false,
+      //       votes: [
+      //         { choice: "SUCCEED", revealed: false },
+      //         { choice: "SABOTAGE", revealed: true },
+      //         { choice: "SUCCEED", revealed: true }
+      //       ],
+      //       result: "SUCCEED"
+      //     },
+      //     questLogs: [
       //       {
-      //         name: "Adam <3",
-      //         id: "333",
-      //         ready: false,
-      //         vote: "REJECT",
-      //         team: "EVIL",
-      //         role: "ASSASSIN"
+      //         id: 1,
+      //         requiredPlayers: 2,
+      //         playerIds: ["222", "333"],
+      //         organiserId: "222",
+      //         result: "SUCCEED"
       //       },
-      //       { name: "Sam", id: "444", ready: false, vote: "REJECT", team: "GOOD" },
       //       {
-      //         name: "Rodney",
-      //         id: "555",
-      //         ready: false,
-      //         vote: "REJECT",
-      //         team: "GOOD"
+      //         id: 2,
+      //         requiredPlayers: 2,
+      //         playerIds: [],
+      //         organiserId: "",
+      //         result: ""
       //       },
-      //       { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
-      //       { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
-      //     ],
+      //       {
+      //         id: 3,
+      //         requiredPlayers: 4,
+      //         playerIds: [],
+      //         organiserId: "",
+      //         result: ""
+      //       },
+      //       {
+      //         id: 4,
+      //         requiredPlayers: 3,
+      //         playerIds: [],
+      //         organiserId: "",
+      //         result: ""
+      //       },
+      //       {
+      //         id: 5,
+      //         requiredPlayers: 4,
+      //         playerIds: [],
+      //         organiserId: "",
+      //         result: ""
+      //       }
+      //     ]
+      //   }
+      // },
+      // players: [
+      //   { name: "Ben", id: "111", ready: true, vote: "APPROVE", team: "EVIL" },
+      //   { name: "Sidd", id: "222", ready: false, vote: "APPROVE", team: "EVIL" },
+      //   {
+      //     name: "Adam <3",
+      //     id: "333",
+      //     ready: false,
+      //     vote: "REJECT",
       //     team: "EVIL",
-      //     role: "ASSASSIN",
-      //     metadata: ["111", "222"]
+      //     role: "ASSASSIN"
+      //   },
+      //   { name: "Sam", id: "444", ready: false, vote: "REJECT", team: "GOOD" },
+      //   {
+      //     name: "Rodney",
+      //     id: "555",
+      //     ready: false,
+      //     vote: "REJECT",
+      //     team: "GOOD"
+      //   },
+      //   { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
+      //   { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
+      // ],
+      // team: "EVIL",
+      // role: "ASSASSIN",
+      // metadata: ["111", "222"]
     };
   },
   computed: {

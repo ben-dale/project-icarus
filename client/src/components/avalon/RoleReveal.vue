@@ -75,7 +75,7 @@
     </div>
     <div class="row mb-5">
       <div class="col-md-12 col-lg-6 offset-lg-3">
-        <PlayerReadyBar :players="players" />
+        <PlayerReadyBar :nameColSpan="4" :players="players" />
       </div>
     </div>
     <div class="row d-none d-lg-block">

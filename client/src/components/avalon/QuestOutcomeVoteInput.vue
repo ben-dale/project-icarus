@@ -30,14 +30,14 @@
         <div class="row">
           <div class="col-6">
             <button
-              class="btn btn-sm btn-info btn-block"
+              class="btn btn-info btn-block"
               @click="succeed(true)"
               :disabled="isPlayerReady"
             >Succeed</button>
           </div>
           <div class="col-6">
             <button
-              :class="['btn', 'btn-sm', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
+              :class="['btn', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
               @click="succeed(false)"
               :disabled="!isEvil || isPlayerReady"
             >Sabotage</button>
@@ -49,21 +49,21 @@
       <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
         <div class="card-body">
           <div class="row">
-          <div class="col-6">
-            <button
-              class="btn btn-sm btn-info btn-block"
-              @click="succeed(true)"
-              :disabled="isPlayerReady"
-            >Succeed</button>
+            <div class="col-6">
+              <button
+                class="btn btn-info btn-block"
+                @click="succeed(true)"
+                :disabled="isPlayerReady"
+              >Succeed</button>
+            </div>
+            <div class="col-6">
+              <button
+                :class="['btn', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
+                @click="succeed(false)"
+                :disabled="!isEvil || isPlayerReady"
+              >Sabotage</button>
+            </div>
           </div>
-          <div class="col-6">
-            <button
-              :class="['btn', 'btn-sm', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
-              @click="succeed(false)"
-              :disabled="!isEvil || isPlayerReady"
-            >Sabotage</button>
-          </div>
-        </div>
         </div>
       </div>
     </div>

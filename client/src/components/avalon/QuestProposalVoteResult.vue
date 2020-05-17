@@ -3,33 +3,39 @@
     <div class="card bg-primary text-light">
       <div class="card-body bg-dark text-center">
         <div class="row mb-3">
-          <div class="col-5 offset-1">
-            <h5>Approve</h5>
+          <div class="col-lg-4 offset-lg-1 col-6">
+            <div class="row">
+              <div class="col-12">
+                <p class="card-text">Approve</p>
+              </div>
+            </div>
             <hr class="border border-primary" />
-            <h5>
-              <span
+            <div class="row">
+              <div
+                class="col-lg-6 col-12 mb-3"
                 v-for="(player, index) in players.filter(p => p.vote == 'APPROVE')"
                 :key="index"
-                class="badge badge-info mx-2 my-2"
-              >{{player.name}}</span>
-            </h5>
+              >
+                <button class="btn btn-sm btn-info btn-block" disabled>{{player.name}}</button>
+              </div>
+            </div>
           </div>
-          <div class="col-5">
-            <h5>Reject</h5>
-             <hr class="border border-primary" />
-            <h5>
-              <span
+          <div class="col-lg-4 offset-lg-2 col-6">
+            <div class="row">
+              <div class="col-12">
+                <p class="card-text">Reject</p>
+              </div>
+            </div>
+            <hr class="border border-primary" />
+            <div class="row">
+              <div
+                class="col-lg-6 col-12 mb-3"
                 v-for="(player, index) in players.filter(p => p.vote == 'REJECT')"
                 :key="index"
-                class="badge badge-info mx-2 my-2"
-              >{{player.name}}</span>
-            </h5>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <p class="card-text" v-if="proposalAccepted">The proposal has been approved.</p>
-            <p class="card-text" v-if="!proposalAccepted">The proposal has been rejected.</p>
+              >
+                <button class="btn btn-sm btn-info btn-block" disabled>{{player.name}}</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -59,3 +65,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.btn.disabled,
+.btn:disabled {
+  opacity: 1;
+}
+</style>

@@ -13,14 +13,14 @@
           <div class="col-6">
             <button
               @click="approve(true)"
-              class="btn btn-secondary btn-sm btn-block"
+              class="btn btn-secondary btn-block"
               :disabled="isPlayerReady"
             >Approve</button>
           </div>
           <div class="col-6">
             <button
               @click="approve(false)"
-              class="btn btn-secondary btn-sm btn-block"
+              class="btn btn-secondary btn-block"
               :disabled="isPlayerReady"
             >Reject</button>
           </div>
@@ -34,14 +34,14 @@
             <div class="col-6">
               <button
                 @click="approve(true)"
-                class="btn btn-secondary btn-sm btn-block"
+                class="btn btn-secondary btn-block"
                 :disabled="isPlayerReady"
               >Approve</button>
             </div>
             <div class="col-6">
               <button
                 @click="approve(false)"
-                class="btn btn-secondary btn-sm btn-block"
+                class="btn btn-secondary btn-block"
                 :disabled="isPlayerReady"
               >Reject</button>
             </div>

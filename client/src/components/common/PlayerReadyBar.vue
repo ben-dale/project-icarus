@@ -1,6 +1,6 @@
 <template>
   <div class="row text-center">
-    <div v-for="(player) in players" class="col-12 col-md-4 col-lg-4" :key="player.id">
+    <div v-for="(player) in players" :class="['col-6 col-md-4 col-lg-' + nameColSpan]" :key="player.id">
       <button
         :class="[(player.ready ? 'btn-success' : 'btn-primary'), 'mt-3', 'btn btn-sm btn-block rounded-0']"
         :disabled="true"
@@ -13,13 +13,9 @@ export default {
   name: "PlayerReadyBar",
   props: {
     players: Array,
-    width: {
+    nameColSpan: {
       type: Number,
-      default: 12
-    },
-    namesPerRow: {
-      type: Number,
-      default: 6
+      default: 3
     }
   }
 };

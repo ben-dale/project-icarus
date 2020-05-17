@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="row">
       <div class="col-12">
-        <PlayerReadyBar :players="players" />
+        <PlayerReadyBar :nameColSpan="2" :players="players" />
       </div>
     </div>
     <hr class="border border-primary" />

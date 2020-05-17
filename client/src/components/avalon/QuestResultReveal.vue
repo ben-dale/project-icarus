@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div class="card bg-primary text-light">
       <div class="card-body bg-dark text-center">
-        <div class="row">
+        <div class="row mb-2">
           <div class="col-12">
             <p v-if="!playerIsOrganiser">{{organiserName}} is revealing the results of the quest...</p>
             <p v-if="playerIsOrganiser">You are revealing the results of the request to everyone.</p>
@@ -20,14 +20,16 @@
               class="btn btn-secondary btn py-4 btn-block"
               v-on:click="revealQuestVote(index)"
               :disabled="!playerIsOrganiser"
-            >Result</button>
+            >Reveal</button>
             <button
               v-if="result.revealed && result.choice === 'SUCCEED'"
               class="btn btn-info btn py-4 btn-block"
+              disabled
             >Succeed</button>
             <button
               v-if="result.revealed && result.choice === 'SABOTAGE'"
               class="btn btn-danger btn py-4 btn-block"
+              disabled
             >Sabotage</button>
           </div>
         </div>
@@ -86,3 +88,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.btn-danger:disabled,
+.btn-info:disabled {
+  opacity: 1;
+}
+</style>
