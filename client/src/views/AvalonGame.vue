@@ -209,40 +209,39 @@ export default {
       //     team: "EVIL",
       //     role: "ASSASSIN",
       //     metadata: ["111", "222"]
-      //   };
-      // },
-      // computed: {
-      //   isPlayerReady: function() {
-      //     let player = this.players.find(o => o.id == this.getPlayerId());
-      //     return player && player.ready;
-      //   }
-      // },
-      // created() {
-      //   this.socket.on("players-updated", players => {
-      //     // console.log("players-updated");
-      //     // console.log(players);
-      //     this.players = players;
-      //   });
-      //   this.socket.on("player-updated", player => {
-      //     // console.log("player-updated");
-      //     // console.log(player);
-      //     // Typically it should only be the 'ready' field that is updated here
-      //     let playerToUpdate = this.players.find(o => o.id == player.id);
-      //     playerToUpdate.ready = player.ready;
-      //   });
-      //   this.socket.on("player-assigned", player => {
-      //     // console.log("player-assigned");
-      //     // console.log(player);
-      //     this.team = player.team;
-      //     this.role = player.role;
-      //     this.metadata = player.metadata.slice();
-      //   });
-      //   this.socket.on("room-updated", room => {
-      //     // console.log("room-updated");
-      //     // console.log(room);
-      //     this.room = room;
-      // });
     };
+  },
+  computed: {
+    isPlayerReady: function() {
+      let player = this.players.find(o => o.id == this.getPlayerId());
+      return player && player.ready;
+    }
+  },
+  created() {
+    this.socket.on("players-updated", players => {
+      // console.log("players-updated");
+      // console.log(players);
+      this.players = players;
+    });
+    this.socket.on("player-updated", player => {
+      // console.log("player-updated");
+      // console.log(player);
+      // Typically it should only be the 'ready' field that is updated here
+      let playerToUpdate = this.players.find(o => o.id == player.id);
+      playerToUpdate.ready = player.ready;
+    });
+    this.socket.on("player-assigned", player => {
+      // console.log("player-assigned");
+      // console.log(player);
+      this.team = player.team;
+      this.role = player.role;
+      this.metadata = player.metadata.slice();
+    });
+    this.socket.on("room-updated", room => {
+      // console.log("room-updated");
+      // console.log(room);
+      this.room = room;
+    });
   },
   methods: {
     getPageUrl: function() {
