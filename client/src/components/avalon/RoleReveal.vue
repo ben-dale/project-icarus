@@ -73,8 +73,10 @@
         </div>
       </div>
     </div>
-    <div class="row mb-4">
-      <PlayerReadyBar :width="6" :namesPerRow="2" :players="players" />
+    <div class="row mb-5">
+      <div class="col-md-12 col-lg-6 offset-lg-3">
+        <PlayerReadyBar :players="players" />
+      </div>
     </div>
     <div class="row d-none d-lg-block">
       <div class="col-6 offset-3">

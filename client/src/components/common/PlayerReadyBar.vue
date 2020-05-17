@@ -1,12 +1,10 @@
 <template>
-  <div :class="['col-lg-'+width, 'offset-lg-' + getCardOffset()]">
-    <div class="row text-center">
-      <div v-for="(player) in players" :class="['col-lg-' + getNameWidth()]" :key="player.id">
-        <button
-          :class="[(player.ready ? 'btn-success' : 'btn-primary'), 'mt-3', 'btn btn-sm btn-block rounded-0']"
-          :disabled="true"
-        >{{player.name}}</button>
-      </div>
+  <div class="row text-center">
+    <div v-for="(player) in players" class="col-12 col-md-4 col-lg-4" :key="player.id">
+      <button
+        :class="[(player.ready ? 'btn-success' : 'btn-primary'), 'mt-3', 'btn btn-sm btn-block rounded-0']"
+        :disabled="true"
+      >{{player.name}}</button>
     </div>
   </div>
 </template>
@@ -22,32 +20,6 @@ export default {
     namesPerRow: {
       type: Number,
       default: 6
-    }
-  },
-  methods: {
-    getNameWidth: function() {
-      switch (this.namesPerRow) {
-        case 1:
-          return 12;
-        case 2:
-          return 6;
-        case 3:
-          return 4;
-        case 4:
-          return 3;
-        case 6:
-          return 2;
-      }
-    },
-    getCardOffset: function() {
-      switch (this.width) {
-        case 12:
-          return 0;
-        case 8:
-          return 2;
-        case 6:
-          return 3;
-      }
     }
   }
 };

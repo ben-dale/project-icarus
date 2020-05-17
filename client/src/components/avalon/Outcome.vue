@@ -16,10 +16,10 @@
       <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
         <div class="card-body">
           <button
-          @click="ready"
-          class="btn btn-secondary btn-block"
-          :disabled="isPlayerReady"
-        >{{buttonText}}</button>
+            @click="ready"
+            class="btn btn-secondary btn-block"
+            :disabled="isPlayerReady"
+          >{{buttonText}}</button>
         </div>
       </div>
     </div>

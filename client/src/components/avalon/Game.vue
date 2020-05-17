@@ -1,9 +1,11 @@
 <template>
   <div class="col-12">
-    <div class="row d-none d-lg-block">
-      <PlayerReadyBar :width="12" :players="players" />
+    <div class="row">
+      <div class="col-12">
+        <PlayerReadyBar :players="players" />
+      </div>
     </div>
-    <hr class="border border-primary d-none d-lg-block" />
+    <hr class="border border-primary" />
     <div class="row">
       <QuestLog
         :questLog="game.questLogs"

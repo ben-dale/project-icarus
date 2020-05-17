@@ -118,130 +118,131 @@ export default {
       team: null,
       role: null,
       metadata: []
-      // room: {
-      //   playerIds: ["111", "222", "333"],
-      //   disconnectedPlayerIds: [],
-      //   closed: true,
-      //   game: {
-      //     result: "GOOD",
-      //     state: "GAME_OVER",
-      //     screen: "GAME",
-      //     settings: {
-      //       percivalEnabled: false,
-      //       oberonEnabled: false,
-      //       morganaEnabled: false
-      //     },
-      //     currentQuest: {
-      //       id: 2,
-      //       organiserId: "222",
-      //       disagreements: 0,
-      //       requiredPlayers: 2,
-      //       proposedPlayerIds: ["111", "222"],
-      //       proposalAccepted: false,
-      //       votes: [
-      //         { choice: "SUCCEED", revealed: false },
-      //         { choice: "SABOTAGE", revealed: true },
-      //         { choice: "SUCCEED", revealed: true }
-      //       ],
-      //       result: "SUCCEED"
-      //     },
-      //     questLogs: [
-      //       {
-      //         id: 1,
-      //         requiredPlayers: 2,
-      //         playerIds: ["222", "333"],
-      //         organiserId: "222",
-      //         result: "SUCCEED"
-      //       },
-      //       {
-      //         id: 2,
-      //         requiredPlayers: 2,
-      //         playerIds: [],
-      //         organiserId: "",
-      //         result: ""
-      //       },
-      //       {
-      //         id: 3,
-      //         requiredPlayers: 4,
-      //         playerIds: [],
-      //         organiserId: "",
-      //         result: ""
-      //       },
-      //       {
-      //         id: 4,
-      //         requiredPlayers: 3,
-      //         playerIds: [],
-      //         organiserId: "",
-      //         result: ""
-      //       },
-      //       {
-      //         id: 5,
-      //         requiredPlayers: 4,
-      //         playerIds: [],
-      //         organiserId: "",
-      //         result: ""
+      //     room: {
+      //       playerIds: ["111", "222", "333"],
+      //       disconnectedPlayerIds: [],
+      //       closed: true,
+      //       game: {
+      //         result: "GOOD",
+      //         state: "GAME_OVER",
+      //         screen: "ROLE_REVEAL",
+      //         settings: {
+      //           percivalEnabled: false,
+      //           oberonEnabled: false,
+      //           morganaEnabled: false
+      //         },
+      //         currentQuest: {
+      //           id: 2,
+      //           organiserId: "222",
+      //           disagreements: 0,
+      //           requiredPlayers: 2,
+      //           proposedPlayerIds: ["111", "222"],
+      //           proposalAccepted: false,
+      //           votes: [
+      //             { choice: "SUCCEED", revealed: false },
+      //             { choice: "SABOTAGE", revealed: true },
+      //             { choice: "SUCCEED", revealed: true }
+      //           ],
+      //           result: "SUCCEED"
+      //         },
+      //         questLogs: [
+      //           {
+      //             id: 1,
+      //             requiredPlayers: 2,
+      //             playerIds: ["222", "333"],
+      //             organiserId: "222",
+      //             result: "SUCCEED"
+      //           },
+      //           {
+      //             id: 2,
+      //             requiredPlayers: 2,
+      //             playerIds: [],
+      //             organiserId: "",
+      //             result: ""
+      //           },
+      //           {
+      //             id: 3,
+      //             requiredPlayers: 4,
+      //             playerIds: [],
+      //             organiserId: "",
+      //             result: ""
+      //           },
+      //           {
+      //             id: 4,
+      //             requiredPlayers: 3,
+      //             playerIds: [],
+      //             organiserId: "",
+      //             result: ""
+      //           },
+      //           {
+      //             id: 5,
+      //             requiredPlayers: 4,
+      //             playerIds: [],
+      //             organiserId: "",
+      //             result: ""
+      //           }
+      //         ]
       //       }
-      //     ]
+      //     },
+      //     players: [
+      //       { name: "Ben", id: "111", ready: true, vote: "APPROVE", team: "EVIL" },
+      //       { name: "Sidd", id: "222", ready: false, vote: "APPROVE", team: "EVIL" },
+      //       {
+      //         name: "Adam <3",
+      //         id: "333",
+      //         ready: false,
+      //         vote: "REJECT",
+      //         team: "EVIL",
+      //         role: "ASSASSIN"
+      //       },
+      //       { name: "Sam", id: "444", ready: false, vote: "REJECT", team: "GOOD" },
+      //       {
+      //         name: "Rodney",
+      //         id: "555",
+      //         ready: false,
+      //         vote: "REJECT",
+      //         team: "GOOD"
+      //       },
+      //       { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
+      //       { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
+      //     ],
+      //     team: "EVIL",
+      //     role: "ASSASSIN",
+      //     metadata: ["111", "222"]
+      //   };
+      // },
+      // computed: {
+      //   isPlayerReady: function() {
+      //     let player = this.players.find(o => o.id == this.getPlayerId());
+      //     return player && player.ready;
       //   }
       // },
-      // players: [
-      //   { name: "Ben", id: "111", ready: true, vote: "APPROVE", team: "EVIL" },
-      //   { name: "Sidd", id: "222", ready: false, vote: "APPROVE", team: "EVIL" },
-      //   {
-      //     name: "Adam <3",
-      //     id: "333",
-      //     ready: false,
-      //     vote: "REJECT",
-      //     team: "EVIL",
-      //     role: "ASSASSIN"
-      //   },
-      //   { name: "Sam", id: "444", ready: false, vote: "REJECT", team: "GOOD" },
-      //   {
-      //     name: "Rodney",
-      //     id: "555",
-      //     ready: false,
-      //     vote: "REJECT",
-      //     team: "GOOD"
-      //   },
-      //   { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
-      //   { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
-      // ],
-      // team: "EVIL",
-      // role: "ASSASSIN",
-      // metadata: ["111", "222"]
+      // created() {
+      //   this.socket.on("players-updated", players => {
+      //     // console.log("players-updated");
+      //     // console.log(players);
+      //     this.players = players;
+      //   });
+      //   this.socket.on("player-updated", player => {
+      //     // console.log("player-updated");
+      //     // console.log(player);
+      //     // Typically it should only be the 'ready' field that is updated here
+      //     let playerToUpdate = this.players.find(o => o.id == player.id);
+      //     playerToUpdate.ready = player.ready;
+      //   });
+      //   this.socket.on("player-assigned", player => {
+      //     // console.log("player-assigned");
+      //     // console.log(player);
+      //     this.team = player.team;
+      //     this.role = player.role;
+      //     this.metadata = player.metadata.slice();
+      //   });
+      //   this.socket.on("room-updated", room => {
+      //     // console.log("room-updated");
+      //     // console.log(room);
+      //     this.room = room;
+      // });
     };
-  },
-  computed: {
-    isPlayerReady: function() {
-      let player = this.players.find(o => o.id == this.getPlayerId());
-      return player && player.ready;
-    }
-  },
-  created() {
-    this.socket.on("players-updated", players => {
-      // console.log("players-updated");
-      // console.log(players);
-      this.players = players;
-    });
-    this.socket.on("player-updated", player => {
-      // console.log("player-updated");
-      // console.log(player);
-      // Typically it should only be the 'ready' field that is updated here
-      let playerToUpdate = this.players.find(o => o.id == player.id);
-      playerToUpdate.ready = player.ready;
-    });
-    this.socket.on("player-assigned", player => {
-      // console.log("player-assigned");
-      // console.log(player);
-      this.team = player.team;
-      this.role = player.role;
-      this.metadata = player.metadata.slice();
-    });
-    this.socket.on("room-updated", room => {
-      // console.log("room-updated");
-      // console.log(room);
-      this.room = room;
-    });
   },
   methods: {
     getPageUrl: function() {
