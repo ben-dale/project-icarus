@@ -4,56 +4,51 @@
       <div class="card-body bg-dark text-center">
         <div class="row">
           <div class="col-12">
-            <p v-if="!playerIsOrganiser">{{organiserName}} is revealing the results...</p>
-            <p v-if="playerIsOrganiser">Reveal the results of the quest by clicking 'Reveal' under each result.</p>
+            <p v-if="!playerIsOrganiser">{{organiserName}} is revealing the results of the quest...</p>
+            <p v-if="playerIsOrganiser">You are revealing the results of the request to everyone.</p>
           </div>
         </div>
+
         <div class="row">
           <div
             v-for="(result, index) in results"
             :key="index"
-            :class="['col-2', index === 0 ? 'offset-' + resultOffset(): '']"
-          >
-            <div
-              v-if="result.revealed && result.choice === 'SUCCEED'"
-              class="py-5 bg-info border border-info rounded text-center text-white"
-            >Succeed</div>
-            <div
-              v-if="result.revealed && result.choice === 'SABOTAGE'"
-              class="py-5 bg-danger border border-danger rounded text-center text-white"
-            >Sabotage</div>
-            <div v-if="!result.revealed" class="py-5 bg-transparent border rounded text-center">
-              Result
-            </div>
-          </div>
-        </div>
-       
-        <div v-if="playerIsOrganiser" class="row">
-          <div
-            v-for="(result, index) in results"
-            :key="index"
-            :class="['col-2 mt-2', index === 0 ? 'offset-' + resultOffset(): '']"
+            :class="['col-lg-2 mb-3', index === 0 ? 'offset-lg-' + resultOffset(): '']"
           >
             <button
-              class="btn btn-secondary btn-sm btn-block"
+              v-if="!result.revealed"
+              class="btn btn-secondary btn py-4 btn-block"
               v-on:click="revealQuestVote(index)"
-              :disabled="result.revealed"
-            >Reveal</button>
+              :disabled="!playerIsOrganiser"
+            >Result</button>
+            <button
+              v-if="result.revealed && result.choice === 'SUCCEED'"
+              class="btn btn-info btn py-4 btn-block"
+            >Succeed</button>
+            <button
+              v-if="result.revealed && result.choice === 'SABOTAGE'"
+              class="btn btn-danger btn py-4 btn-block"
+            >Sabotage</button>
           </div>
         </div>
-        <!-- <div v-if="questResult == 'FAIL'" class="row pt-4">
-          <div class="col-12">
-            <p>The quest was sabotaged!</p>
-          </div>
-        </div>
-        <div v-if="questResult == 'SUCCEED'" class="row pt-4">
-          <div class="col-12">
-            <p>The quest was completed successfully.</p>
-          </div>
-        </div>-->
       </div>
-      <div class="card-footer">
-        <ReadyButton :isPlayerReady="isPlayerReady" :disabled="questResult == ''" v-on="$listeners" />
+      <div class="card-footer d-none d-lg-block">
+        <ReadyButton
+          :isPlayerReady="isPlayerReady"
+          :disabled="questResult == ''"
+          v-on="$listeners"
+        />
+      </div>
+    </div>
+    <div class="fixed-bottom">
+      <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
+        <div class="card-body">
+          <ReadyButton
+            :isPlayerReady="isPlayerReady"
+            v-on="$listeners"
+            :disabled="questResult == ''"
+          />
+        </div>
       </div>
     </div>
   </div>

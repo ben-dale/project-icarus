@@ -124,7 +124,7 @@ export default {
       //   closed: true,
       //   game: {
       //     result: "GOOD",
-      //     state: "QUEST_RESULT_REVEAL",
+      //     state: "GAME_OVER",
       //     screen: "GAME",
       //     settings: {
       //       percivalEnabled: false,
@@ -133,13 +133,13 @@ export default {
       //     },
       //     currentQuest: {
       //       id: 2,
-      //       organiserId: "111",
+      //       organiserId: "222",
       //       disagreements: 0,
       //       requiredPlayers: 2,
-      //       proposedPlayerIds: ["333", "222"],
+      //       proposedPlayerIds: ["111", "222"],
       //       proposalAccepted: false,
       //       votes: [
-      //         { choice: "SUCCEED", revealed: true },
+      //         { choice: "SUCCEED", revealed: false },
       //         { choice: "SABOTAGE", revealed: true },
       //         { choice: "SUCCEED", revealed: true }
       //       ],
@@ -206,8 +206,8 @@ export default {
       //   { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
       //   { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
       // ],
-      // team: "GOOD",
-      // role: "MERLIN",
+      // team: "EVIL",
+      // role: "ASSASSIN",
       // metadata: ["111", "222"]
     };
   },

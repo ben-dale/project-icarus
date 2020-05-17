@@ -8,8 +8,15 @@
           </div>
         </div>
       </div>
-      <div class="card-footer">
+      <div class="card-footer d-none d-lg-block">
         <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+      </div>
+    </div>
+    <div class="fixed-bottom">
+      <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
+        <div class="card-body">
+          <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+        </div>
       </div>
     </div>
   </div>

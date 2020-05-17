@@ -1,7 +1,7 @@
 <template>
-  <div :class="['col-'+width, 'offset-' + getCardOffset()]">
+  <div :class="['col-lg-'+width, 'offset-lg-' + getCardOffset()]">
     <div class="row text-center">
-      <div v-for="(player) in players" :class="['col-' + getNameWidth()]" :key="player.id">
+      <div v-for="(player) in players" :class="['col-lg-' + getNameWidth()]" :key="player.id">
         <button
           :class="[(player.ready ? 'btn-success' : 'btn-primary'), 'mt-3', 'btn btn-sm btn-block rounded-0']"
           :disabled="true"

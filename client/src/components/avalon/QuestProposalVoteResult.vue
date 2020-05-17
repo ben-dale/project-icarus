@@ -2,7 +2,7 @@
   <div class="col-md-12">
     <div class="card bg-primary text-light">
       <div class="card-body bg-dark text-center">
-        <div class="row">
+        <div class="row mb-3">
           <div class="col-5 offset-1">
             <h5>Approve</h5>
             <hr class="border border-primary" />
@@ -26,15 +26,22 @@
             </h5>
           </div>
         </div>
-        <!-- <div class="row mt-3 mb-4">
+        <div class="row">
           <div class="col-12">
             <p class="card-text" v-if="proposalAccepted">The proposal has been approved.</p>
             <p class="card-text" v-if="!proposalAccepted">The proposal has been rejected.</p>
           </div>
-        </div> -->
+        </div>
       </div>
-      <div class="card-footer">
+      <div class="card-footer d-none d-lg-block">
         <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+      </div>
+    </div>
+    <div class="fixed-bottom">
+      <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
+        <div class="card-body">
+          <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+        </div>
       </div>
     </div>
   </div>

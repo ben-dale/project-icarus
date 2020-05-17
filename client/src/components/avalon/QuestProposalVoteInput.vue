@@ -8,7 +8,7 @@
         </h5>
         <p class="card-text">Your vote will be seen by the other players. This is a majority vote.</p>
       </div>
-      <div class="card-footer">
+      <div class="card-footer d-none d-lg-block">
         <div class="row">
           <div class="col-6">
             <button
@@ -23,6 +23,28 @@
               class="btn btn-secondary btn-sm btn-block"
               :disabled="isPlayerReady"
             >Reject</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fixed-bottom">
+      <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <button
+                @click="approve(true)"
+                class="btn btn-secondary btn-sm btn-block"
+                :disabled="isPlayerReady"
+              >Approve</button>
+            </div>
+            <div class="col-6">
+              <button
+                @click="approve(false)"
+                class="btn btn-secondary btn-sm btn-block"
+                :disabled="isPlayerReady"
+              >Reject</button>
+            </div>
           </div>
         </div>
       </div>

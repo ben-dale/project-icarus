@@ -11,7 +11,7 @@
           <div
             v-for="(player, index) in players"
             :key="index"
-            :class="['col-2 mb-2', (index % 5 === 0 ? 'offset-1' : ''), (index % 3 === 0 && players.length == 3 ? 'offset-3' : '')]"
+            :class="['col-md-12 col-lg-2 mb-2', (index % 5 === 0 ? 'offset-lg-1' : ''), (index % 3 === 0 && players.length == 3 ? 'offset-lg-3' : '')]"
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"
@@ -28,12 +28,19 @@
           </div>
         </div>
       </div>
-      <div class="card-footer">
+      <div class="card-footer d-none d-lg-block">
         <ReadyButton
           :isPlayerReady="isPlayerReady"
           :disabled="requiredPlayers != proposedPlayerIds.length"
           v-on="$listeners"
         />
+      </div>
+    </div>
+    <div class="fixed-bottom">
+      <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
+        <div class="card-body">
+          <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+        </div>
       </div>
     </div>
   </div>

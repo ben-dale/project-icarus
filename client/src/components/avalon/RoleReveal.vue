@@ -1,7 +1,7 @@
 <template>
   <div class="col-12">
     <div class="row mb-5">
-      <div class="col-6 offset-3 text-center text-light">
+      <div class="col-md-12 col-lg-6 offset-lg-3 text-center text-light">
         <h2 class="pt-2">
           <span class="badge badge badge-info mx-2">{{goodPlayerCount()}}</span> vs
           <span class="badge badge badge-danger mx-2">{{players.length - goodPlayerCount()}}</span>
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="row mb-4">
-      <div class="col-6 offset-3">
+      <div class="col-md-12 col-lg-6 offset-lg-3">
         <div :class="['card', 'text-center', team == 'EVIL' ? 'bg-danger' : 'bg-info']">
           <div class="card-body text-white">
             <h3 v-if="role == 'GUARD'" class="card-title">You are a Royal Guard</h3>
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="row mb-2" v-if="role != 'GUARD'">
-      <div class="col-6 offset-3">
+      <div class="col-md-12 col-lg-6 offset-lg-3">
         <div class="card bg-dark border border-primary text-light">
           <h5
             v-if="team == 'EVIL' || role == 'MERLIN'"
@@ -76,9 +76,17 @@
     <div class="row mb-4">
       <PlayerReadyBar :width="6" :namesPerRow="2" :players="players" />
     </div>
-    <div class="row">
+    <div class="row d-none d-lg-block">
       <div class="col-6 offset-3">
         <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+      </div>
+    </div>
+
+    <div class="fixed-bottom">
+      <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
+        <div class="card-body">
+          <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
+        </div>
       </div>
     </div>
   </div>

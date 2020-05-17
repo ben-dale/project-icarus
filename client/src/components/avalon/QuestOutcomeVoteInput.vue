@@ -12,33 +12,60 @@
                 class="badge badge-info mx-2"
               >{{player}}</span>
             </h5>
-            <p v-if="!isEvil" class="card-text">You are in Good and can only vote 'Succeed'. Evil players on this quest may vote either 'Succeed' or 'Sabotage'.</p>
-            <p v-if="isEvil" class="card-text">You are in Evil and may vote either 'Succeed' or 'Sabotage'. Good players on this quest can only vote 'Succeed'.</p>
+            <p
+              v-if="!isEvil"
+              class="card-text"
+            >You are in Good and can only vote 'Succeed'. Evil players on this quest may vote either 'Succeed' or 'Sabotage'.</p>
+            <p
+              v-if="isEvil"
+              class="card-text"
+            >You are in Evil and may vote either 'Succeed' or 'Sabotage'. Good players on this quest can only vote 'Succeed'.</p>
             <p
               class="card-text"
             >How would you like to proceed? Your decision will be kept anonymous.</p>
           </div>
         </div>
-        
       </div>
-      <div class="card-footer">
-          <div class="row">
-            <div class="col-6">
-              <button
-                class="btn btn-sm btn-info btn-block"
-                @click="succeed(true)"
-                :disabled="isPlayerReady"
-              >Succeed</button>
-            </div>
-            <div class="col-6">
-              <button
-                :class="['btn', 'btn-sm', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
-                @click="succeed(false)"
-                :disabled="!isEvil || isPlayerReady"
-              >Sabotage</button>
-            </div>
+      <div class="card-footer d-none d-lg-block">
+        <div class="row">
+          <div class="col-6">
+            <button
+              class="btn btn-sm btn-info btn-block"
+              @click="succeed(true)"
+              :disabled="isPlayerReady"
+            >Succeed</button>
+          </div>
+          <div class="col-6">
+            <button
+              :class="['btn', 'btn-sm', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
+              @click="succeed(false)"
+              :disabled="!isEvil || isPlayerReady"
+            >Sabotage</button>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="fixed-bottom">
+      <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
+        <div class="card-body">
+          <div class="row">
+          <div class="col-6">
+            <button
+              class="btn btn-sm btn-info btn-block"
+              @click="succeed(true)"
+              :disabled="isPlayerReady"
+            >Succeed</button>
+          </div>
+          <div class="col-6">
+            <button
+              :class="['btn', 'btn-sm', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
+              @click="succeed(false)"
+              :disabled="!isEvil || isPlayerReady"
+            >Sabotage</button>
+          </div>
+        </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>

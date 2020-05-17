@@ -89,16 +89,16 @@
               <div v-for="player in players" class="col-lg-3 col-md-12" :key="player.id">
                 <p
                   v-if="player.ready"
-                  class="card-text bg-success text-white py-2 border-success rounded"
+                  class="card-text bg-success text-white mb-3 py-2 border-success rounded-0"
                 >{{player.name}}</p>
                 <p
                   v-if="!player.ready"
-                  class="card-text py-2 text-dark rounded bg-secondary"
+                  class="card-text py-2 text-dark rounded mb-3 bg-secondary rounded-0"
                 >{{player.name}}</p>
               </div>
               <div v-for="index in playersStillNeeded" class="col-lg-3 col-md-12" :key="index">
                 <p
-                  class="card-text text-light py-2 mb-3 border border-secondary rounded d-none d-lg-block"
+                  class="card-text text-light py-2 mb-3 border border-secondary rounded-0 d-none d-lg-block"
                 >Required</p>
               </div>
               <div
@@ -107,7 +107,7 @@
                 :key="index+100"
               >
                 <p
-                  class="card-text text-light border border-secondary rounded py-2 mb-3 d-none d-lg-block"
+                  class="card-text text-light border border-secondary rounded-0 py-2 mb-3 d-none d-lg-block"
                 >Optional</p>
               </div>
             </div>
