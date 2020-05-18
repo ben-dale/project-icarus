@@ -8,7 +8,7 @@
         </h2>
       </div>
     </div>
-    <div class="row mb-4">
+    <div class="row">
       <div class="col-md-12 col-lg-6 offset-lg-3">
         <div class="card bg-dark border-primary text-center">
           <h4 v-if="role == 'GUARD'" class="text-white bg-info card-header">You are a Royal Guard</h4>
@@ -27,7 +27,8 @@
               <br />
               <br />Evil players know who their teammates are.
               <br />All players know that the Evil team has been revealed to you.
-              <br />{{settings.percivalEnabled ? (settings.morganaEnabled ? 'Morgana is confusing Percival by disguising as a second Merlin.' : 'Percival knows your identity.')  : 'Nobody knows your identity.'}}
+              <br />
+              {{settings.percivalEnabled ? (settings.morganaEnabled ? 'Morgana is confusing Percival by disguising as a second Merlin.' : 'Percival knows your identity.') : 'Nobody knows your identity.'}}
             </p>
             <p
               v-if="team == 'GOOD' && role === 'PERCIVAL' && !settings.morganaEnabled"
@@ -84,7 +85,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-2" v-if="role != 'GUARD'">
+    <div class="row mt-3" v-if="role != 'GUARD'">
       <div class="col-md-12 col-lg-6 offset-lg-3">
         <div class="card bg-dark border border-primary text-light">
           <h5
@@ -92,32 +93,37 @@
             class="card-header border-primary text-center"
           >Evil Team</h5>
           <div class="card-body" v-if="team == 'EVIL' || role == 'MERLIN'">
-            <p
-              v-for="(playerId, index) in metadata"
-              :key="index"
-              class="card-text text-center py-1 bg-danger"
-            >{{findPlayerName(playerId)}}</p>
+            <div class="row">
+              <div v-for="(playerId, index) in metadata" :key="index" class="col-6">
+                <p class="text-center card-text bg-danger py-1">{{findPlayerName(playerId)}}</p>
+              </div>
+            </div>
           </div>
-          <h5
-            v-if="role == 'PERCIVAL'"
-            class="card-header border-primary text-center"
-          >Merlin is {{metadata.length > 1 ? 'either...' : ''}}</h5>
+          <h5 v-if="role == 'PERCIVAL'" class="card-header border-primary text-center">Merlin</h5>
           <div class="card-body" v-if="role == 'PERCIVAL'">
-            <p
-              v-for="(playerId, index) in metadata"
-              :key="index"
-              class="card-text text-center py-1 bg-info"
-            >{{findPlayerName(playerId)}}</p>
+            <div class="row">
+              <div
+                v-for="(playerId, index) in metadata"
+                :key="index"
+                :class="['col-6', (metadata.length == 1 ? 'offset-3': '')]"
+              >
+                <p class="text-center card-text bg-info py-1">{{findPlayerName(playerId)}}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row mb-5">
+    <div class="row mt-3 mb-2">
       <div class="col-md-12 col-lg-6 offset-lg-3">
-        <PlayerReadyBar :nameColSpan="4" :players="players" />
+        <div class="card bg-dark border border-primary">
+          <div class="card-body pb-1">
+            <PlayerReadyBar :nameColSpan="4" :players="players" />
+          </div>
+        </div>
       </div>
     </div>
-    <div class="row d-none d-lg-block">
+    <div class="row mt-3 d-none d-lg-block">
       <div class="col-6 offset-3">
         <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
       </div>

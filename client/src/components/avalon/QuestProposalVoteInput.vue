@@ -1,7 +1,7 @@
 <template>
   <div class="col-12">
     <div class="card bg-primary text-light">
-      <div class="card-body bg-dark text-center">
+      <div class="card-body py-5 bg-dark text-center">
         <p class="card-text">{{organiser}} has proposed the following team:</p>
         <h5 class="card-text mb-4">
           <span v-for="(name, index) in names" :key="index" class="badge badge-info mx-2">{{name}}</span>

@@ -1,10 +1,24 @@
 <template>
   <div class="row text-center">
-    <div v-for="(player) in players" :class="['col-6 col-md-4 col-lg-' + nameColSpan]" :key="player.id">
-      <button
-        :class="[(player.ready ? 'btn-success' : 'btn-primary'), 'mt-3', 'btn btn-sm btn-block rounded-0']"
+    <div
+      v-for="(player) in players"
+      :class="['col-6 col-md-4 col-lg-' + nameColSpan]"
+      :key="player.id"
+    >
+      <p
+        :class="[(player.ready ? 'bg-success' : 'bg-primary'), 'mb-3 py-1 text-white']"
         :disabled="true"
-      >{{player.name}}</button>
+      >{{player.name}}</p>
+    </div>
+    <div
+      v-for="i in maxPlayers - players.length"
+      :class="['col-6 col-md-4 col-lg-' + nameColSpan]"
+      :key="i"
+    >
+      <p
+        v-if="showEmptySpaces"
+        class="py-1 mb-3 border-primary border"
+      >‏‏‎ ‎</p>
     </div>
   </div>
 </template>
@@ -13,19 +27,15 @@ export default {
   name: "PlayerReadyBar",
   props: {
     players: Array,
+    maxPlayers: {
+      type: Number,
+      default: 10
+    },
     nameColSpan: {
       type: Number,
       default: 3
-    }
+    },
+    showEmptySpaces: Boolean
   }
 };
 </script>
-<style scoped>
-.btn.disabled,
-.btn:disabled {
-  opacity: 1;
-}
-.card-body {
-  padding-bottom: 0;
-}
-</style>

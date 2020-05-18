@@ -61,9 +61,8 @@
     <div class="row mb-3">
       <div class="col-12">
         <div class="card bg-dark border border-primary">
-          <h5 class="card-header text-white border-primary text-center">Players</h5>
-          <div class="card-body" style="padding-top:0">
-            <PlayerReadyBar :nameColSpan="2" :players="players" />
+          <div class="card-body pb-1">
+            <PlayerReadyBar :nameColSpan="2" :players="players" :showEmptySpaces="true" />
           </div>
         </div>
       </div>
@@ -71,13 +70,16 @@
     <div class="row mb-3">
       <div class="col-12">
         <div class="card bg-dark border border-primary text-center text-light">
-          <div class="card-body">
+          <div class="card-body py-5">
             <p
               class="card-text"
             >Instruction and explanation will be provided as you play through The Resistance: Avalon.</p>
             <p
               class="card-text"
-            >The next screen will reveal which team you are in and which role you will play. Depending on your role you may wish to keep this information to yourself.</p>
+            >The next screen will reveal which team you are in and which role you will play.</p>
+            <p
+              class="card-text"
+            >Depending on your role you may wish to keep this information to yourself.</p>
             <p
               class="card-text"
               v-if="playersStillNeeded > 0"
@@ -87,13 +89,17 @@
               v-if="playersStillNeeded == 0"
             >The game will begin when all players are ready.</p>
           </div>
+          <div class="card-footer bg-primary">
+            <div class="row">
+              <div class="col-12 col-md-6 d-none d-lg-block">
+                <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" :large="true" />
+              </div>
+              <div class="col-12 col-md-6 d-none d-lg-block">
+                <button class="btn btn-block btn-secondary">Read the rules</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12 d-none d-lg-block">
-        <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
       </div>
     </div>
 

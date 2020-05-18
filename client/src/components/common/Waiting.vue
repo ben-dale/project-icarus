@@ -1,7 +1,7 @@
 <template>
   <div class="col-12">
     <div class="card bg-primary text-light">
-      <div class="card-body bg-dark text-center">
+      <div class="card-body py-5 bg-dark text-center">
         <div class="row">
           <div class="col-12">
             <p v-for="(line, index) in lines" :key="index" class="card-text">{{line}}</p>

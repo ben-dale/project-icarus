@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12">
     <div class="card bg-primary text-light">
-      <div class="card-body bg-dark text-center">
+      <div class="card-body py-5 bg-dark text-center">
         <div class="row">
           <div class="col-12">
             <p class="card-text">This quest contains the following players:</p>

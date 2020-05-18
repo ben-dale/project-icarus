@@ -12,12 +12,12 @@
 <style lang="scss">
 /* change the colors */
 $danger: #cf3727;
-$success: #0e9c7b;
+$success: #13a382;
 $warning: #e49311;
 $info: #1492d6;
 $secondary: #bac2c8;
 
-$primary: #46484d;
+$primary: #4f5157;
 $dark: #2c2d2f;
 $body-bg: #2c2d2f;
 @import "bootstrap";

@@ -16,7 +16,7 @@
                 v-for="(player, index) in players.filter(p => p.vote == 'APPROVE')"
                 :key="index"
               >
-                <button class="btn btn-sm btn-info btn-block" disabled>{{player.name}}</button>
+                <p class="card-text bg-info py-1">{{player.name}}</p>
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
                 v-for="(player, index) in players.filter(p => p.vote == 'REJECT')"
                 :key="index"
               >
-                <button class="btn btn-sm btn-info btn-block" disabled>{{player.name}}</button>
+                <p class="card-text bg-info py-1">{{player.name}}</p>
               </div>
             </div>
           </div>
