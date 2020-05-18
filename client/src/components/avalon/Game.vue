@@ -28,8 +28,7 @@
         :header="'Quest ' + game.currentQuest.id + ' - Team proposal'"
         :body="[
           'You are tasked with proposing a team for Quest ' +game.currentQuest.id+ '. All players will vote to either \'Accept\' or \'Reject\' your proposal.',
-          'Evil players sent on a quest have the option to \'Sabotage\' the quest. If any \'Sabotage\' votes are cast the quest will fail.',
-          game.currentQuest.requiredPlayers + ' players are required for this quest. Click on the players you wish to nominate.'
+          'Select ' + game.currentQuest.requiredPlayers + ' players to send on Quest ' +game.currentQuest.id+ '. Your proposal will be voted on when all players are ready.'
         ]"
         :players="players"
         :proposedPlayerIds="game.currentQuest.proposedPlayerIds"

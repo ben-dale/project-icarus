@@ -10,39 +10,76 @@
     </div>
     <div class="row mb-4">
       <div class="col-md-12 col-lg-6 offset-lg-3">
-        <div :class="['card', 'text-center', team == 'EVIL' ? 'bg-danger' : 'bg-info']">
+        <div class="card bg-dark border-primary text-center">
+          <h4 v-if="role == 'GUARD'" class="text-white bg-info card-header">You are a Royal Guard</h4>
+          <h4 v-if="role == 'MERLIN'" class="text-white bg-info card-header">You are Merlin</h4>
+          <h4 v-if="role == 'PERCIVAL'" class="text-white bg-info card-header">You are Percival</h4>
+          <h4
+            v-if="role == 'ASSASSIN'"
+            class="text-white bg-danger card-header"
+          >You are the Assassin</h4>
+          <h4 v-if="role == 'MINION'" class="text-white bg-danger card-header">You are a Minion</h4>
+          <h4 v-if="role == 'MORGANA'" class="text-white bg-danger card-header">You are Morgana</h4>
+          <h4 v-if="role == 'OBERON'" class="text-white bg-danger card-header">You are Oberon</h4>
           <div class="card-body text-white">
-            <h3 v-if="role == 'GUARD'" class="card-title">You are a Royal Guard</h3>
-            <h3 v-if="role == 'MERLIN'" class="card-title">You are Merlin</h3>
-            <h3 v-if="role == 'OBERON'" class="card-title">You are Oberon</h3>
-            <h3 v-if="role == 'PERCIVAL'" class="card-title">You are Percival</h3>
-            <h3 v-if="role == 'ASSASSIN'" class="card-title">You are the Assassin</h3>
-            <h3 v-if="role == 'MINION'" class="card-title">You are a Minion</h3>
-            <h3 v-if="role == 'MORGANA'" class="card-title">You are Morgana</h3>
+            <p v-if="team == 'GOOD' && role === 'MERLIN'" class="card-text">
+              Your goal is to successfully complete three quests. The Assassin will have an opportunity to identify you after three successful quests. Evil will win if the Assassin can identify you.
+              <br />
+              <br />Evil players know who their teammates are.
+              <br />All players know that the Evil team has been revealed to you.
+              <br />{{settings.percivalEnabled ? (settings.morganaEnabled ? 'Morgana is confusing Percival by disguising as a second Merlin.' : 'Percival knows your identity.')  : 'Nobody knows your identity.'}}
+            </p>
             <p
-              v-if="team == 'GOOD' && role === 'MERLIN'"
+              v-if="team == 'GOOD' && role === 'PERCIVAL' && !settings.morganaEnabled"
               class="card-text"
-            >Your goal is to complete three quests. You know who is in Evil. The Assassin will have an opportunity to identify you after three successful quests. If the Assassin can identify you Evil will win.</p>
+            >
+              Your goal is to successfully complete three quests.
+              <br />
+              <br />You know who Merlin is.
+              <br />Merlin knows which players are in Evil.
+              <br />Evil players know who their teammates are.
+            </p>
             <p
-              v-if="team == 'GOOD' && role === 'PERCIVAL' && metadata.length == 1"
+              v-if="team == 'GOOD' && role === 'PERCIVAL' && settings.morganaEnabled"
               class="card-text"
-            >Your goal is to complete three quests. You know who Merlin is.</p>
-            <p
-              v-if="team == 'GOOD' && role === 'PERCIVAL' && metadata.length == 2"
-              class="card-text"
-            >Your goal is to complete three quests. You know who Merlin is but Morgana is appearing as a second Merlin which confuses you.</p>
-            <p
-              v-if="team == 'GOOD' && role !== 'MERLIN' && role !== 'PERCIVAL'"
-              class="card-text"
-            >Your goal is to complete three quests.</p>
-            <p
-              v-if="team == 'EVIL' && role === 'ASSASSIN'"
-              class="card-text"
-            >Your goal is to disrupt the flow of the game and stay undercover. You will be given an opportunity to identify Merlin after three successful quests. If you successfully identify Merlin you will steal the win.</p>
-            <p
-              v-if="team == 'EVIL' && role !== 'ASSASSIN'"
-              class="card-text"
-            >Your goal is to disrupt the flow of the game and stay undercover.</p>
+            >
+              Your goal is to successfully complete three quests.
+              <br />
+              <br />Merlin knows which players are in Evil.
+              <br />Morgana is confusing you by disguising as a second Merlin.
+              <br />Merlin knows that Morgana is confusing you.
+              <br />Evil players know who their teammates are.
+            </p>
+            <p v-if="team == 'GOOD' && role === 'GUARD'" class="card-text">
+              Your goal is to successfully complete three quests.
+              <br />
+              <br />Evil players know who their teammates are.
+              <br />Merlin knows which players are in Evil.
+            </p>
+            <p v-if="team == 'EVIL' && role === 'ASSASSIN'" class="card-text">
+              Your goal is to disrupt the flow of the game and stay undercover. You will be given an opportunity to identify Merlin after three successful quests. Evil steal will win if you can successfully identify Merlin.
+              <br />
+              <br />The other Evil players know that you are in Evil.
+              <br />Merlin knows which players are in Evil.
+            </p>
+            <p v-if="team == 'EVIL' && role === 'MINION'" class="card-text">
+              Your goal is to disrupt the flow of the game and stay undercover.
+              <br />
+              <br />The other Evil players know that you are in Evil.
+              <br />Merlin knows which players are in Evil.
+            </p>
+            <p v-if="team == 'EVIL' && role === 'MORGANA'" class="card-text">
+              Your goal is to disrupt the flow of the game and stay undercover. You are disguised as Merlin which confuses Percival.
+              <br />
+              <br />The other Evil players know that you are in Evil.
+              <br />Merlin knows which players are in Evil.
+            </p>
+            <p v-if="team == 'EVIL' && role === 'OBERON'" class="card-text">
+              Your goal is to disrupt the flow of the game and stay undercover.
+              <br />
+              <br />Evil players do not know that you are in Evil.
+              <br />Merlin knows which players are in Evil.
+            </p>
           </div>
         </div>
       </div>
@@ -52,24 +89,26 @@
         <div class="card bg-dark border border-primary text-light">
           <h5
             v-if="team == 'EVIL' || role == 'MERLIN'"
-            class="card-title text-center pt-3"
+            class="card-header border-primary text-center"
           >Evil Team</h5>
-          <h5 v-if="team == 'EVIL' || role == 'MERLIN'" class="card-text text-center mb-4">
-            <span
+          <div class="card-body" v-if="team == 'EVIL' || role == 'MERLIN'">
+            <p
               v-for="(playerId, index) in metadata"
               :key="index"
-              class="badge badge badge-danger mx-2"
-            >{{findPlayerName(playerId)}}</span>
-          </h5>
-          <h5 v-if="role == 'PERCIVAL'" class="card-title text-center pt-3">Merlin is</h5>
-          <h5 v-if="role == 'PERCIVAL'" class="card-text pb-4 text-center">
-            <span class="badge badge-info mx-2">{{findPlayerName(metadata[0])}}</span>
-            <span v-if="metadata.length == 2">or</span>
-            <span
-              v-if="metadata.length == 2"
-              class="badge badge-info mx-2"
-            >{{findPlayerName(metadata[1])}}</span>
-          </h5>
+              class="card-text text-center py-1 bg-danger"
+            >{{findPlayerName(playerId)}}</p>
+          </div>
+          <h5
+            v-if="role == 'PERCIVAL'"
+            class="card-header border-primary text-center"
+          >Merlin is {{metadata.length > 1 ? 'either...' : ''}}</h5>
+          <div class="card-body" v-if="role == 'PERCIVAL'">
+            <p
+              v-for="(playerId, index) in metadata"
+              :key="index"
+              class="card-text text-center py-1 bg-info"
+            >{{findPlayerName(playerId)}}</p>
+          </div>
         </div>
       </div>
     </div>

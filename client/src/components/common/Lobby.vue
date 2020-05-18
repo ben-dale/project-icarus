@@ -2,9 +2,9 @@
   <div class="col-12">
     <div class="row mb-3">
       <div class="col-12">
-        <div class="card bg-primary text-light">
-          <p class="card-header">Game settings</p>
-          <div class="card-body">
+        <div class="card bg-dark border-primary text-light">
+          <h5 class="card-header text-center border-primary">Roles</h5>
+          <div class="card-body" style="padding-bottom:0">
             <div class="row">
               <div class="col-lg-6 col-md-12 mb-3">
                 <button type="button" class="btn btn-info btn-block">
@@ -60,64 +60,43 @@
     </div>
     <div class="row mb-3">
       <div class="col-12">
+        <div class="card bg-dark border border-primary">
+          <h5 class="card-header text-white border-primary text-center">Players</h5>
+          <div class="card-body" style="padding-top:0">
+            <PlayerReadyBar :nameColSpan="2" :players="players" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-12">
         <div class="card bg-dark border border-primary text-center text-light">
           <div class="card-body">
             <p
               class="card-text"
-            >Further instruction and explanation will be provided as you play through The Resistance: Avalon.</p>
+            >Instruction and explanation will be provided as you play through The Resistance: Avalon.</p>
             <p
               class="card-text"
-            >The next screen will reveal which team you are in and which role you will play.</p>
+            >The next screen will reveal which team you are in and which role you will play. Depending on your role you may wish to keep this information to yourself.</p>
             <p
               class="card-text"
               v-if="playersStillNeeded > 0"
             >We are still waiting for {{playersStillNeeded}} more {{playersStillNeeded == 1 ? 'player' : 'players'}} to join the lobby.</p>
-            <p class="card-text" v-if="playersStillNeeded == 0">
-              Waiting for all players to click
-              <span class="badge badge-success">Ready</span>
-            </p>
+            <p
+              class="card-text"
+              v-if="playersStillNeeded == 0"
+            >The game will begin when all players are ready.</p>
           </div>
         </div>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-12">
-        <div class="card bg-primary text-light">
-          <div class="card-body">
-            <div class="row text-center">
-              <div v-for="player in players" class="col-lg-3 col-md-12" :key="player.id">
-                <p
-                  v-if="player.ready"
-                  class="card-text bg-success text-white mb-3 py-2 border-success rounded-0"
-                >{{player.name}}</p>
-                <p
-                  v-if="!player.ready"
-                  class="card-text py-2 text-dark rounded mb-3 bg-secondary rounded-0"
-                >{{player.name}}</p>
-              </div>
-              <div v-for="index in playersStillNeeded" class="col-lg-3 col-md-12" :key="index">
-                <p
-                  class="card-text text-light py-2 mb-3 border border-secondary rounded-0 d-none d-lg-block"
-                >Required</p>
-              </div>
-              <div
-                v-for="index in (maxPlayers - (players.length + playersStillNeeded))"
-                class="col-lg-3 col-md-12"
-                :key="index+100"
-              >
-                <p
-                  class="card-text text-light border border-secondary rounded-0 py-2 mb-3 d-none d-lg-block"
-                >Optional</p>
-              </div>
-            </div>
-          </div>
-          <div class="card-footer d-none d-lg-block">
-            <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
-          </div>
-        </div>
+      <div class="col-12 d-none d-lg-block">
+        <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
       </div>
     </div>
+
     <div class="fixed-bottom">
       <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
         <div class="card-body">
@@ -198,9 +177,11 @@
 
 <script>
 import ReadyButton from "@/components/common/ReadyButton.vue";
+import PlayerReadyBar from "@/components/common/PlayerReadyBar.vue";
+
 export default {
   name: "Lobby",
-  components: { ReadyButton },
+  components: { ReadyButton, PlayerReadyBar },
   props: {
     socket: Object,
     room: Object,

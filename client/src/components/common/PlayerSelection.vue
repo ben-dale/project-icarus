@@ -11,7 +11,7 @@
           <div
             v-for="(player, index) in players"
             :key="index"
-            :class="['col-md-12 col-lg-2 mb-3', (index % 5 === 0 ? 'offset-lg-1' : ''), (index % 3 === 0 && players.length == 3 ? 'offset-lg-3' : '')]"
+            :class="['col-6 col-md-3 col-lg-2 mb-3', (index % 5 === 0 ? 'offset-lg-1' : ''), (index % 3 === 0 && players.length == 3 ? 'offset-lg-3' : ''), (index % 4 === 0 && players.length == 4 ? 'offset-lg-2' : '')]"
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"

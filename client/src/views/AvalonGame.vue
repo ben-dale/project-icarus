@@ -124,7 +124,7 @@ export default {
       //   closed: true,
       //   game: {
       //     result: "GOOD",
-      //     state: "QUEST_STARTED",
+      //     state: "QUEST_PROPOSING",
       //     screen: "GAME",
       //     settings: {
       //       percivalEnabled: false,
@@ -185,15 +185,27 @@ export default {
       //   }
       // },
       // players: [
-      //   { name: "Ben", id: "111", ready: true, vote: "APPROVE", team: "EVIL" },
-      //   { name: "Sidd", id: "222", ready: false, vote: "APPROVE", team: "EVIL" },
+      //   {
+      //     name: "Ben",
+      //     id: "111",
+      //     ready: true,
+      //     vote: "APPROVE",
+      //     team: "EVIL",
+      //     role: "ASSASSIN"
+      //   },
+      //   {
+      //     name: "Sidd",
+      //     id: "222",
+      //     ready: false,
+      //     vote: "APPROVE",
+      //     team: "EVIL"
+      //   },
       //   {
       //     name: "Adam <3",
       //     id: "333",
       //     ready: false,
       //     vote: "REJECT",
-      //     team: "EVIL",
-      //     role: "ASSASSIN"
+      //     team: "EVIL"
       //   },
       //   { name: "Sam", id: "444", ready: false, vote: "REJECT", team: "GOOD" },
       //   {
@@ -206,9 +218,9 @@ export default {
       //   { name: "Jim", id: "666", ready: false, vote: "REJECT", team: "GOOD" },
       //   { name: "Max", id: "777", ready: false, vote: "REJECT", team: "GOOD" }
       // ],
-      // team: "EVIL",
+      // team: "GOOD",
       // role: "ASSASSIN",
-      // metadata: ["111", "222"]
+      // metadata: ["222"]
     };
   },
   computed: {
