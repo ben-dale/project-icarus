@@ -2,10 +2,11 @@
   <div class="col-12">
     <div class="row pb-2">
       <div class="col-12">
-        <PlayerReadyBar :nameColSpan="2" :players="players" />
+        <div class="border-bottom mb-2 border-primary">
+          <PlayerReadyBar :nameColSpan="2" :players="players" />
+        </div>
       </div>
     </div>
-    <hr class="border border-primary" />
     <div class="row">
       <QuestLog
         :questLog="game.questLogs"

@@ -39,7 +39,7 @@ class Player {
 
   storeInRedis(redisClient) {
     redisClient.set(this.id, JSON.stringify(this));
-    redisClient.expire(this.id, 86400);
+    redisClient.expire(this.id, 43200); // Expires after 12 hours
   }
 
   withId(id) {

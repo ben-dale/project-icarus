@@ -17,8 +17,8 @@ $warning: #e49311;
 $info: #1492d6;
 $secondary: #bac2c8;
 
-$primary: #4f5157;
-$dark: #2c2d2f;
-$body-bg: #2c2d2f;
+$primary: #424347;
+$dark: #282829;
+$body-bg: #282829;
 @import "bootstrap";
 </style>

@@ -69,10 +69,6 @@ class Room {
         ql.organiserId = newPlayerId;
       }
     });
-
-    // Need to do some research to make sure all ID's are updated here
-    // e.g. metadata stored on the player
-    // e.g. 
     return copy;
   }
 
@@ -86,7 +82,7 @@ class Room {
 
   storeInRedis(redisClient) {
     redisClient.set(this.id, JSON.stringify(this));
-    redisClient.expire(this.id, 86400);
+    redisClient.expire(this.id, 43200); // Expires after 12 hours
   }
 
   getFromRedis(redisClient, id, onSuccess, onError) {

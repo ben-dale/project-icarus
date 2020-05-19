@@ -3,17 +3,16 @@
     <div class="row mb-3">
       <div class="col-12">
         <div class="card bg-dark border-primary text-light">
-          <h5 class="card-header text-center border-primary">Roles</h5>
           <div class="card-body" style="padding-bottom:0">
             <div class="row">
               <div class="col-lg-6 col-md-12 mb-3">
-                <button type="button" class="btn btn-info btn-block">
+                <button type="button" class="btn btn-info btn-block" :disabled="!isRoomOwner">
                   Merlin
                   <br />Knows which team each player is in
                 </button>
               </div>
               <div class="col-lg-6 col-md-12 mb-3">
-                <button type="button" class="btn btn-danger btn-block">
+                <button type="button" class="btn btn-danger btn-block" :disabled="!isRoomOwner">
                   Assassin
                   <br />Has an opportunity to steal the win
                 </button>
@@ -24,7 +23,7 @@
                 <button
                   v-on:click="percivalEnabled(!room.game.settings.percivalEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-outline-secondary'), (room && room.game.settings.percivalEnabled ? 'border-info' : 'border')]"
+                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-outline-info')]"
                   :disabled="!isRoomOwner"
                 >
                   Percival
@@ -35,7 +34,7 @@
                 <button
                   v-on:click="morganaEnabled(!room.game.settings.morganaEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-outline-secondary'), (room && room.game.settings.morganaEnabled ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-outline-danger')]"
                   :disabled="!isRoomOwner || (room.game.settings.oberonEnabled && players.length < 7)"
                 >
                   Morgana
@@ -46,7 +45,7 @@
                 <button
                   v-on:click="oberonEnabled(!room.game.settings.oberonEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-outline-secondary'), (room && room.game.settings.oberonEnabled ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-outline-danger')]"
                   :disabled="!isRoomOwner || (room.game.settings.morganaEnabled && players.length < 7)"
                 >
                   Oberon
@@ -77,9 +76,7 @@
             <p
               class="card-text"
             >The next screen will reveal which team you are in and which role you will play.</p>
-            <p
-              class="card-text"
-            >Depending on your role you may wish to keep this information to yourself.</p>
+            <p class="card-text">You may wish to keep your role and team to yourself.</p>
             <p
               class="card-text"
               v-if="playersStillNeeded > 0"
@@ -91,8 +88,18 @@
           </div>
           <div class="card-footer bg-primary d-none d-lg-block">
             <div class="row">
-              <div class="col-12">
+              <div class="col-6">
                 <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" :large="true" />
+              </div>
+              <div class="col-6">
+                <button
+                  id="copyLinkButton"
+                  :class="['btn btn-block', (showLinkCopiedText ? 'btn-primary' : 'btn-secondary')]"
+                  data-toggle="tooltip"
+                  data-placement="top"
+                  title="Tooltip on top"
+                  @click="copyLink"
+                >{{showLinkCopiedText ? 'Copied!' : 'Copy link'}}</button>
               </div>
             </div>
           </div>
@@ -198,7 +205,8 @@ export default {
       minPlayers: 5,
       maxPlayers: 10,
       currentMemberCount: 0,
-      readyClasses: "card bg-success text-white"
+      readyClasses: "card bg-success text-white",
+      showLinkCopiedText: false
     };
   },
   computed: {
@@ -212,6 +220,11 @@ export default {
     }
   },
   methods: {
+    copyLink: function() {
+      navigator.clipboard.writeText(window.location.href);
+      this.showLinkCopiedText = true;
+      setTimeout(() => (this.showLinkCopiedText = false), 400);
+    },
     percivalEnabled: function(enabled) {
       this.$emit("percival-enabled", enabled);
     },
@@ -225,4 +238,7 @@ export default {
 };
 </script>
 <style scoped>
+.btn:disabled {
+  opacity: 1;
+}
 </style>

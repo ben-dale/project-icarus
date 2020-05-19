@@ -1,26 +1,50 @@
 <template>
   <div id="app" class="container">
-    <div class="row" v-bind:class="{ 'visible': !room, 'hidden': room }">
-      <NameInput buttonText="Join" @submit="joinSession" />
-    </div>
-
-    <div v-if="room && room.game.closed && room.disconnectedPlayerIds.length > 0">
-      <h1 class="text-white display-5 text-center pb-5">The game has been paused</h1>
-      <div v-for="player in getDisconnectedPlayers()" class="card bg-primary" :key="player.id">
-        <div class="card-body text-light text-center">
-          <p class="card-text">{{player.name}} has disconnected from the game</p>
-          <p
-            class="card-text"
-          >They may rejoin the game by visiting {{getPageUrl()}} and entering the name {{player.id}}</p>
-        </div>
-      </div>
-    </div>
-
     <div
-      v-if="room && room.game && room.game.closed && !room.playerIds.includes(getPlayerId())"
+      v-if="room && room.game && !room.game.closed && !room.playerIds.includes(socket.id)"
+      class="row"
+    >
+      <NameInput buttonText="Join lobby" @submit="joinSession" :placeHolder="'Name'" :length="8" />
+    </div>
+    <div
+      v-if="room && room.game && room.game.closed && !room.playerIds.includes(socket.id) && room.disconnectedPlayerIds.length > 0"
+      class="row"
+    >
+      <NameInput buttonText="Rejoin game" @submit="rejoinSession" :placeHolder="'Code'" />
+    </div>
+    <div
+      v-if="room && room.game && room.game.closed && !room.playerIds.includes(socket.id) && room.disconnectedPlayerIds.length == 0"
       class="row"
     >
       <RoomClosed />
+    </div>
+
+    <div
+      v-if="room && room.game.closed && room.disconnectedPlayerIds.length > 0 && room.playerIds.includes(getPlayerId())"
+    >
+      <div class="row" v-for="player in getDisconnectedPlayers()" :key="player.id">
+        <div class="col-12">
+          <div class="card bg-dark border border-primary mb-5">
+            <div class="card-body text-light text-center py-5">
+              <p class="card-text">{{player.name}} has left the game.</p>
+              <p class="card-text">The game will resume when {{player.name}} rejoins the game.</p>
+              <p class="card-text">
+                They may rejoin the game using the code
+                <span
+                  class="bg-primary px-2 py-1"
+                >{{player.id}}</span>
+              </p>
+            </div>
+            <div class="card-footer bg-primary">
+              <button
+                :id="'copyLinkAndCodeButton'+player.id"
+                @click="copyLinkAndCode(player.id, player.name)"
+                class="btn btn-secondary btn-block"
+              >Copy link + code</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       v-if="room && room.game && room.playerIds.includes(getPlayerId()) && room.game.screen == 'LOBBY'"
@@ -96,7 +120,7 @@ export default {
   props: {
     socket: {
       type: Object,
-      default: function() {
+      default() {
         let socket = null;
         if (process.env.NODE_ENV == "development") {
           socket = io.connect("http://localhost:3000", {
@@ -106,12 +130,13 @@ export default {
         } else {
           socket = io.connect({ upgrade: false, transports: ["websocket"] });
         }
+
         return socket;
       }
     },
     roomId: String
   },
-  data: function() {
+  data() {
     return {
       room: null,
       players: [],
@@ -121,11 +146,11 @@ export default {
       // room: {
       //   playerIds: ["111", "222", "333"],
       //   disconnectedPlayerIds: [],
-      //   closed: true,
       //   game: {
+      //     closed: true,
       //     result: "GOOD",
       //     state: "QUEST_PROPOSING",
-      //     screen: "GAME",
+      //     screen: "JOIN",
       //     settings: {
       //       percivalEnabled: false,
       //       oberonEnabled: false,
@@ -224,7 +249,7 @@ export default {
     };
   },
   computed: {
-    isPlayerReady: function() {
+    isPlayerReady() {
       let player = this.players.find(o => o.id == this.getPlayerId());
       return player && player.ready;
     }
@@ -254,100 +279,117 @@ export default {
       // console.log(room);
       this.room = room;
     });
+    this.socket.emit("get-room", { roomId: this.roomId });
   },
   methods: {
-    getPageUrl: function() {
+    getPageUrl() {
       return window.location.href;
     },
-    getDisconnectedPlayers: function() {
+    getDisconnectedPlayers() {
       return this.room.disconnectedPlayerIds
         .filter(pid => this.room.playerIds.includes(pid))
         .map(pid => this.getPlayerById(pid))
         .filter(p => p);
     },
-    getPlayerById: function(playerId) {
+    getPlayerById(playerId) {
       return this.players.find(p => p.id == playerId);
     },
-    percivalEnabled: function(enabled) {
+    percivalEnabled(enabled) {
       this.socket.emit("room-updated", {
         game: { settings: { percivalEnabled: enabled } }
       });
     },
-    getPlayerId: function() {
+    getPlayerId() {
       // return "111";
       return this.socket.id;
     },
-    morganaEnabled: function(enabled) {
+    morganaEnabled(enabled) {
       this.socket.emit("room-updated", {
         game: { settings: { morganaEnabled: enabled } }
       });
     },
-    oberonEnabled: function(enabled) {
+    oberonEnabled(enabled) {
       this.socket.emit("room-updated", {
         game: { settings: { oberonEnabled: enabled } }
       });
     },
-    proposePlayerForQuest: function(playerId) {
+    proposePlayerForQuest(playerId) {
       this.socket.emit("room-updated", {
         game: { currentQuest: { playerIdToPropose: playerId } }
       });
     },
-    revealQuestVote: function(index) {
+    revealQuestVote(index) {
       this.socket.emit("room-updated", {
         game: { currentQuest: { voteToReveal: index } }
       });
     },
-    unproposePlayerForQuest: function(playerId) {
+    unproposePlayerForQuest(playerId) {
       this.socket.emit("room-updated", {
         game: { currentQuest: { playerIdToUnpropose: playerId } }
       });
     },
-    selectMerlinForId: function(playerId) {
+    selectMerlinForId(playerId) {
       this.socket.emit("room-updated", {
         game: { currentQuest: { merlinIdToPropose: playerId } }
       });
     },
-    unselectMerlinForId: function(playerId) {
+    unselectMerlinForId(playerId) {
       this.socket.emit("room-updated", {
         game: { currentQuest: { merlinIdToUnpropose: playerId } }
       });
     },
-    joinSession: function(name) {
-      this.name = name;
+    joinSession(name) {
       this.socket.emit("player-joined", {
-        name: this.name,
+        name: name,
         roomId: this.roomId
       });
     },
-    playerApproveVote: function(approve) {
+    rejoinSession(code) {
+      this.socket.emit("player-rejoined", {
+        name: code,
+        roomId: this.roomId
+      });
+    },
+    playerApproveVote(approve) {
       this.socket.emit("player-updated", {
         ready: true,
         approveProposal: approve
       });
     },
-    playerSucceedQuest: function(succeed) {
+    playerSucceedQuest(succeed) {
       this.socket.emit("player-updated", {
         ready: true,
         succeedQuest: succeed
       });
     },
-    readyUp: function() {
+    readyUp() {
       this.socket.emit("player-updated", { ready: true });
     },
     readyUpWithVote(vote) {
       this.socket.emit("player-updated", { ready: true, vote: vote });
     },
-    notReady: function() {
+    notReady() {
       this.socket.emit("player-updated", { ready: false });
+    },
+    copyLinkAndCode(playerId, playerName) {
+      navigator.clipboard.writeText(
+        "Hey, " +
+          playerName +
+          "! It looks like you left the game. Follow this link: " +
+          window.location.href +
+          " and enter the code: " +
+          playerId
+      );
+      const buttonId = "copyLinkAndCodeButton" + playerId;
+      document.getElementById(buttonId).classList.remove("btn-secondary");
+      document.getElementById(buttonId).classList.add("btn-primary");
+      document.getElementById(buttonId).innerHTML = "Copied!";
+      setTimeout(() => {
+        document.getElementById(buttonId).classList.add("btn-secondary");
+        document.getElementById(buttonId).classList.remove("btn-primary");
+        document.getElementById(buttonId).innerHTML = "Copy link + code";
+      }, 400);
     }
   }
 };
 </script>
-<style scoped>
-.hidden {
-  display: none;
-}
-.visible {
-  display: flex;
-}
-</style>

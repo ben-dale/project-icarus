@@ -7,10 +7,10 @@
             v-model="name"
             type="text"
             class="form-control"
-            placeholder="Name"
+            :placeholder="placeHolder"
             aria-label="Name"
             aria-describedby="button-start"
-            maxlength="20"
+            :maxlength="length"
             required
           />
           <div class="input-group-append">
@@ -29,9 +29,15 @@
 
 <script>
 export default {
+  //TODO rename to text input
   name: "NameInput",
   props: {
-    buttonText: String
+    buttonText: String,
+    placeHolder: String,
+    length: {
+      type: Number,
+      default: 20
+    }
   },
   data: function() {
     return {

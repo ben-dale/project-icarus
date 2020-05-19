@@ -62,8 +62,43 @@ io.on('connection', (socket) => {
     socket.emit('avalon-created', roomId);
   });
 
+  socket.on('get-room', (data) => {
+    if (data && data.roomId) {
+      new Room().getFromRedis(redisClient, data.roomId, (room) => {
+        socket.emit('room-updated', room);
+      }, () => { });
+    }
+  })
+
   socket.on('player-joined', (data) => {
     console.log(data);
+    if (data && data.name && data.name.length > 0 && data.roomId) {
+      new Room().getFromRedis(redisClient, data.roomId, (room) => {
+        const playerId = socket.id;
+
+        let player = new Player().init(playerId, data.name.substring(0, 8), data.roomId);
+        player.storeInRedis(redisClient);
+
+        if (!room.game.closed) {
+          console.log('player joined room ' + socket.id);
+          const updatedRoom = room.addPlayerId(socket.id);
+          updatedRoom.storeInRedis(redisClient);
+
+          socket.join(data.roomId);
+
+          new AllPlayers().getFromRedis(redisClient, updatedRoom.playerIds, (allPlayers) => {
+            updatedRoom.emitToAll(io);
+            allPlayers.emitToAll(io, data.roomId);
+          }, () => { });
+        } else {
+          // Player is attempting to join a closed room so just emit the current room state to them for now
+          socket.emit('room-updated', room);
+        }
+      });
+    }
+  });
+
+  socket.on('player-rejoined', (data) => {
     if (data && data.name && data.name.length > 0 && data.roomId) {
       new Room().getFromRedis(redisClient, data.roomId, (room) => {
         new Player().getFromRedis(redisClient, data.name, (existingPlayer) => {
@@ -87,29 +122,8 @@ io.on('connection', (socket) => {
             updatedRoom.storeInRedis(redisClient);
             updatedRoom.emitToAll(io);
           }, () => { });
-        }, (error, result) => {
-          const playerId = socket.id;
-
-          let player = new Player().init(playerId, data.name.substring(0, 8), data.roomId);
-          player.storeInRedis(redisClient);
-
-          if (!room.game.closed) {
-            console.log('player joined room ' + socket.id);
-            const updatedRoom = room.addPlayerId(socket.id);
-            updatedRoom.storeInRedis(redisClient);
-
-            socket.join(data.roomId);
-
-            new AllPlayers().getFromRedis(redisClient, updatedRoom.playerIds, (allPlayers) => {
-              updatedRoom.emitToAll(io);
-              allPlayers.emitToAll(io, data.roomId);
-            }, () => { });
-          } else {
-            // Player is attempting to join a closed room so just emit the current room state to them for now
-            socket.emit('room-updated', room);
-          }
-        });
-      });
+        }, () => { });
+      }, () => { })
     }
   });
 
