@@ -20,7 +20,7 @@ test('store in redis', () => {
   expect(redisClient.setKey).toBe('2930e');
   expect(redisClient.setValue).toBe(JSON.stringify(player));
   expect(redisClient.expireKey).toBe('2930e');
-  expect(redisClient.expireTime).toBe(86400);
+  expect(redisClient.expireTime).toBe(43200);
 });
 
 test('get from redis', () => {
