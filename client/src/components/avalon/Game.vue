@@ -1,6 +1,6 @@
 <template>
   <div class="col-12">
-    <div class="row">
+    <div class="row pb-2">
       <div class="col-12">
         <PlayerReadyBar :nameColSpan="2" :players="players" />
       </div>
@@ -17,7 +17,7 @@
     <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
       <Waiting
         header="Team proposal"
-        :lines="['There are five quests to complete. Each quest has a nominated player that acts as the quest\'s leader.', 'Evil players sent on a quest have the option to \'Sabotage\' the quest. If any \'Sabotage\' votes are cast the quest will fail.', currentOrganiser.name + ' is the current quest leader and is choosing a team for Quest ' + game.currentQuest.id +  '.']"
+        :lines="['There are five quests to complete. Each quest has a nominated player that acts as the quest\'s leader.', currentOrganiser.name + ' is the current quest leader and is choosing a team for Quest ' + game.currentQuest.id +  '.']"
         :questId="game.currentQuest.id"
         :isPlayerReady="isPlayerReady"
         v-on="$listeners"
@@ -27,8 +27,9 @@
       <PlayerSelection
         :header="'Quest ' + game.currentQuest.id + ' - Team proposal'"
         :body="[
-          'You are tasked with proposing a team for Quest ' +game.currentQuest.id+ '. All players will vote to either \'Accept\' or \'Reject\' your proposal.',
-          'Select ' + game.currentQuest.requiredPlayers + ' players to send on Quest ' +game.currentQuest.id+ '. Your proposal will be voted on when all players are ready.'
+          'There are five quests to complete. You are tasked with proposing a team for Quest ' +game.currentQuest.id+'.',
+          'Your proposal will be put to a majority vote when everyone is ready.',
+          'Select ' + game.currentQuest.requiredPlayers + ' players to send on Quest ' +game.currentQuest.id+'.'
         ]"
         :players="players"
         :proposedPlayerIds="game.currentQuest.proposedPlayerIds"
@@ -77,7 +78,7 @@
       v-if="game.state == 'QUEST_STARTED' && game.currentQuest.proposedPlayerIds.includes(playerId)"
     >
       <QuestOutcomeVoteInput
-        :players="proposedQuestPlayers"
+        :names="proposedQuestPlayerNames"
         :questId="game.currentQuest.id"
         :isEvil="team == 'EVIL'"
         :isPlayerReady="isPlayerReady"
@@ -182,18 +183,18 @@ export default {
     currentOrganiser: function() {
       return this.players.find(o => o.id == this.game.currentQuest.organiserId);
     },
-    proposedQuestPlayers: function() {
-      let members = [];
+    proposedQuestPlayerNames: function() {
+      let names = [];
       for (
         let i = 0;
         i < this.game.currentQuest.proposedPlayerIds.length;
         i++
       ) {
-        members.push(
+        names.push(
           this.getPlayerNameById(this.game.currentQuest.proposedPlayerIds[i])
         );
       }
-      return members;
+      return names;
     },
     proposedQuestMemberNames: function() {
       return this.game.currentQuest.proposedPlayerIds.map(id =>

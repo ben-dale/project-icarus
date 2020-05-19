@@ -5,13 +5,15 @@
         <div class="row">
           <div class="col-12">
             <p class="card-text">This quest contains the following players:</p>
-            <h5 class="card-text mb-5">
-              <span
-                v-for="(player, index) in players"
-                :key="index"
-                class="badge badge-info mx-2"
-              >{{player}}</span>
-            </h5>
+             <div class="row">
+          <div
+            v-for="(player, index) in names"
+            :key="index"
+            :class="['card-text mb-4 col-md-2 col-12', (index == 0 && names.length == 2 ? 'offset-md-4' : ''), (index == 0 && names.length == 3 ? 'offset-md-3' : ''),(index == 0 && names.length == 4 ? 'offset-md-2' : '')]"
+          >
+            <p class="card-text bg-info py-1">{{player}}</p>
+          </div>
+        </div>
             <p
               v-if="!isEvil"
               class="card-text"
@@ -73,7 +75,7 @@
 export default {
   props: {
     isEvil: Boolean,
-    players: Array,
+    names: Array,
     questId: Number,
     isPlayerReady: Boolean
   },

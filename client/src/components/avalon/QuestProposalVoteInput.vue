@@ -3,9 +3,15 @@
     <div class="card bg-primary text-light">
       <div class="card-body py-5 bg-dark text-center">
         <p class="card-text">{{organiser}} has proposed the following team:</p>
-        <h5 class="card-text mb-4">
-          <span v-for="(name, index) in names" :key="index" class="badge badge-info mx-2">{{name}}</span>
-        </h5>
+        <div class="row">
+          <div
+            v-for="(name, index) in names"
+            :key="index"
+            :class="['card-text mb-4 col-md-2 col-12', (index == 0 && names.length == 2 ? 'offset-md-4' : ''), (index == 0 && names.length == 3 ? 'offset-md-3' : ''),(index == 0 && names.length == 4 ? 'offset-md-2' : '')]"
+          >
+            <p class="card-text bg-info py-1">{{name}}</p>
+          </div>
+        </div>
         <p class="card-text">Your vote will be seen by the other players. This is a majority vote.</p>
       </div>
       <div class="card-footer d-none d-lg-block">

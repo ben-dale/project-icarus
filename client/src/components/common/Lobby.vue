@@ -42,7 +42,7 @@
                   <br />Disguised as Merlin
                 </button>
               </div>
-              <div class="col-md-12 col-lg-4">
+              <div class="col-md-12 col-lg-4 mb-3">
                 <button
                   v-on:click="oberonEnabled(!room.game.settings.oberonEnabled)"
                   type="button"
@@ -89,13 +89,10 @@
               v-if="playersStillNeeded == 0"
             >The game will begin when all players are ready.</p>
           </div>
-          <div class="card-footer bg-primary">
+          <div class="card-footer bg-primary d-none d-lg-block">
             <div class="row">
-              <div class="col-12 col-md-6 d-none d-lg-block">
+              <div class="col-12">
                 <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" :large="true" />
-              </div>
-              <div class="col-12 col-md-6 d-none d-lg-block">
-                <button class="btn btn-block btn-secondary">Read the rules</button>
               </div>
             </div>
           </div>
@@ -197,6 +194,7 @@ export default {
   data: function() {
     return {
       name: "",
+      showRules: false,
       minPlayers: 5,
       maxPlayers: 10,
       currentMemberCount: 0,
