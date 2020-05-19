@@ -131,7 +131,7 @@
 
     <div class="fixed-bottom">
       <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
-        <div class="card-body">
+        <div class="card-body pb-5">
           <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
         </div>
       </div>

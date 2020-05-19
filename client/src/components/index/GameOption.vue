@@ -1,7 +1,6 @@
 <template>
-  <div class="card bg-primary text-light">
-    <!-- <img :src="require('@/assets/' + image)" class="card-img-top"> -->
-    <h5 class="card-header text-center">{{name}}</h5>
+  <div class="card bg-dark border-primary text-light">
+    <h5 class="card-header border-primary text-center">{{name}}</h5>
     <div class="card-body text-center bg-dark">
       <p v-if="description" class="card-text">{{description}}</p>
       <p
@@ -9,7 +8,7 @@
         class="card-subtitle"
       >{{minPlayers}} - {{maxPlayers}} players, {{teams}} teams</p>
     </div>
-    <div v-if="linkTo" class="card-footer">
+    <div v-if="linkTo" class="card-footer bg-primary">
       <router-link v-if="linkTo" :to="linkTo" class="btn btn-sm btn-secondary btn-block">Play</router-link>
     </div>
   </div>

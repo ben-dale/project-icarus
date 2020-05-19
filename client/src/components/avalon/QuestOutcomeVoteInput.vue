@@ -49,16 +49,16 @@
     </div>
     <div class="fixed-bottom">
       <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
-        <div class="card-body">
+        <div class="card-body pb-5">
           <div class="row">
-            <div class="col-6">
+            <div class="col-12 col-md-6 pb-3">
               <button
                 class="btn btn-info btn-block"
                 @click="succeed(true)"
                 :disabled="isPlayerReady"
               >Succeed</button>
             </div>
-            <div class="col-6">
+            <div class="col-12 col-md-6">
               <button
                 :class="['btn', isEvil ? 'btn-danger' : 'btn-secondary', 'btn-block']"
                 @click="succeed(false)"

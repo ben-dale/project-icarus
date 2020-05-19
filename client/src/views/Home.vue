@@ -4,7 +4,7 @@
       <Title />
     </div>
     <div class="row">
-      <div class="col-md-4 pb-4">
+      <div class="col-12 col-lg-4 offset-lg-4 pb-4">
         <GameOption
           name="The Resistance: Avalon"
           description="Avalon pits the forces of Good and Evil in a battle to control the future of civilization."
@@ -13,20 +13,6 @@
           :teams="2"
           linkTo="/avalon"
           image="avalon.jpeg"
-        />
-      </div>
-      <div class="col-md-4 pb-4">
-        <GameOption
-          name="Coming Soon"
-          description="More games are on the way!"
-          image="coming-soon.jpeg"
-        />
-      </div>
-      <div class="col-md-4 pb-4">
-        <GameOption
-          name="Coming Soon"
-          description="More games are on the way!"
-          image="coming-soon.jpeg"
         />
       </div>
     </div>
