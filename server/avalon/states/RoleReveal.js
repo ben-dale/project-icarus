@@ -75,11 +75,7 @@ class RoleReveal {
       }
     });
 
-    // Store roles and team information for each player in Redis
-    updatedAllPlayers.storeInRedis(redisClient);
-
-    updatedAllPlayers.emitToAll(io, roomId);
-    updatedAllPlayers.forEach(p => p.emitAssignmentInformation(io));
+    updatedAllPlayers.storeInRedis(redisClient).emitToAll(io, roomId).forEach(p => p.emitAssignmentInformation(io));
   }
 }
 

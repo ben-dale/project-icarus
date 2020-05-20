@@ -55,6 +55,7 @@ class Avalon {
     return this;
   }
 
+  // TODO remove mutation from this and have each block return new instance of Avalon
   next(redisClient, io, allPlayers, roomId) {
     if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER')) && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
       console.log('starting role reveal...');

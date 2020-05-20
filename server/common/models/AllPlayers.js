@@ -14,6 +14,7 @@ class AllPlayers {
 
   set(i, player) {
     this.players[i] = player;
+    return this;
   }
 
   filter(predicate) {
@@ -22,6 +23,7 @@ class AllPlayers {
 
   forEach(lambda) {
     this.players.forEach(lambda);
+    return this;
   }
 
   areReady() {
@@ -44,6 +46,7 @@ class AllPlayers {
 
   storeInRedis(redisClient) {
     this.players.forEach(p => p.storeInRedis(redisClient));
+    return this;
   }
 
   getFromRedis(redisClient, ids, onSuccess, onError) {
@@ -71,6 +74,7 @@ class AllPlayers {
       return copy;
     });
     io.in(roomId).emit('players-updated', playersToEmit);
+    return this;
   }
 
   emitToAllWithVote(io, roomId) {
@@ -83,6 +87,7 @@ class AllPlayers {
       return copy;
     });
     io.in(roomId).emit('players-updated', playersToEmit);
+    return this;
   }
 
   emitToAllWithTeamAndRole(io, roomId) {
@@ -94,6 +99,7 @@ class AllPlayers {
       return copy;
     });
     io.in(roomId).emit('players-updated', playersToEmit);
+    return this;
   }
 
   shuffle() {

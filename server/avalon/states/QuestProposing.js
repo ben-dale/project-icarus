@@ -7,9 +7,7 @@ class QuestProposing {
     this.avalon.screen = 'GAME';
     this.avalon.state = 'QUEST_PROPOSING';
 
-    const updatedAllPlayers = allPlayers.resetReadyStatuses();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
+    allPlayers.resetReadyStatuses().storeInRedis(redisClient).emitToAll(io, roomId);
   }
 }
 
