@@ -124,6 +124,13 @@ class Player {
     io.to(this.id).emit('player-assigned', copy);
   }
 
+  emitAssignmentInformation(io) {
+    const copy = this.copy();
+    delete copy.roomId;
+    delete copy.vote;
+    io.to(this.id).emit('player-assigned', copy);
+  }
+
 }
 
 module.exports = Player;

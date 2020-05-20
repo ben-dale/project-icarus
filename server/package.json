@@ -17,6 +17,7 @@
   },
   "scripts": {
     "test": "jest",
+    "testCoverage": "jest --coverage",
     "start": "node server.js"
   },
   "author": "",

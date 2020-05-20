@@ -8,6 +8,22 @@ class AllPlayers {
     return this;
   }
 
+  get(i) {
+    return this.players[i];
+  }
+
+  set(i, player) {
+    this.players[i] = player;
+  }
+
+  filter(predicate) {
+    return this.players.filter(predicate);
+  }
+
+  forEach(lambda) {
+    this.players.forEach(lambda);
+  }
+
   areReady() {
     return this.players.filter(p => !p.ready).length == 0;
   }
