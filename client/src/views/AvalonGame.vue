@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <div class="container">
     <div
       v-if="room && room.game && !room.game.closed && !room.playerIds.includes(socket.id)"
       class="row"
@@ -55,6 +55,7 @@
         :room="room"
         :players="players"
         :isPlayerReady="isPlayerReady"
+        :minPlayers="5"
         @percival-enabled="percivalEnabled"
         @oberon-enabled="oberonEnabled"
         @morgana-enabled="morganaEnabled"
@@ -280,6 +281,11 @@ export default {
       this.room = room;
     });
     this.socket.emit("get-room", { roomId: this.roomId });
+  },
+  beforeRouteLeave(to, from, next) {
+    // https://router.vuejs.org/guide/advanced/navigation-guards.html#in-component-guards
+    this.socket.close();
+    next();
   },
   methods: {
     getPageUrl() {

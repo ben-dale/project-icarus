@@ -50,6 +50,8 @@ class Room {
     copy.playerIds = this.playerIds.filter(pid => pid !== playerId);
     if (copy.ownerId == playerId && copy.playerIds.length > 0) {
       copy.ownerId = copy.playerIds[0];
+    } else if (copy.playerIds.length == 0) {
+      copy.ownerId = '';
     }
     return copy;
   }

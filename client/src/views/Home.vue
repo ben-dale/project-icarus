@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <div class="container">
     <div class="row mb-5">
       <Title />
     </div>

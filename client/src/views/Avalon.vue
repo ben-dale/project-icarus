@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <div class="container">
     <div class="row">
       <div class="col-md-12 py-5 text-center">
         <h1 class="display-5 text-light">The Resistance: Avalon</h1>

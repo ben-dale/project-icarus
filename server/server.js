@@ -40,7 +40,6 @@ io.on('connection', (socket) => {
           updatedRoom = updatedRoom.withActiveDisconnectedPlayer(player.id);
         } else {
           updatedRoom = updatedRoom.disconnectPlayer(player.id);
-          // todo also delete player from Redis at this point I think?
         }
 
         updatedRoom.storeInRedis(redisClient);

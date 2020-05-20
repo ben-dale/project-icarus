@@ -23,7 +23,7 @@
                 <button
                   v-on:click="percivalEnabled(!room.game.settings.percivalEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-outline-info')]"
+                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-outline-dark text-white'), (room && room.game.settings.percivalEnabled ? 'border-info' : 'border')]"
                   :disabled="!isRoomOwner"
                 >
                   Percival
@@ -34,7 +34,7 @@
                 <button
                   v-on:click="morganaEnabled(!room.game.settings.morganaEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-outline-danger')]"
+                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-outline-dark text-white'), (room && room.game.settings.morganaEnabled ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner || (room.game.settings.oberonEnabled && players.length < 7)"
                 >
                   Morgana
@@ -45,7 +45,7 @@
                 <button
                   v-on:click="oberonEnabled(!room.game.settings.oberonEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-outline-danger')]"
+                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-outline-dark text-white'), (room && room.game.settings.oberonEnabled ? 'border-danger' : 'border')]"
                   :disabled="!isRoomOwner || (room.game.settings.morganaEnabled && players.length < 7)"
                 >
                   Oberon
@@ -88,18 +88,24 @@
           </div>
           <div class="card-footer bg-primary d-none d-lg-block">
             <div class="row">
+              <div class="col-3">
+                <button
+                  class="btn btn-secondary btn-block"
+                  data-toggle="modal"
+                  data-target="#learnModal"
+                >Learn</button>
+              </div>
               <div class="col-6">
                 <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
               </div>
-              <div class="col-6">
+              <div class="col-3">
                 <button
-                  id="copyLinkButton"
-                  :class="['btn btn-block', (showLinkCopiedText ? 'btn-primary' : 'btn-secondary')]"
+                  class="btn-copy-link btn btn-block btn-secondary"
                   data-toggle="tooltip"
                   data-placement="top"
-                  title="Tooltip on top"
-                  @click="copyLink"
-                >{{showLinkCopiedText ? 'Copied!' : 'Copy link'}}</button>
+                  title="Copied!"
+                  @click="share"
+                >Share</button>
               </div>
             </div>
           </div>
@@ -111,19 +117,61 @@
       <div class="card bg-primary rounded-0 d-none d-block d-lg-none pb-5">
         <div class="card-body">
           <div class="row">
+            <div class="col-md-3 pb-3 d-none d-md-block">
+              <button
+                class="btn btn-secondary btn-block"
+                data-toggle="modal"
+                data-target="#learnModal"
+              >Learn</button>
+            </div>
             <div class="col-12 col-md-6 pb-3">
               <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" />
             </div>
-            <div class="col-12 col-md-6">
+            <div class="col-12 pb-3 d-none d-block d-md-none">
               <button
-                id="copyLinkButton"
-                :class="['btn btn-block', (showLinkCopiedText ? 'btn-primary' : 'btn-secondary')]"
+                class="btn btn-secondary btn-block"
+                data-toggle="modal"
+                data-target="#learnModal"
+              >Learn</button>
+            </div>
+            <div class="col-12 col-md-3">
+              <button
+                class="btn-copy-link-sm btn btn-block btn-secondary"
                 data-toggle="tooltip"
                 data-placement="top"
-                title="Tooltip on top"
-                @click="copyLink"
-              >{{showLinkCopiedText ? 'Copied!' : 'Copy link'}}</button>
+                title="Copied!"
+                @click="shareSmall"
+              >Share</button>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="learnModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content bg-dark text-white border-primary">
+          <div class="modal-body py-5 px-5">
+            <p>The game begins by privately assigning each player a role and a team, either Good or Evil.</p>
+            <p>The goal of Good is to complete three quests and help Merlin to keep their identity hidden.</p>
+            <p>The goal of Evil is to disrupt the flow of the game.</p>
+            <p>There are five quests to complete. Each quest has a nominated player that acts as the quest's leader. The quest leader proposes a team to head out on the quest.</p>
+            <p>All players then vote to 'Approve' or 'Reject' the team proposal. This is a majority vote.</p>
+            <p>If the proposal is not accepted the quest restarts with a new quest leader.</p>
+            <p>The quest will begin once a proposal is accepted. Players on the quest will then vote on how they would like the quest to turn out.</p>
+            <p>Good team members may only choose 'Success' as the outcome.</p>
+            <p>Evil members may choose 'Success' or 'Sabotage' as the outcome.</p>
+            <p>The quest is a 'Success' if all players vote 'Success'.</p>
+            <p>The quest is a 'Fail' if one or more players vote 'Sabotage'.</p>
+            <p>The next quest starts with a new quest leader after the current quest leader shares the result of the quest.</p>
+            <p>After three successful quests Evil team members are exposed and the Assassin will have an opportunity to identify Merlin.</p>
+            <p>Good will take the win if the Assassin does not manage to identify Merlin.</p>
+            <p>Evil will take the win if the Assassin manages to identify Merlin.</p>
+            <p>Evil will take the win if they sabotage three quests.</p>
+            <p>Evil will take the win if players reject five team proposals for the same quest.</p>
+            <p>Don't worry if this is your first time playing. Instruction and explanation is provided as you play.</p>
+          </div>
+          <div class="modal-footer bg-primary border-primary">
+            <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
@@ -134,57 +182,71 @@
 <script>
 import ReadyButton from "@/components/common/ReadyButton.vue";
 import PlayerReadyBar from "@/components/common/PlayerReadyBar.vue";
+import $ from "jquery";
 
 export default {
   name: "Lobby",
   components: { ReadyButton, PlayerReadyBar },
   props: {
+    minPlayers: Number,
     socket: Object,
     room: Object,
     players: Array,
     isPlayerReady: Boolean
   },
-  data: function() {
-    return {
-      name: "",
-      showRules: false,
-      minPlayers: 5,
-      maxPlayers: 10,
-      currentMemberCount: 0,
-      readyClasses: "card bg-success text-white",
-      showLinkCopiedText: false
-    };
+  created() {
+    $(function() {
+      $('[data-toggle="tooltip"]').tooltip();
+      $(".btn-copy-link").tooltip("disable");
+      $(".btn-copy-link-sm").tooltip("disable");
+    });
   },
   computed: {
-    isRoomOwner: function() {
+    isRoomOwner() {
       return this.room && this.socket.id == this.room.ownerId;
     },
-    playersStillNeeded: function() {
+    playersStillNeeded() {
       return this.players.length >= this.minPlayers
         ? 0
         : this.minPlayers - this.players.length;
     }
   },
   methods: {
-    copyLink: function() {
+    share() {
       navigator.clipboard.writeText(window.location.href);
-      this.showLinkCopiedText = true;
-      setTimeout(() => (this.showLinkCopiedText = false), 400);
+      $(".btn-copy-link").tooltip("enable");
+      $(".btn-copy-link").tooltip("show");
+      setTimeout(() => {
+        $(".btn-copy-link").tooltip("hide");
+        $(".btn-copy-link").tooltip("disable");
+        $(".btn-copy-link").trigger("blur");
+      }, 400);
     },
-    percivalEnabled: function(enabled) {
+    shareSmall() {
+      navigator.clipboard.writeText(window.location.href);
+      $(".btn-copy-link-sm").tooltip("enable");
+      $(".btn-copy-link-sm").tooltip("show");
+      setTimeout(() => {
+        $(".btn-copy-link-sm").tooltip("hide");
+        $(".btn-copy-link-sm").tooltip("disable");
+        $(".btn-copy-link-sm").trigger("blur");
+      }, 400);
+    },
+    percivalEnabled(enabled) {
       this.$emit("percival-enabled", enabled);
     },
-    morganaEnabled: function(enabled) {
+    morganaEnabled(enabled) {
       this.$emit("morgana-enabled", enabled);
     },
-    oberonEnabled: function(enabled) {
+    oberonEnabled(enabled) {
       this.$emit("oberon-enabled", enabled);
     }
   }
 };
 </script>
 <style scoped>
-.btn:disabled {
+.btn-info:disabled,
+.btn-danger:disabled {
   opacity: 1;
 }
 </style>
