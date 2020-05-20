@@ -23,7 +23,7 @@
                 <button
                   v-on:click="percivalEnabled(!room.game.settings.percivalEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.percivalEnabled ? 'btn-info' : 'btn-outline-dark text-white'), (room && room.game.settings.percivalEnabled ? 'border-info' : 'border')]"
+                  v-bind:class="['btn border-secondary btn-block text-white', (room && room.game.settings.percivalEnabled ? 'btn-info border-info' : '')]"
                   :disabled="!isRoomOwner"
                 >
                   Percival
@@ -34,7 +34,7 @@
                 <button
                   v-on:click="morganaEnabled(!room.game.settings.morganaEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.morganaEnabled ? 'btn-danger' : 'btn-outline-dark text-white'), (room && room.game.settings.morganaEnabled ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn border-secondary btn-block text-white', (room && room.game.settings.morganaEnabled ? 'btn-danger border-danger' : '')]"
                   :disabled="!isRoomOwner || (room.game.settings.oberonEnabled && players.length < 7)"
                 >
                   Morgana
@@ -45,7 +45,7 @@
                 <button
                   v-on:click="oberonEnabled(!room.game.settings.oberonEnabled)"
                   type="button"
-                  v-bind:class="['btn', 'border-secondary', 'btn-block', (room && room.game.settings.oberonEnabled ? 'btn-danger' : 'btn-outline-dark text-white'), (room && room.game.settings.oberonEnabled ? 'border-danger' : 'border')]"
+                  v-bind:class="['btn border-secondary btn-block text-white', (room && room.game.settings.oberonEnabled ? 'btn-danger border-danger' : '')]"
                   :disabled="!isRoomOwner || (room.game.settings.morganaEnabled && players.length < 7)"
                 >
                   Oberon
@@ -72,7 +72,7 @@
           <div class="card-body py-5">
             <p
               class="card-text"
-            >Instruction and explanation will be provided as you play through The Resistance: Avalon.</p>
+            >Instructions and explanations are provided to you during the game.</p>
             <p
               class="card-text"
             >The next screen will reveal which team you are in and which role you will play.</p>
@@ -151,11 +151,11 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content bg-dark text-white border-primary">
           <div class="modal-body py-5 px-5">
-            <p>The game begins by privately assigning each player a role and a team, either Good or Evil.</p>
+            <p>The game begins by assigning each player a role and a team, either Good or Evil.</p>
             <p>The goal of Good is to complete three quests and help Merlin to keep their identity hidden.</p>
             <p>The goal of Evil is to disrupt the flow of the game.</p>
             <p>There are five quests to complete. Each quest has a nominated player that acts as the quest's leader. The quest leader proposes a team to head out on the quest.</p>
-            <p>All players then vote to 'Approve' or 'Reject' the team proposal. This is a majority vote.</p>
+            <p>All players vote to 'Approve' or 'Reject' the team proposal. This is a majority vote.</p>
             <p>If the proposal is not accepted the quest restarts with a new quest leader.</p>
             <p>The quest will begin once a proposal is accepted. Players on the quest will then vote on how they would like the quest to turn out.</p>
             <p>Good team members may only choose 'Success' as the outcome.</p>
@@ -163,12 +163,12 @@
             <p>The quest is a 'Success' if all players vote 'Success'.</p>
             <p>The quest is a 'Fail' if one or more players vote 'Sabotage'.</p>
             <p>The next quest starts with a new quest leader after the current quest leader shares the result of the quest.</p>
-            <p>After three successful quests Evil team members are exposed and the Assassin will have an opportunity to identify Merlin.</p>
+            <p>After three successful quests, Evil team members are exposed and the Assassin will have an opportunity to identify Merlin.</p>
             <p>Good will take the win if the Assassin does not manage to identify Merlin.</p>
             <p>Evil will take the win if the Assassin manages to identify Merlin.</p>
             <p>Evil will take the win if they sabotage three quests.</p>
             <p>Evil will take the win if players reject five team proposals for the same quest.</p>
-            <p>Don't worry if this is your first time playing. Instruction and explanation is provided as you play.</p>
+            <p>Don't worry if this is your first time playing. Instructions and explanations are provided as you play.</p>
           </div>
           <div class="modal-footer bg-primary border-primary">
             <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Close</button>
