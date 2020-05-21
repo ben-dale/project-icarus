@@ -49,7 +49,6 @@ test('start', () => {
   });
 });
 
-
 test('start with two sabotage votes', () => {
   // Given
   const avalon = new Avalon().init();

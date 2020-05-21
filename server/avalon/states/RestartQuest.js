@@ -1,5 +1,3 @@
-const AvalonRules = require('../models/AvalonRules');
-
 class RestartQuest {
   constructor(avalon) {
     this.avalon = avalon;
@@ -14,16 +12,13 @@ class RestartQuest {
     const indexOfCurrentQuestLog = this.avalon.questLogs.map(ql => ql.id).indexOf(this.avalon.currentQuest.id);
 
     this.avalon.questLogs[indexOfCurrentQuestLog].organiserId = nextOrganiser.id;
-    const avalonRules = new AvalonRules(allPlayers.players.length);
-    this.avalon.currentQuest = this.avalon.currentQuest.restartQuest(nextOrganiser.id, avalonRules.numberOfPlayersRequiredForQuest(this.avalon.currentQuest.id - 1));
+    this.avalon.currentQuest = this.avalon.currentQuest.restartQuest(nextOrganiser.id);
     if (this.avalon.currentQuest.disagreements >= 5) {
       this.avalon.screen = 'GAME';
       this.avalon.state = 'GAME_OVER';
       this.avalon.result = 'EVIL';
     }
-    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
+    allPlayers.resetReadyStatuses().resetVotes().storeInRedis(redisClient).emitToAll(io, roomId);
   }
 }
 

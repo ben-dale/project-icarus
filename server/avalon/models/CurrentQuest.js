@@ -78,12 +78,6 @@ class CurrentQuest {
     return copy;
   }
 
-  withDisagreementCount(disagreements) {
-    const copy = this.copy();
-    copy.disagreements = disagreements;
-    return copy;
-  }
-
   withProposedPlayerId(playerId) {
     const copy = this.copy();
     copy.proposedPlayerIds.push(playerId);
@@ -141,10 +135,10 @@ class CurrentQuest {
     return copy;
   }
 
-  restartQuest(organiserId, requiredPlayers) {
+  restartQuest(organiserId) {
     const copy = this.copy();
     copy.organiserId = organiserId;
-    copy.requiredPlayers = requiredPlayers;
+    copy.requiredPlayers = this.requiredPlayers;
     copy.votes = [];
     copy.result = '';
     copy.proposedPlayerIds = [];
