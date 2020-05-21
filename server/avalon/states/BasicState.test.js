@@ -1,4 +1,4 @@
-const QuestProposing = require('./QuestProposing');
+const BasicState = require('./BasicState');
 const Avalon = require('../Avalon');
 const Player = require('../../common/models/Player');
 const AllPlayers = require('../../common/models/AllPlayers');
@@ -20,7 +20,7 @@ test('start', () => {
   const redisClient = new MockRedisClient();
 
   // When
-  new QuestProposing(avalon).start(redisClient, io, allPlayers, roomId);
+  new BasicState(avalon).start(redisClient, io, allPlayers, roomId, 'GAME', 'QUEST_PROPOSING');
 
   // Then
   expect(avalon.screen).toBe('GAME');

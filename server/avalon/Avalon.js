@@ -6,9 +6,7 @@ const QuestResultReveal = require('./states/QuestResultReveal');
 const NextQuest = require('./states/NextQuest');
 const RestartQuest = require('./states/RestartQuest');
 const ProposalResult = require('./states/ProposalResult');
-const ProposalVote = require('./states/ProposalVote');
-const QuestProposing = require('./states/QuestProposing');
-const QuestStarting = require('./states/QuestStarting');
+const BasicState = require('./states/BasicState');
 
 class Avalon {
 
@@ -62,18 +60,16 @@ class Avalon {
       new RoleReveal(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'ROLE_REVEAL') {
       console.log('starting game...');
-      new QuestProposing(this).start(redisClient, io, allPlayers, roomId);
+      new BasicState(this).start(redisClient, io, allPlayers, roomId, 'GAME', 'QUEST_PROPOSING');
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSING' && this.currentQuest.proposedPlayerIds.length == this.currentQuest.requiredPlayers) {
-      // check that the proposal is valid (no duplicates, of length required and the player ids are players in the room)
-      // maybe this could be ProposalVote.canStart(blah)...
       console.log('starting proposal vote...');
-      return new ProposalVote(this).start(redisClient, io, allPlayers, roomId);
+      return new BasicState(this).start(redisClient, io, allPlayers, roomId, 'GAME', 'QUEST_PROPOSAL');
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL') {
       console.log('starting proposal result...');
       new ProposalResult(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && this.currentQuest.proposalAccepted) {
       console.log('starting quest...');
-      new QuestStarting(this).start(redisClient, io, allPlayers, roomId);
+      new BasicState(this).start(redisClient, io, allPlayers, roomId, 'GAME', 'QUEST_STARTED');
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && !this.currentQuest.proposalAccepted) {
       console.log('restarting quest...');
       new RestartQuest(this).start(redisClient, io, allPlayers, roomId);
