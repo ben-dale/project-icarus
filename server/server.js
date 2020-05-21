@@ -29,6 +29,7 @@ redisClient.on('connect', () => { console.log('Redis client connected') });
 
 // Manage socket connections
 io.on('connection', (socket) => {
+  console.log(socket.id + ' connected');
   socket.on('connect-avalon', () => {
     console.log('player connected to avalon game...');
     new AvalonSocket().registerListeners(io, socket, redisClient);
