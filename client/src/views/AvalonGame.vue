@@ -131,7 +131,7 @@ export default {
         } else {
           socket = io.connect({ upgrade: false, transports: ["websocket"] });
         }
-
+        socket.emit('connect-avalon');
         return socket;
       }
     },

@@ -41,6 +41,7 @@ export default {
     socket.on("avalon-created", roomId => {
       this.$router.replace({ name: `AvalonGame`, params: { socket, roomId } });
     });
+    socket.emit("connect-avalon");
     return { socket };
   }
 };
