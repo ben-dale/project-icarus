@@ -1,8 +1,8 @@
 <template>
-  <div class="col-md-12 col-lg-6 offset-lg-3">
+  <div class="col-md-12 col-lg-4 offset-lg-4">
     <div class="row">
       <div class="col-12">
-        <div class="input-group input-group-lg">
+        <div class="input-group">
           <input
             v-model="name"
             type="text"
@@ -29,8 +29,7 @@
 
 <script>
 export default {
-  //TODO rename to text input
-  name: "NameInput",
+  name: "TextInput",
   props: {
     buttonText: String,
     placeHolder: String,

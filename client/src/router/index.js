@@ -12,11 +12,6 @@ const routes = [
     component: Home
   },
   {
-    path: '/avalon',
-    name: 'Avalon',
-    component: () => import('../views/Avalon.vue')
-  },
-  {
     path: '/avalon/:roomId',
     name: 'AvalonGame',
     component: () => import('../views/AvalonGame.vue'),

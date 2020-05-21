@@ -8,8 +8,8 @@
         class="card-subtitle"
       >{{minPlayers}} - {{maxPlayers}} players, {{teams}} teams</p>
     </div>
-    <div v-if="linkTo" class="card-footer bg-primary">
-      <router-link v-if="linkTo" :to="linkTo" class="btn btn-sm btn-secondary btn-block">Play</router-link>
+    <div class="card-footer bg-primary">
+      <button class="btn btn-sm btn-secondary btn-block" @click="$emit('play')">Start</button>
     </div>
   </div>
 </template>
@@ -23,7 +23,6 @@ export default {
     minPlayers: Number,
     maxPlayers: Number,
     teams: Number,
-    linkTo: String,
     image: String
   }
 };

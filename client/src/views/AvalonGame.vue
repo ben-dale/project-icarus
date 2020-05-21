@@ -4,13 +4,31 @@
       v-if="room && room.game && !room.game.closed && !room.playerIds.includes(socket.id)"
       class="row"
     >
-      <NameInput buttonText="Join lobby" @submit="joinSession" :placeHolder="'Name'" :length="8" />
+      <div class="col-12">
+        <div class="row mb-3">
+          <div class="col-12 col-lg-8 offset-lg-2 text-center">
+            <h5 class="text-light">Enter your name</h5>
+          </div>
+        </div>
+        <div class="row">
+          <TextInput buttonText="Join" @submit="joinSession" :placeHolder="'Name'" :length="8" />
+        </div>
+      </div>
     </div>
     <div
       v-if="room && room.game && room.game.closed && !room.playerIds.includes(socket.id) && room.disconnectedPlayerIds.length > 0"
       class="row"
     >
-      <NameInput buttonText="Rejoin game" @submit="rejoinSession" :placeHolder="'Code'" />
+      <div class="col-12">
+        <div class="row mb-3">
+          <div class="col-12 col-lg-8 offset-lg-2 text-center">
+            <h5 class="text-light">Enter your code</h5>
+          </div>
+        </div>
+        <div class="row">
+          <TextInput buttonText="Rejoin" @submit="rejoinSession" :placeHolder="'Code'" />
+        </div>
+      </div>
     </div>
     <div
       v-if="room && room.game && room.game.closed && !room.playerIds.includes(socket.id) && room.disconnectedPlayerIds.length == 0"
@@ -110,14 +128,14 @@
 <script>
 import io from "socket.io-client";
 import RoomClosed from "@/components/common/RoomClosed.vue";
-import NameInput from "@/components/common/NameInput.vue";
+import TextInput from "@/components/common/TextInput.vue";
 import Lobby from "@/components/common/Lobby.vue";
 import RoleReveal from "@/components/avalon/RoleReveal.vue";
 import Game from "@/components/avalon/Game.vue";
 
 export default {
   name: "AvalonGame",
-  components: { NameInput, Lobby, RoleReveal, Game, RoomClosed },
+  components: { TextInput, Lobby, RoleReveal, Game, RoomClosed },
   props: {
     socket: {
       type: Object,
@@ -131,7 +149,7 @@ export default {
         } else {
           socket = io.connect({ upgrade: false, transports: ["websocket"] });
         }
-        socket.emit('connect-avalon');
+        socket.emit("connect-avalon");
         return socket;
       }
     },
