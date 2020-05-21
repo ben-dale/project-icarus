@@ -14,11 +14,11 @@ test('start with rejected proposal', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId).withProposalApproved(false),
-    new Player().init('2', 'player2', roomId).withProposalApproved(false),
-    new Player().init('3', 'player3', roomId).withProposalApproved(false),
-    new Player().init('4', 'player4', roomId).withProposalApproved(false),
-    new Player().init('5', 'player5', roomId).withProposalApproved(false)
+    new Player().init('1', 'player1', roomId).withReady(true).withProposalApproved(false),
+    new Player().init('2', 'player2', roomId).withReady(true).withProposalApproved(false),
+    new Player().init('3', 'player3', roomId).withReady(true).withProposalApproved(false),
+    new Player().init('4', 'player4', roomId).withReady(true).withProposalApproved(false),
+    new Player().init('5', 'player5', roomId).withReady(true).withProposalApproved(false)
   ];
   const allPlayers = new AllPlayers().init(players);
 
@@ -36,7 +36,7 @@ test('start with rejected proposal', () => {
 
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
-  
+
   redisClient.setValueHistory.forEach(v => {
     const player = new Player().fromRawObject(JSON.parse(v));
     expect(player.ready).toBe(false);
@@ -53,11 +53,11 @@ test('start with approved proposal', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId).withProposalApproved(true),
-    new Player().init('2', 'player2', roomId).withProposalApproved(true),
-    new Player().init('3', 'player3', roomId).withProposalApproved(true),
-    new Player().init('4', 'player4', roomId).withProposalApproved(false),
-    new Player().init('5', 'player5', roomId).withProposalApproved(false)
+    new Player().init('1', 'player1', roomId).withReady(true).withProposalApproved(true),
+    new Player().init('2', 'player2', roomId).withReady(true).withProposalApproved(true),
+    new Player().init('3', 'player3', roomId).withReady(true).withProposalApproved(true),
+    new Player().init('4', 'player4', roomId).withReady(true).withProposalApproved(false),
+    new Player().init('5', 'player5', roomId).withReady(true).withProposalApproved(false)
   ];
   const allPlayers = new AllPlayers().init(players);
 
@@ -76,7 +76,7 @@ test('start with approved proposal', () => {
 
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
-  
+
   redisClient.setValueHistory.forEach(v => {
     const player = new Player().fromRawObject(JSON.parse(v));
     expect(player.ready).toBe(false);

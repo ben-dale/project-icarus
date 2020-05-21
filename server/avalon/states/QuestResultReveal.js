@@ -7,18 +7,16 @@ class QuestResultReveal {
     this.avalon.screen = 'GAME';
     this.avalon.state = 'QUEST_RESULT_REVEAL';
 
-    allPlayers.players.filter(p => p.vote == 'SABOTAGE').forEach(p => {
+    allPlayers.filter(p => p.vote == 'SABOTAGE').forEach(_ => {
       this.avalon.currentQuest = this.avalon.currentQuest.withSabotageVote();
     });
-    allPlayers.players.filter(p => p.vote == 'SUCCEED').forEach(p => {
+    allPlayers.filter(p => p.vote == 'SUCCEED').forEach(_ => {
       this.avalon.currentQuest = this.avalon.currentQuest.withSucceedVote();
     });
 
     this.avalon.currentQuest = this.avalon.currentQuest.shuffleVotes();
 
-    const updatedAllPlayers = allPlayers.resetReadyStatuses().resetVotes();
-    updatedAllPlayers.storeInRedis(redisClient);
-    updatedAllPlayers.emitToAll(io, roomId);
+    allPlayers.resetReadyStatuses().resetVotes().storeInRedis(redisClient).emitToAll(io, roomId);
   }
 }
 
