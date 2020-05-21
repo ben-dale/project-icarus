@@ -5,7 +5,7 @@ const AllPlayers = require('../../common/models/AllPlayers');
 const MockIo = require('../../mocks/MockIo');
 const MockRedisClient = require('../../mocks/MockRedisClient');
 
-test('start', () => {
+test('create BasicState, reset player statuses and emit', () => {
   // Given
   const avalon = new Avalon().init();
   const roomId = 'roomId';
@@ -20,7 +20,7 @@ test('start', () => {
   const redisClient = new MockRedisClient();
 
   // When
-  new BasicState(avalon).start(redisClient, io, allPlayers, roomId, 'GAME', 'QUEST_PROPOSING');
+  new BasicState(avalon, 'GAME', 'QUEST_PROPOSING').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
 
   // Then
   expect(avalon.screen).toBe('GAME');
@@ -28,4 +28,18 @@ test('start', () => {
   expect(redisClient.setKeyHistory.length).toBe(5);
   expect(redisClient.setValueHistory.length).toBe(5);
   expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
+});
+
+
+test('create BasicState with result', () => {
+  // Given
+  const avalon = new Avalon().init();
+
+  // When
+  new BasicState(avalon, 'GAME', 'GAME_OVER').withResult('EVIL');
+
+  // Then
+  expect(avalon.screen).toBe('GAME');
+  expect(avalon.state).toBe('GAME_OVER');
+  expect(avalon.result).toBe('EVIL');
 });

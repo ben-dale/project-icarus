@@ -55,43 +55,38 @@ class Avalon {
 
   // TODO remove mutation from this and have each block return new instance of Avalon
   next(redisClient, io, allPlayers, roomId) {
-    if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER')) && allPlayers.players.length >= this.minPlayers && allPlayers.players.length <= this.maxPlayers) {
+    if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER')) && this.enoughPlayersToStartGame(allPlayers)) {
       console.log('starting role reveal...');
       new RoleReveal(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'ROLE_REVEAL') {
       console.log('starting game...');
-      new BasicState(this).start(redisClient, io, allPlayers, roomId, 'GAME', 'QUEST_PROPOSING');
+      new BasicState(this, 'GAME', 'QUEST_PROPOSING').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSING' && this.currentQuest.proposedPlayerIds.length == this.currentQuest.requiredPlayers) {
       console.log('starting proposal vote...');
-      return new BasicState(this).start(redisClient, io, allPlayers, roomId, 'GAME', 'QUEST_PROPOSAL');
+      new BasicState(this, 'GAME', 'QUEST_PROPOSAL').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL') {
       console.log('starting proposal result...');
       new ProposalResult(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && this.currentQuest.proposalAccepted) {
       console.log('starting quest...');
-      new BasicState(this).start(redisClient, io, allPlayers, roomId, 'GAME', 'QUEST_STARTED');
+      new BasicState(this, 'GAME', 'QUEST_STARTED').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && !this.currentQuest.proposalAccepted) {
       console.log('restarting quest...');
       new RestartQuest(this).start(redisClient, io, allPlayers, roomId);
-    } else if (this.screen == 'GAME' && this.state == 'QUEST_STARTED' && allPlayers.players.filter(p => this.currentQuest.proposedPlayerIds.includes(p.id)).filter(p => p.vote != '').length == this.currentQuest.requiredPlayers) {
+    } else if (this.screen == 'GAME' && this.state == 'QUEST_STARTED' && this.allPlayersHaveVotedOnQuestResult(allPlayers)) {
       console.log('starting quest result reveal...');
       new QuestResultReveal(this).start(redisClient, io, allPlayers, roomId);
-    } else if (this.screen == 'GAME' && this.state == 'QUEST_RESULT_REVEAL' && this.currentQuest.votes.filter(v => v.revealed).length == this.currentQuest.votes.length) {
+    } else if (this.screen == 'GAME' && this.state == 'QUEST_RESULT_REVEAL' && this.allQuestVotesAreRevealed()) {
       console.log('starting next quest...');
       new NextQuest(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'GAME' && this.state == 'MERLIN_ID' && this.currentQuest.proposedPlayerIds.length == 1) {
+      console.log('starting game over...');
       if (allPlayers.players.find(p => p.role == 'MERLIN' && p.id == this.currentQuest.proposedPlayerIds[0])) {
-        this.screen = 'GAME';
-        this.state = 'GAME_OVER';
-        this.result = 'EVIL';
+        new BasicState(this, 'GAME', 'GAME_OVER').withResult('EVIL');
       } else {
-        this.screen = 'GAME';
-        this.state = 'GAME_OVER';
-        this.result = 'GOOD';
+        new BasicState(this, 'GAME', 'GAME_OVER').withResult('GOOD');
       }
-      const updatedAllPlayers = allPlayers.resetReadyStatuses();
-      updatedAllPlayers.storeInRedis(redisClient);
-      updatedAllPlayers.emitToAllWithTeamAndRole(io, roomId);
+      allPlayers.resetReadyStatuses().storeInRedis(redisClient).emitToAllWithTeamAndRole(io, roomId);
     }
   }
 
@@ -102,6 +97,18 @@ class Avalon {
       const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
       this.questLogs[indexOfCurrentQuestLog].result = this.currentQuest.result;
     }
+  }
+
+  enoughPlayersToStartGame(allPlayers) {
+    return allPlayers.count() >= this.minPlayers && allPlayers.count() <= this.maxPlayers;
+  }
+
+  allQuestVotesAreRevealed() {
+    return this.currentQuest.votes.filter(v => v.revealed).length == this.currentQuest.votes.length;
+  }
+
+  allPlayersHaveVotedOnQuestResult(allPlayers) {
+    return allPlayers.players.filter(p => this.currentQuest.proposedPlayerIds.includes(p.id)).filter(p => p.vote != '').length == this.currentQuest.requiredPlayers
   }
 
 }
