@@ -148,8 +148,6 @@ export default {
     team: String,
     role: String,
     settings: Object,
-    ready: Boolean,
-    socket: Object,
     metadata: Array,
     players: Array,
     isPlayerReady: Boolean

@@ -28,10 +28,7 @@ export default {
   name: "Waiting",
   components: { ReadyButton },
   props: {
-    questId: Number,
-    organiserName: String,
     lines: Array,
-    header: String,
     isPlayerReady: Boolean
   }
 };

@@ -7,7 +7,7 @@
             v-model="name"
             type="text"
             class="form-control"
-            :placeholder="placeHolder"
+            :placeholder="placeholder"
             aria-label="Name"
             aria-describedby="button-start"
             :maxlength="length"
@@ -32,7 +32,7 @@ export default {
   name: "TextInput",
   props: {
     buttonText: String,
-    placeHolder: String,
+    placeholder: String,
     length: {
       type: Number,
       default: 20

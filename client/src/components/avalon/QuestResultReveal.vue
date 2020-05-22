@@ -65,7 +65,6 @@ export default {
     playerIsOrganiser: Boolean,
     organiserName: String,
     results: Array,
-    questId: Number,
     questResult: String,
     isPlayerReady: Boolean
   },

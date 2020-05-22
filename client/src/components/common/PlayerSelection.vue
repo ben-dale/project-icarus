@@ -57,7 +57,6 @@ export default {
   name: "PlayerSelection",
   components: { ReadyButton },
   props: {
-    header: String,
     body: Array,
     players: Array,
     requiredPlayers: Number,

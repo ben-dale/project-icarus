@@ -11,7 +11,7 @@
           </div>
         </div>
         <div class="row">
-          <TextInput buttonText="Join" @submit="joinSession" :placeHolder="'Name'" :length="8" />
+          <TextInput buttonText="Join" @submit="joinSession" :placeholder="'Name'" :length="8" />
         </div>
       </div>
     </div>
@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="row">
-          <TextInput buttonText="Rejoin" @submit="rejoinSession" :placeHolder="'Code'" />
+          <TextInput buttonText="Rejoin" @submit="rejoinSession" :placeholder="'Code'" />
         </div>
       </div>
     </div>

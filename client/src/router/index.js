@@ -24,6 +24,16 @@ const routes = [
   }
 ]
 
+if (process.env.NODE_ENV == "development") {
+  routes.push(
+    {
+      path: '/components',
+      name: 'Components',
+      component: () => import ('../views/Components.vue')
+    }
+  )
+}
+
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,

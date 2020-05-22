@@ -61,7 +61,6 @@
 <script>
 export default {
   props: {
-    questId: Number,
     organiser: String,
     names: Array,
     isPlayerReady: Boolean

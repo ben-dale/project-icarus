@@ -76,7 +76,6 @@ export default {
   props: {
     isEvil: Boolean,
     names: Array,
-    questId: Number,
     isPlayerReady: Boolean
   },
   methods: {
