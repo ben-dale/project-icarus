@@ -114,9 +114,20 @@ test('emits all data to player', () => {
   expected.ready = false;
   expected.role = 'MERLIN';
   expected.team = 'GOOD';
-  expected.metadata = [ '444', '555' ];
+  expected.metadata = ['444', '555'];
 
   expect(io.toPlayerId).toBe('111');
   expect(io.message).toBe('player-assigned');
   expect(io.obj).toStrictEqual(expected);
+});
+
+test('reconnects player', () => {
+  const id = '111';
+  const newId = '222';
+  const player = new Player().init(id, 'Ben', '5t6y').withRole('MERLIN').withMetadata(['111', '666']);
+
+  const result = player.reconnect(id, newId);
+
+  expect(result.id).toBe('222');
+  expect(result.metadata).toStrictEqual(['222', '666']);
 });

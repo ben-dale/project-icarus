@@ -31,7 +31,7 @@ class AvalonSocket {
       new Room().getFromRedis(redisClient, player.roomId, (room) => {
         var updatedRoom = room.copy();
         if (updatedRoom.game.closed) {
-          updatedRoom = updatedRoom.withActiveDisconnectedPlayer(player.id);
+          updatedRoom = updatedRoom.disconnectActivePlayer(player.id);
         } else {
           updatedRoom = updatedRoom.disconnectPlayer(player.id);
         }

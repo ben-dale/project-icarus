@@ -42,12 +42,6 @@ class Player {
     redisClient.expire(this.id, 43200); // Expires after 12 hours
   }
 
-  withId(id) {
-    const copy = this.copy();
-    copy.id = id;
-    return copy;
-  }
-
   withReady(ready) {
     const copy = this.copy();
     copy.ready = ready;

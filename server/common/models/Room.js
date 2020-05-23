@@ -39,7 +39,7 @@ class Room {
     return copy;
   }
 
-  withActiveDisconnectedPlayer(playerId) {
+  disconnectActivePlayer(playerId) {
     const copy = this.copy();
     copy.disconnectedPlayerIds.push(playerId);
     return copy;
@@ -61,6 +61,8 @@ class Room {
     copy.ownerId = this.ownerId == oldPlayerId ? newPlayerId : this.ownerId;
     copy.playerIds = this.playerIds.map(pid => pid == oldPlayerId ? newPlayerId : pid);
     copy.disconnectedPlayerIds = this.disconnectedPlayerIds.filter(pid => pid != oldPlayerId);
+
+    // TODO move game modification parts into Avalon.js
     if (copy.game.currentQuest.organiserId == oldPlayerId) {
       copy.game.currentQuest.organiserId = newPlayerId;
     }
