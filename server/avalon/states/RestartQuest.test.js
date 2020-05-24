@@ -39,7 +39,6 @@ test('start', () => {
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
 
-
   expect(redisClient.keyCount()).toBe(5);
   new Player().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
   new Player().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });

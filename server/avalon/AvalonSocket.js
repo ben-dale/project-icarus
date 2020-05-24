@@ -50,13 +50,11 @@ class AvalonSocket {
     console.log(data);
     if (data && data.name && data.name.length > 0 && data.roomId) {
       new Room().getFromRedis(redisClient, data.roomId, (room) => {
-        const playerId = socket.id;
-
-        let player = new Player().init(playerId, data.name.substring(0, 8), data.roomId);
-        player.storeInRedis(redisClient);
-
         if (!room.game.closed) {
           console.log('player joined room ' + socket.id);
+          let player = new Player().init(socket.id, data.name.substring(0, 8), data.roomId);
+          player.storeInRedis(redisClient);
+          
           const updatedRoom = room.addPlayerId(socket.id);
           updatedRoom.storeInRedis(redisClient);
 

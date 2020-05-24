@@ -91,7 +91,7 @@ class Room {
 
   getFromRedis(redisClient, id, onSuccess, onError) {
     redisClient.get(id, (error, result) => {
-      if (error) {
+      if (error || !result) {
         onError();
       } else if (result) {
         onSuccess(new Room().fromRawObject(JSON.parse(result)));

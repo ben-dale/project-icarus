@@ -94,7 +94,7 @@ class Player {
   getFromRedis(redisClient, id, onSuccess, onError) {
     redisClient.get(id, (error, result) => {
       if (error || !result) {
-        onError(error, result);
+        onError();
       } else {
         onSuccess(new Player().fromRawObject(JSON.parse(result)));
       }
