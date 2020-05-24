@@ -25,8 +25,7 @@ test('create BasicState, reset player statuses and emit', () => {
   // Then
   expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('QUEST_PROPOSING');
-  expect(redisClient.setKeyHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.length).toBe(5);
+  expect(redisClient.keyCount()).toBe(5);
   expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
 });
 

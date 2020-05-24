@@ -57,17 +57,16 @@ test('start', () => {
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
 
-  expect(redisClient.setKeyHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(3);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(2);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(0);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(0);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(2);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MINION').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(0);
+  expect(redisClient.keyCount()).toBe(5);
+  expect(redisClient.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(3);
+  expect(redisClient.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(2);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(0);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(0);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(2);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MINION').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(0);
 });
 
 test('start with percival and morgana', () => {
@@ -125,17 +124,16 @@ test('start with percival and morgana', () => {
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
 
-  expect(redisClient.setKeyHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(3);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(2);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MINION').length).toBe(0);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(0);
+  expect(redisClient.keyCount()).toBe(5);
+  expect(redisClient.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(3);
+  expect(redisClient.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(2);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MINION').length).toBe(0);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(0);
 });
 
 
@@ -193,17 +191,16 @@ test('start with percival and oberon', () => {
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
 
-  expect(redisClient.setKeyHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(3);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(2);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(0);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MINION').length).toBe(0);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(1);
+  expect(redisClient.keyCount()).toBe(5);
+  expect(redisClient.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(3);
+  expect(redisClient.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(2);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(0);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MINION').length).toBe(0);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(1);
 });
 
 
@@ -257,15 +254,14 @@ test('start with percival, morgana and oberon', () => {
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
 
-  expect(redisClient.setKeyHistory.length).toBe(7);
-  expect(redisClient.setValueHistory.length).toBe(7);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(4);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(3);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(1);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(2);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'MINION').length).toBe(0);
-  expect(redisClient.setValueHistory.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(1);
+  expect(redisClient.keyCount()).toBe(7);
+  expect(redisClient.filter(p => JSON.parse(p).team == 'GOOD').length).toBe(4);
+  expect(redisClient.filter(p => JSON.parse(p).team == 'EVIL').length).toBe(3);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MERLIN').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'ASSASSIN').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'PERCIVAL').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MORGANA').length).toBe(1);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'GUARD').length).toBe(2);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'MINION').length).toBe(0);
+  expect(redisClient.filter(p => JSON.parse(p).role == 'OBERON').length).toBe(1);
 });

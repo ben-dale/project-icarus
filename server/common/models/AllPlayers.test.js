@@ -19,7 +19,8 @@ test('gets players from redis', () => {
   let playerIds = ['111', '222'];
 
   let redisClient = new MockRedisClient();
-  redisClient.resultToReturn(['{ "id": "111", "name": "Ben", "vote": "", "ready": false, "metadata": [] }', '{ "id": "222", "name": "Sam", "vote": "", "ready": false, "metadata": [] }']);
+  new Player().init('111', 'Ben').withReady(false).storeInRedis(redisClient);
+  new Player().init('222', 'Sam').withReady(false).storeInRedis(redisClient);
 
   new AllPlayers().getFromRedis(redisClient, playerIds, (allPlayers) => {
     expect(allPlayers.players.length).toBe(2);

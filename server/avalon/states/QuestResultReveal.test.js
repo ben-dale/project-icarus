@@ -36,17 +36,15 @@ test('start', () => {
   ])
 
   expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
-  expect(redisClient.setKeyHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.length).toBe(5);
-
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
 
-  redisClient.setValueHistory.forEach(v => {
-    const player = new Player().fromRawObject(JSON.parse(v));
-    expect(player.ready).toBe(false);
-    expect(player.vote).toBe('');
-  });
+  expect(redisClient.keyCount()).toBe(5);
+  new Player().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new Player().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new Player().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new Player().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new Player().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
 });
 
 test('start with two sabotage votes', () => {
@@ -75,15 +73,13 @@ test('start with two sabotage votes', () => {
   expect(avalon.currentQuest.votes.filter(v => v.choice == 'SUCCEED').length).toBe(3);
 
   expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
-  expect(redisClient.setKeyHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.length).toBe(5);
-
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
 
-  redisClient.setValueHistory.forEach(v => {
-    const player = new Player().fromRawObject(JSON.parse(v));
-    expect(player.ready).toBe(false);
-    expect(player.vote).toBe('');
-  });
+  expect(redisClient.keyCount()).toBe(5);
+  new Player().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new Player().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new Player().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new Player().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new Player().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
 });

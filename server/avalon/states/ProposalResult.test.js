@@ -31,16 +31,16 @@ test('start with rejected proposal', () => {
   expect(avalon.currentQuest.proposalAccepted).toBe(false);
 
   expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
-  expect(redisClient.setKeyHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.length).toBe(5);
 
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
 
-  redisClient.setValueHistory.forEach(v => {
-    const player = new Player().fromRawObject(JSON.parse(v));
-    expect(player.ready).toBe(false);
-  });
+  expect(redisClient.keyCount()).toBe(5);
+  new Player().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false) });
+  new Player().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false) });
+  new Player().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false) });
+  new Player().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false) });
+  new Player().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false) });
 });
 
 test('start with approved proposal', () => {
@@ -71,14 +71,15 @@ test('start with approved proposal', () => {
   expect(avalon.questLogs[0].playerIds).toStrictEqual(['4', '5']);
 
   expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
-  expect(redisClient.setKeyHistory.length).toBe(5);
-  expect(redisClient.setValueHistory.length).toBe(5);
+  expect(redisClient.keyCount()).toBe(5);
 
   expect(io.inId).toBe(roomId);
   expect(io.obj).toBeDefined();
 
-  redisClient.setValueHistory.forEach(v => {
-    const player = new Player().fromRawObject(JSON.parse(v));
-    expect(player.ready).toBe(false);
-  });
+  expect(redisClient.keyCount()).toBe(5);
+  new Player().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false) });
+  new Player().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false) });
+  new Player().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false) });
+  new Player().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false) });
+  new Player().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false) });
 });

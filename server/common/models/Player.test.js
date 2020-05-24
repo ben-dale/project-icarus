@@ -11,26 +11,17 @@ test('init creates new player', () => {
   expect(player.ready).toBe(false);
 });
 
-test('store in redis', () => {
+test('store and get from redis', () => {
   let redisClient = new MockRedisClient();
-  const player = new Player().init('2930e', 'Ben', '5t6y');
+  const player = new Player().init('playerId', 'Ben', '5t6y');
 
   player.storeInRedis(redisClient);
 
-  expect(redisClient.setKey).toBe('2930e');
-  expect(redisClient.setValue).toBe(JSON.stringify(player));
-  expect(redisClient.expireKey).toBe('2930e');
+  expect(new Player().getFromRedis(redisClient, 'playerId', (player) => {
+    expect(player.id).toBe('playerId');
+  }, () => {}));
+  expect(redisClient.expireKey).toBe('playerId');
   expect(redisClient.expireTime).toBe(43200);
-});
-
-test('get from redis', () => {
-  let result = '{"id": "2930e", "name": "Ben", "vote": "", "ready": false, "metadata": []}';
-  let redisClient = new MockRedisClient();
-  redisClient.resultToReturn(result);
-
-  new Player().getFromRedis(redisClient, '2930e', (result) => {
-    expect(result.id).toBe('2930e');
-  }, () => { });
 });
 
 test('emit to all', () => {

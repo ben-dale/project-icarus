@@ -3,29 +3,17 @@ const QuestLog = require('../../avalon/models/QuestLog');
 const MockRedisClient = require('../../mocks/MockRedisClient');
 const MockIo = require('../../mocks/MockIo')
 
-test('store in redis', () => {
+test('store and get from redis', () => {
   let redisClient = new MockRedisClient();
   let room = new Room().init('325t3');
 
   room.storeInRedis(redisClient, '325t3');
 
-  expect(redisClient.setKey).toBe('325t3');
-  expect(redisClient.setValue).toBe(JSON.stringify(room));
+  new Room().getFromRedis(redisClient, '325t3', (room) => {
+    expect(room.id).toBe('325t3');
+  }, () => { });
   expect(redisClient.expireKey).toBe('325t3');
   expect(redisClient.expireTime).toBe(43200);
-});
-
-test('get from redis', () => {
-  let result = '{"ownerId":"123","playerIds":[],"disconnectedPlayerIds":[],"game":{"closed":false,"screen":"LOBBY","state":"","currentQuest":{"id":1,"disagreements":0,"organiserId":"","proposedPlayerIds":[],"proposalAccepted":false,"votes":[],"result":""},"settings":{"morganaEnabled":false,"percivalEnabled":false,"oberonEnabled":false},"questLogs":[]}}'
-  let redisClient = new MockRedisClient();
-  redisClient.resultToReturn(result);
-
-  let room = new Room().init('123');
-
-  room.getFromRedis(redisClient, 'roomId', (result) => {
-    expect(result.ownerId).toBe('123');
-    expect(result.playerIds).toStrictEqual([]);
-  }, () => { });
 });
 
 test('add player id and sets owner id', () => {
