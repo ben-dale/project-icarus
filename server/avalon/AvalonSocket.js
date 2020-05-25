@@ -107,7 +107,6 @@ class AvalonSocket {
 
 
   roomUpdated(io, redisClient, socket, data) {
-    console.log(data);
     if (data) {
       new Player().getFromRedis(redisClient, socket.id, (player) => {
         new Room().getFromRedis(redisClient, player.roomId, (room) => {
