@@ -1,6 +1,6 @@
-const Room = require('../common/models/Room.js');
-const Player = require('../common/models/Player.js');
-const AllPlayers = require('../common/models/AllPlayers.js');
+const AvalonRoom = require('./models/AvalonRoom');
+const Player = require('../common/models/Player');
+const AllPlayers = require('../common/models/AllPlayers');
 const { v4: uuidv4 } = require('uuid');
 
 class AvalonSocket {
@@ -13,13 +13,13 @@ class AvalonSocket {
     socket.on('room-updated', (data) => this.roomUpdated(io, redisClient, socket, data));
     socket.on('init-avalon', () => {
       let roomId = uuidv4().split("-")[0];
-      let room = new Room().init(roomId);
+      let room = new AvalonRoom().init(roomId);
       room.storeInRedis(redisClient);
       socket.emit('avalon-created', roomId);
     });
     socket.on('get-room', (data) => {
       if (data && data.roomId) {
-        new Room().getFromRedis(redisClient, data.roomId, (room) => {
+        new AvalonRoom().getFromRedis(redisClient, data.roomId, (room) => {
           socket.emit('room-updated', room);
         }, () => { });
       }
@@ -28,7 +28,7 @@ class AvalonSocket {
 
   playerDisconnected(io, redisClient, socket) {
     new Player().getFromRedis(redisClient, socket.id, (player) => {
-      new Room().getFromRedis(redisClient, player.roomId, (room) => {
+      new AvalonRoom().getFromRedis(redisClient, player.roomId, (room) => {
         var updatedRoom = room.copy();
         if (updatedRoom.game.closed) {
           updatedRoom = updatedRoom.disconnectActivePlayer(player.id);
@@ -49,7 +49,7 @@ class AvalonSocket {
   playerJoined(io, redisClient, socket, data) {
     console.log(data);
     if (data && data.name && data.name.length > 0 && data.roomId) {
-      new Room().getFromRedis(redisClient, data.roomId, (room) => {
+      new AvalonRoom().getFromRedis(redisClient, data.roomId, (room) => {
         if (!room.game.closed) {
           console.log('player joined room ' + socket.id);
           let player = new Player().init(socket.id, data.name.substring(0, 8), data.roomId);
@@ -92,7 +92,7 @@ class AvalonSocket {
         updatedPlayer.storeInRedis(redisClient);
         updatedPlayer.emitToAll(io);
 
-        new Room().getFromRedis(redisClient, updatedPlayer.roomId, (room) => {
+        new AvalonRoom().getFromRedis(redisClient, updatedPlayer.roomId, (room) => {
           new AllPlayers().getFromRedis(redisClient, room.playerIds, (allPlayers) => {
             if (allPlayers.areReady() && room.hasEnoughPlayers()) { // Need to put in a condition to stop play if a player leaves
               room.game.next(redisClient, io, allPlayers, room.id); // This mutates the game instance which is grim
@@ -109,7 +109,7 @@ class AvalonSocket {
   roomUpdated(io, redisClient, socket, data) {
     if (data) {
       new Player().getFromRedis(redisClient, socket.id, (player) => {
-        new Room().getFromRedis(redisClient, player.roomId, (room) => {
+        new AvalonRoom().getFromRedis(redisClient, player.roomId, (room) => {
           let updatedRoom = room.copy();
           if (data.game && data.game.settings && data.game.settings.hasOwnProperty('percivalEnabled') && player.id == room.ownerId) {
             updatedRoom.game.settings = updatedRoom.game.settings.withPercivalEnabled(data.game.settings.percivalEnabled);
@@ -164,7 +164,7 @@ class AvalonSocket {
 
   playerRejoined(io, redisClient, socket, data) {
     if (data && data.name && data.name.length > 0 && data.roomId) {
-      new Room().getFromRedis(redisClient, data.roomId, (room) => {
+      new AvalonRoom().getFromRedis(redisClient, data.roomId, (room) => {
         new Player().getFromRedis(redisClient, data.name, (existingPlayer) => {
           const oldPlayerId = existingPlayer.id;
           const newPlayerId = socket.id;

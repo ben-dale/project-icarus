@@ -1,6 +1,6 @@
 const AvalonSocket = require('./AvalonSocket');
 const Player = require('../common/models/Player');
-const Room = require('../common/models/Room');
+const AvalonRoom = require('./models/AvalonRoom');
 const MockRedisClient = require('../mocks/MockRedisClient');
 const MockIo = require('../mocks/MockIo')
 
@@ -14,7 +14,7 @@ test('disconnect player from open game', () => {
   const player = new Player().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
-  const room = new Room().init('roomId');
+  const room = new AvalonRoom().init('roomId');
   room.storeInRedis(redisClient);
 
   // When
@@ -26,7 +26,7 @@ test('disconnect player from open game', () => {
   expect(io.inId).toBe('roomId');
   expect(io.obj).toBeDefined();
 
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.disconnectedPlayerIds).toStrictEqual([]);
   }, () => { });
 });
@@ -41,7 +41,7 @@ test('disconnect player from closed game', () => {
   const player = new Player().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
-  const room = new Room().init('roomId');
+  const room = new AvalonRoom().init('roomId');
   room.game.closed = true;
   room.storeInRedis(redisClient);
 
@@ -54,7 +54,7 @@ test('disconnect player from closed game', () => {
   expect(io.inId).toBe('roomId');
   expect(io.obj).toBeDefined();
 
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.disconnectedPlayerIds).toStrictEqual(['socketId']);
   }, () => { });
 });
@@ -68,7 +68,7 @@ test('adds player to room', () => {
 
   const data = { name: 'Ben', roomId: 'roomId' };
 
-  const room = new Room().init('roomId');
+  const room = new AvalonRoom().init('roomId');
   room.storeInRedis(redisClient);
 
   // When
@@ -81,7 +81,7 @@ test('adds player to room', () => {
     expect(player.roomId).toBe('roomId');
   }, () => { });
 
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.id).toBe('roomId');
     expect(room.playerIds).toStrictEqual(['socketId']);
   }, () => { });
@@ -102,7 +102,7 @@ test('does not add player to room', () => {
 
   const data = { name: 'Ben', roomId: 'roomId' };
 
-  const room = new Room().init('roomId');
+  const room = new AvalonRoom().init('roomId');
   room.game.closed = true;
   room.storeInRedis(redisClient);
 
@@ -115,7 +115,7 @@ test('does not add player to room', () => {
     expect(true).toBe(false);
   }, () => { });
 
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.id).toBe('roomId');
     expect(room.playerIds).toStrictEqual([]);
   }, () => { });
@@ -134,7 +134,7 @@ test('update player with ready status', () => {
   const player = new Player().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
-  const room = new Room().init('roomId');
+  const room = new AvalonRoom().init('roomId');
   room.game.closed = true;
   room.storeInRedis(redisClient);
 
@@ -162,7 +162,7 @@ test('update player with proposal approval vote', () => {
   const player = new Player().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
-  const room = new Room().init('roomId');
+  const room = new AvalonRoom().init('roomId');
   room.game.closed = true;
   room.storeInRedis(redisClient);
 
@@ -190,7 +190,7 @@ test('update player with proposal approval vote', () => {
   const player = new Player().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
-  const room = new Room().init('roomId');
+  const room = new AvalonRoom().init('roomId');
   room.game.closed = true;
   room.storeInRedis(redisClient);
 
@@ -221,7 +221,7 @@ test('start next section of game', () => {
   new Player().init('4', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
   new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
-  const room = new Room().init('roomId').addPlayerId('socketId').addPlayerId('1').addPlayerId('2').addPlayerId('3').addPlayerId('4');
+  const room = new AvalonRoom().init('roomId').addPlayerId('socketId').addPlayerId('1').addPlayerId('2').addPlayerId('3').addPlayerId('4');
   room.game.closed = true;
   room.storeInRedis(redisClient);
 
@@ -246,14 +246,14 @@ test('enable roles', () => {
 
   new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
-  const room = new Room().init('roomId').addPlayerId('socketId');
+  const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.storeInRedis(redisClient);
 
   // When
   avalonSocket.roomUpdated(io, redisClient, socket, data);
 
   // Then
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.game.settings.percivalEnabled).toBe(true);
     expect(room.game.settings.morganaEnabled).toBe(true);
     expect(room.game.settings.oberonEnabled).toBe(true);
@@ -272,7 +272,7 @@ test('proposes player id', () => {
 
   new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
-  const room = new Room().init('roomId').addPlayerId('socketId');
+  const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest.organiserId = 'socketId';
   room.game.currentQuest.requiredPlayers = 3;
   room.storeInRedis(redisClient);
@@ -281,7 +281,7 @@ test('proposes player id', () => {
   avalonSocket.roomUpdated(io, redisClient, socket, data);
 
   // Then
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.game.currentQuest.proposedPlayerIds).toStrictEqual(['socketId']);
   }, () => { });
 
@@ -299,7 +299,7 @@ test('unproposes player id', () => {
 
   new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
-  const room = new Room().init('roomId').addPlayerId('socketId');
+  const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest.proposedPlayerIds = ['socketId']
   room.game.currentQuest.organiserId = 'socketId';
   room.game.currentQuest.requiredPlayers = 3;
@@ -309,7 +309,7 @@ test('unproposes player id', () => {
   avalonSocket.roomUpdated(io, redisClient, socket, data);
 
   // Then
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.game.currentQuest.proposedPlayerIds).toStrictEqual([]);
   }, () => { });
 
@@ -326,7 +326,7 @@ test('proposes merlin id', () => {
 
   new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
-  const room = new Room().init('roomId').addPlayerId('socketId');
+  const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest.proposedPlayerIds = [];
   room.game.currentQuest.requiredPlayers = 1;
   room.storeInRedis(redisClient);
@@ -335,7 +335,7 @@ test('proposes merlin id', () => {
   avalonSocket.roomUpdated(io, redisClient, socket, data);
 
   // Then
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.game.currentQuest.proposedPlayerIds).toStrictEqual(['socketId']);
   }, () => { });
 
@@ -352,7 +352,7 @@ test('unproposes merlin id', () => {
 
   new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
-  const room = new Room().init('roomId').addPlayerId('socketId');
+  const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest.proposedPlayerIds = ['socketId'];
   room.game.currentQuest.requiredPlayers = 1;
   room.storeInRedis(redisClient);
@@ -361,7 +361,7 @@ test('unproposes merlin id', () => {
   avalonSocket.roomUpdated(io, redisClient, socket, data);
 
   // Then
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.game.currentQuest.proposedPlayerIds).toStrictEqual([]);
   }, () => { });
 
@@ -378,7 +378,7 @@ test('reveals quest vote', () => {
 
   new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
-  const room = new Room().init('roomId').addPlayerId('socketId');
+  const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest = room.game.currentQuest.withSucceedVote().withSucceedVote().withSucceedVote();
   room.game.currentQuest.organiserId = 'socketId';
   room.storeInRedis(redisClient);
@@ -387,7 +387,7 @@ test('reveals quest vote', () => {
   avalonSocket.roomUpdated(io, redisClient, socket, data);
 
   // Then
-  new Room().getFromRedis(redisClient, 'roomId', (room) => {
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => {
     expect(room.game.currentQuest.votes[1].revealed).toBe(true);
   }, () => { });
 
