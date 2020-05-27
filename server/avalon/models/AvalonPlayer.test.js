@@ -1,9 +1,9 @@
-const Player = require('./Player');
+const AvalonPlayer = require('./AvalonPlayer');
 const MockRedisClient = require('../../mocks/MockRedisClient');
 const MockIo = require('../../mocks/MockIo')
 
 test('init creates new player', () => {
-  const player = new Player().init('2930e', 'ben', '5t6y');
+  const player = new AvalonPlayer().init('2930e', 'ben', '5t6y');
 
   expect(player.id).toBe('2930e');
   expect(player.name).toBe('Ben');
@@ -13,24 +13,24 @@ test('init creates new player', () => {
 
 test('store and get from redis', () => {
   let redisClient = new MockRedisClient();
-  const player = new Player().init('playerId', 'Ben', '5t6y');
+  const player = new AvalonPlayer().init('playerId', 'Ben', '5t6y');
 
   player.storeInRedis(redisClient);
 
-  expect(new Player().getFromRedis(redisClient, 'playerId', (player) => {
+  expect(new AvalonPlayer().getFromRedis(redisClient, 'playerId', (player) => {
     expect(player.id).toBe('playerId');
-  }, () => {}));
+  }, () => { }));
   expect(redisClient.expireKey).toBe('playerId');
   expect(redisClient.expireTime).toBe(43200);
 });
 
 test('emit to all', () => {
-  const player = new Player().init('111', 'Ben', '5t6y');
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y');
   const io = new MockIo();
 
   player.emitToAll(io)
 
-  const expected = new Player();
+  const expected = new AvalonPlayer();
   expected.id = '111';
   expected.name = 'Ben';
   expected.ready = false;
@@ -39,67 +39,65 @@ test('emit to all', () => {
 });
 
 test('sets team', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withTeam('GOOD');
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withTeam('GOOD');
   expect(player.team).toBe('GOOD')
 });
 
-
 test('sets vote to proposal approved value', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withProposalApproved(true);
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withProposalApproved(true);
 
   expect(player.vote).toBe('APPROVE');
 });
 
-
 test('sets vote to proposal rejected value', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withProposalApproved(false);
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withProposalApproved(false);
 
   expect(player.vote).toBe('REJECT');
 })
 
 test('clears vote', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withProposalApproved(true).clearVote();
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withProposalApproved(true).clearVote();
 
   expect(player.vote).toBe('');
 });
 
 test('sets vote to succeed quest for good player', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withTeam('GOOD').withSucceedQuest(true);
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withTeam('GOOD').withSucceedQuest(true);
 
   expect(player.vote).toBe('SUCCEED');
 });
 
 test('sets vote to succeed quest for evil player', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withTeam('EVIL').withSucceedQuest(true);
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withTeam('EVIL').withSucceedQuest(true);
 
   expect(player.vote).toBe('SUCCEED');
 });
 
 test('does not set vote to sabotage quest for good player', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withTeam('GOOD').withSucceedQuest(false);
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withTeam('GOOD').withSucceedQuest(false);
 
   expect(player.vote).toBe('SUCCEED');
 });
 
 test('sets vote to sabotage quest for evil player', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withTeam('EVIL').withSucceedQuest(false);
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withTeam('EVIL').withSucceedQuest(false);
 
   expect(player.vote).toBe('SABOTAGE');
 });
 
 
 test('sets role', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withRole('MERLIN');
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withRole('MERLIN');
   expect(player.role).toBe('MERLIN')
 });
 
 test('emits all data to player', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withMetadata(['444', '555']).withRole('MERLIN').withTeam('GOOD');
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withMetadata(['444', '555']).withRole('MERLIN').withTeam('GOOD');
   const io = new MockIo();
 
   player.emitToPlayer(io, ['444', '555']);
 
-  const expected = new Player();
+  const expected = new AvalonPlayer();
   expected.id = '111';
   expected.name = 'Ben';
   expected.ready = false;
@@ -115,7 +113,7 @@ test('emits all data to player', () => {
 test('reconnects player', () => {
   const id = '111';
   const newId = '222';
-  const player = new Player().init(id, 'Ben', '5t6y').withRole('MERLIN').withMetadata(['111', '666']);
+  const player = new AvalonPlayer().init(id, 'Ben', '5t6y').withRole('MERLIN').withMetadata(['111', '666']);
 
   const result = player.reconnect(id, newId);
 

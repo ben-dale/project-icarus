@@ -1,6 +1,6 @@
 const BasicState = require('./BasicState');
 const Avalon = require('../Avalon');
-const Player = require('../../common/models/Player');
+const AvalonPlayer = require('../../avalon/models/AvalonPlayer');
 const AllPlayers = require('../../common/models/AllPlayers');
 const MockIo = require('../../mocks/MockIo');
 const MockRedisClient = require('../../mocks/MockRedisClient');
@@ -10,11 +10,11 @@ test('create BasicState, reset player statuses and emit', () => {
   const avalon = new Avalon().init();
   const roomId = 'roomId';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();

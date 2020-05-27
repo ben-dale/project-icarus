@@ -1,6 +1,6 @@
 const QuestResultReveal = require('./QuestResultReveal');
 const Avalon = require('../Avalon');
-const Player = require('../../common/models/Player');
+const AvalonPlayer = require('../models/AvalonPlayer');
 const AllPlayers = require('../../common/models/AllPlayers');
 const MockIo = require('../../mocks/MockIo');
 const MockRedisClient = require('../../mocks/MockRedisClient');
@@ -13,11 +13,11 @@ test('start', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId).withReady(true).withSucceedQuest(true),
-    new Player().init('2', 'player2', roomId).withReady(true).withSucceedQuest(true),
-    new Player().init('3', 'player3', roomId).withReady(true).withSucceedQuest(true),
-    new Player().init('4', 'player4', roomId).withReady(true).withSucceedQuest(true),
-    new Player().init('5', 'player5', roomId).withReady(true).withSucceedQuest(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withReady(true).withSucceedQuest(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withReady(true).withSucceedQuest(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withReady(true).withSucceedQuest(true),
+    new AvalonPlayer().init('4', 'player4', roomId).withReady(true).withSucceedQuest(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withReady(true).withSucceedQuest(true)
   ];
   const allPlayers = new AllPlayers().init(players);
 
@@ -40,11 +40,11 @@ test('start', () => {
   expect(io.obj).toBeDefined();
 
   expect(redisClient.keyCount()).toBe(5);
-  new Player().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
-  new Player().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
-  new Player().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
-  new Player().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
-  new Player().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
 });
 
 test('start with two sabotage votes', () => {
@@ -55,11 +55,11 @@ test('start with two sabotage votes', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId).withReady(true).withTeam('EVIL').withSucceedQuest(false),
-    new Player().init('2', 'player2', roomId).withReady(true).withTeam('EVIL').withSucceedQuest(false),
-    new Player().init('3', 'player3', roomId).withReady(true).withSucceedQuest(true),
-    new Player().init('4', 'player4', roomId).withReady(true).withSucceedQuest(true),
-    new Player().init('5', 'player5', roomId).withReady(true).withSucceedQuest(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withReady(true).withTeam('EVIL').withSucceedQuest(false),
+    new AvalonPlayer().init('2', 'player2', roomId).withReady(true).withTeam('EVIL').withSucceedQuest(false),
+    new AvalonPlayer().init('3', 'player3', roomId).withReady(true).withSucceedQuest(true),
+    new AvalonPlayer().init('4', 'player4', roomId).withReady(true).withSucceedQuest(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withReady(true).withSucceedQuest(true)
   ];
   const allPlayers = new AllPlayers().init(players);
 
@@ -77,9 +77,9 @@ test('start with two sabotage votes', () => {
   expect(io.obj).toBeDefined();
 
   expect(redisClient.keyCount()).toBe(5);
-  new Player().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
-  new Player().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
-  new Player().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
-  new Player().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
-  new Player().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
+  new AvalonPlayer().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false); expect(p.vote).toBe('') });
 });

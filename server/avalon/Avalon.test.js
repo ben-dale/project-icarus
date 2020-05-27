@@ -2,7 +2,7 @@ const Avalon = require('./Avalon');
 const Settings = require('./models/Settings');
 const CurrentQuest = require('./models/CurrentQuest');
 const AllPlayers = require('../common/models/AllPlayers');
-const Player = require('../common/models/Player');
+const AvalonPlayer = require('../avalon/models/AvalonPlayer');
 const QuestLog = require('./models/QuestLog');
 const MockRedisClient = require('../mocks/MockRedisClient');
 const MockIo = require('../mocks/MockIo')
@@ -21,11 +21,11 @@ test('init instance', () => {
 test('starts the game', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -43,11 +43,11 @@ test('starts the game', () => {
 test('starts proposal vote', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -69,11 +69,11 @@ test('starts proposal vote', () => {
 test('starts proposal vote result', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -89,11 +89,11 @@ test('starts proposal vote result', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withProposalApproved(true),
-    new Player().init('2', 'player2', roomId).withProposalApproved(true),
-    new Player().init('3', 'player3', roomId).withProposalApproved(true),
-    new Player().init('4', 'player4', roomId).withProposalApproved(true),
-    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
 
@@ -106,11 +106,11 @@ test('starts proposal vote result', () => {
 test('starts quest', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -126,11 +126,11 @@ test('starts quest', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withProposalApproved(true),
-    new Player().init('2', 'player2', roomId).withProposalApproved(true),
-    new Player().init('3', 'player3', roomId).withProposalApproved(true),
-    new Player().init('4', 'player4', roomId).withProposalApproved(true),
-    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
@@ -145,11 +145,11 @@ test('starts quest', () => {
 test('restarts quest', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -165,11 +165,11 @@ test('restarts quest', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withProposalApproved(false),
-    new Player().init('2', 'player2', roomId).withProposalApproved(false),
-    new Player().init('3', 'player3', roomId).withProposalApproved(false),
-    new Player().init('4', 'player4', roomId).withProposalApproved(true),
-    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(false),
+    new AvalonPlayer().init('2', 'player2', roomId).withProposalApproved(false),
+    new AvalonPlayer().init('3', 'player3', roomId).withProposalApproved(false),
+    new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   const previousOrganiserId = avalon.currentQuest.organiserId;
@@ -186,11 +186,11 @@ test('restarts quest', () => {
 test('game over with EVIL win when 5 disagreements', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -206,11 +206,11 @@ test('game over with EVIL win when 5 disagreements', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withProposalApproved(false),
-    new Player().init('2', 'player2', roomId).withProposalApproved(false),
-    new Player().init('3', 'player3', roomId).withProposalApproved(false),
-    new Player().init('4', 'player4', roomId).withProposalApproved(true),
-    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(false),
+    new AvalonPlayer().init('2', 'player2', roomId).withProposalApproved(false),
+    new AvalonPlayer().init('3', 'player3', roomId).withProposalApproved(false),
+    new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
@@ -243,11 +243,11 @@ test('game over with EVIL win when 5 disagreements', () => {
 test('starts quest result reveal', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -263,20 +263,20 @@ test('starts quest result reveal', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withProposalApproved(true),
-    new Player().init('2', 'player2', roomId).withProposalApproved(true),
-    new Player().init('3', 'player3', roomId).withProposalApproved(true),
-    new Player().init('4', 'player4', roomId).withProposalApproved(true),
-    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
   const allPlayersWithQuestVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
-    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
 
@@ -290,11 +290,11 @@ test('starts quest result reveal', () => {
 test('starts next quest', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -310,20 +310,20 @@ test('starts next quest', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withProposalApproved(true),
-    new Player().init('2', 'player2', roomId).withProposalApproved(true),
-    new Player().init('3', 'player3', roomId).withProposalApproved(true),
-    new Player().init('4', 'player4', roomId).withProposalApproved(true),
-    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
   const allPlayersWithQuestVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
-    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.revealVote(0);
@@ -352,11 +352,11 @@ test('starts next quest', () => {
 test('starts merlin id', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -372,20 +372,20 @@ test('starts merlin id', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withProposalApproved(true),
-    new Player().init('2', 'player2', roomId).withProposalApproved(true),
-    new Player().init('3', 'player3', roomId).withProposalApproved(true),
-    new Player().init('4', 'player4', roomId).withProposalApproved(true),
-    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
   let allPlayersWithQuestVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
-    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.revealVote(0);
@@ -399,11 +399,11 @@ test('starts merlin id', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   allPlayersWithQuestVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
-    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('3', 'player3', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
@@ -418,11 +418,11 @@ test('starts merlin id', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   allPlayersWithQuestVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
-    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
@@ -438,11 +438,11 @@ test('starts merlin id', () => {
 test('starts merlin id', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
   ]);
   const io = new MockIo();
   const redisClient = new MockRedisClient();
@@ -458,20 +458,20 @@ test('starts merlin id', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withProposalApproved(true),
-    new Player().init('2', 'player2', roomId).withProposalApproved(true),
-    new Player().init('3', 'player3', roomId).withProposalApproved(true),
-    new Player().init('4', 'player4', roomId).withProposalApproved(true),
-    new Player().init('5', 'player5', roomId).withProposalApproved(true)
+    new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
+    new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
   let allPlayersWithQuestVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
-    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.revealVote(0);
@@ -485,11 +485,11 @@ test('starts merlin id', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   allPlayersWithQuestVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
-    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('3', 'player3', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
@@ -504,11 +504,11 @@ test('starts merlin id', () => {
   avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
   avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   allPlayersWithQuestVote = new AllPlayers().init([
-    new Player().init('1', 'player1', roomId).withTeam('GOOD').withRole('MERLIN').withSucceedQuest(true),
-    new Player().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withRole('MERLIN').withSucceedQuest(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest

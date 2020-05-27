@@ -1,7 +1,7 @@
 const ProposalResult = require('./ProposalResult');
 const QuestLog = require('../models/QuestLog');
 const Avalon = require('../Avalon');
-const Player = require('../../common/models/Player');
+const AvalonPlayer = require('../../avalon/models/AvalonPlayer');
 const AllPlayers = require('../../common/models/AllPlayers');
 const MockIo = require('../../mocks/MockIo');
 const MockRedisClient = require('../../mocks/MockRedisClient');
@@ -14,11 +14,11 @@ test('start with rejected proposal', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId).withReady(true).withProposalApproved(false),
-    new Player().init('2', 'player2', roomId).withReady(true).withProposalApproved(false),
-    new Player().init('3', 'player3', roomId).withReady(true).withProposalApproved(false),
-    new Player().init('4', 'player4', roomId).withReady(true).withProposalApproved(false),
-    new Player().init('5', 'player5', roomId).withReady(true).withProposalApproved(false)
+    new AvalonPlayer().init('1', 'player1', roomId).withReady(true).withProposalApproved(false),
+    new AvalonPlayer().init('2', 'player2', roomId).withReady(true).withProposalApproved(false),
+    new AvalonPlayer().init('3', 'player3', roomId).withReady(true).withProposalApproved(false),
+    new AvalonPlayer().init('4', 'player4', roomId).withReady(true).withProposalApproved(false),
+    new AvalonPlayer().init('5', 'player5', roomId).withReady(true).withProposalApproved(false)
   ];
   const allPlayers = new AllPlayers().init(players);
 
@@ -36,11 +36,11 @@ test('start with rejected proposal', () => {
   expect(io.obj).toBeDefined();
 
   expect(redisClient.keyCount()).toBe(5);
-  new Player().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false) });
-  new Player().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false) });
-  new Player().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false) });
-  new Player().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false) });
-  new Player().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false) });
 });
 
 test('start with approved proposal', () => {
@@ -53,11 +53,11 @@ test('start with approved proposal', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId).withReady(true).withProposalApproved(true),
-    new Player().init('2', 'player2', roomId).withReady(true).withProposalApproved(true),
-    new Player().init('3', 'player3', roomId).withReady(true).withProposalApproved(true),
-    new Player().init('4', 'player4', roomId).withReady(true).withProposalApproved(false),
-    new Player().init('5', 'player5', roomId).withReady(true).withProposalApproved(false)
+    new AvalonPlayer().init('1', 'player1', roomId).withReady(true).withProposalApproved(true),
+    new AvalonPlayer().init('2', 'player2', roomId).withReady(true).withProposalApproved(true),
+    new AvalonPlayer().init('3', 'player3', roomId).withReady(true).withProposalApproved(true),
+    new AvalonPlayer().init('4', 'player4', roomId).withReady(true).withProposalApproved(false),
+    new AvalonPlayer().init('5', 'player5', roomId).withReady(true).withProposalApproved(false)
   ];
   const allPlayers = new AllPlayers().init(players);
 
@@ -77,9 +77,9 @@ test('start with approved proposal', () => {
   expect(io.obj).toBeDefined();
 
   expect(redisClient.keyCount()).toBe(5);
-  new Player().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false) });
-  new Player().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false) });
-  new Player().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false) });
-  new Player().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false) });
-  new Player().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '1', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '2', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '3', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '4', (p) => { expect(p.ready).toBe(false) });
+  new AvalonPlayer().getFromRedis(redisClient, '5', (p) => { expect(p.ready).toBe(false) });
 });

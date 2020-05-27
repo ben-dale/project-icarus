@@ -1,4 +1,4 @@
-const Player = require('./Player');
+const AvalonPlayer = require('../../avalon/models/AvalonPlayer');
 const RandomInteger = require('./RandomInteger')
 
 class AllPlayers {
@@ -56,7 +56,7 @@ class AllPlayers {
       } else {
         const players = [];
         for (let i = 0; i < resultSet.length; i++) {
-          players.push(new Player().fromRawObject(JSON.parse(resultSet[i])))
+          players.push(new AvalonPlayer().fromRawObject(JSON.parse(resultSet[i])))
         }
         onSuccess(new AllPlayers().init(players));
       }

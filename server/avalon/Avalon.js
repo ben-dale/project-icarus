@@ -10,6 +10,7 @@ const BasicState = require('./states/BasicState');
 
 class Avalon {
 
+  // Move to AvalonRoom.js?
   constructor() {
     this.minPlayers = 5;
     this.maxPlayers = 10;

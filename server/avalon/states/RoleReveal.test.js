@@ -1,6 +1,6 @@
 const RoleReveal = require('./RoleReveal');
 const Avalon = require('../Avalon');
-const Player = require('../../common/models/Player');
+const AvalonPlayer = require('../models/AvalonPlayer');
 const AllPlayers = require('../../common/models/AllPlayers');
 const MockIo = require('../../mocks/MockIo');
 const MockRedisClient = require('../../mocks/MockRedisClient');
@@ -13,11 +13,11 @@ test('start', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ];
   const allPlayers = new AllPlayers().init(players);
 
@@ -79,11 +79,11 @@ test('start with percival and morgana', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ];
   const allPlayers = new AllPlayers().init(players);
 
@@ -147,11 +147,11 @@ test('start with percival and oberon', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId)
   ];
   const allPlayers = new AllPlayers().init(players);
 
@@ -215,13 +215,13 @@ test('start with percival, morgana and oberon', () => {
   const redisClient = new MockRedisClient();
   const io = new MockIo();
   const players = [
-    new Player().init('1', 'player1', roomId),
-    new Player().init('2', 'player2', roomId),
-    new Player().init('3', 'player3', roomId),
-    new Player().init('4', 'player4', roomId),
-    new Player().init('5', 'player5', roomId),
-    new Player().init('6', 'player6', roomId),
-    new Player().init('7', 'player7', roomId)
+    new AvalonPlayer().init('1', 'player1', roomId),
+    new AvalonPlayer().init('2', 'player2', roomId),
+    new AvalonPlayer().init('3', 'player3', roomId),
+    new AvalonPlayer().init('4', 'player4', roomId),
+    new AvalonPlayer().init('5', 'player5', roomId),
+    new AvalonPlayer().init('6', 'player6', roomId),
+    new AvalonPlayer().init('7', 'player7', roomId)
   ];
   const allPlayers = new AllPlayers().init(players);
 

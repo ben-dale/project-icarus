@@ -1,16 +1,16 @@
 const AllPlayers = require('./AllPlayers');
-const Player = require('./Player');
+const AvalonPlayer = require('../../avalon/models/AvalonPlayer');
 const MockRedisClient = require('../../mocks/MockRedisClient');
 const MockIo = require('../../mocks/MockIo')
 
 test('returns false when all players are not ready', () => {
-  let players = [new Player().init('111', 'Ben').withReady(false)];
+  let players = [new AvalonPlayer().init('111', 'Ben').withReady(false)];
 
   expect(new AllPlayers().init(players).areReady()).toBe(false);
 });
 
 test('returns true when all players are ready', () => {
-  let players = [new Player().init('111', 'Ben').withReady(true)];
+  let players = [new AvalonPlayer().init('111', 'Ben').withReady(true)];
 
   expect(new AllPlayers().init(players).areReady()).toBe(true);
 });
@@ -19,8 +19,8 @@ test('gets players from redis', () => {
   let playerIds = ['111', '222'];
 
   let redisClient = new MockRedisClient();
-  new Player().init('111', 'Ben').withReady(false).storeInRedis(redisClient);
-  new Player().init('222', 'Sam').withReady(false).storeInRedis(redisClient);
+  new AvalonPlayer().init('111', 'Ben').withReady(false).storeInRedis(redisClient);
+  new AvalonPlayer().init('222', 'Sam').withReady(false).storeInRedis(redisClient);
 
   new AllPlayers().getFromRedis(redisClient, playerIds, (allPlayers) => {
     expect(allPlayers.players.length).toBe(2);
@@ -29,13 +29,13 @@ test('gets players from redis', () => {
 });
 
 test('emit to all', () => {
-  const player = new Player().init('111', 'Ben', '5t6y');
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y');
   const io = new MockIo();
   const allPlayers = new AllPlayers().init([player]);
 
   allPlayers.emitToAll(io, '39fnr9')
 
-  const expected = new Player();
+  const expected = new AvalonPlayer();
   expected.id = '111';
   expected.name = 'Ben';
   expected.ready = false;
@@ -44,13 +44,13 @@ test('emit to all', () => {
 });
 
 test('emit to all with vote', () => {
-  const player = new Player().init('111', 'Ben', '5t6y');
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y');
   const io = new MockIo();
   const allPlayers = new AllPlayers().init([player]);
 
   allPlayers.emitToAllWithVote(io, '39fnr9')
 
-  const expected = new Player();
+  const expected = new AvalonPlayer();
   expected.id = '111';
   expected.name = 'Ben';
   expected.ready = false;
@@ -60,13 +60,13 @@ test('emit to all with vote', () => {
 });
 
 test('emit to all with team and role', () => {
-  const player = new Player().init('111', 'Ben', '5t6y');
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y');
   const io = new MockIo();
   const allPlayers = new AllPlayers().init([player]);
 
   allPlayers.emitToAllWithTeamAndRole(io, '39fnr9')
 
-  const expected = new Player();
+  const expected = new AvalonPlayer();
   expected.id = '111';
   expected.name = 'Ben';
   expected.ready = false;
@@ -77,7 +77,7 @@ test('emit to all with team and role', () => {
 });
 
 test('resets all player statuses', () => {
-  const player = new Player().init('111', 'Ben', '5t6y').withReady(true);
+  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withReady(true);
 
   const allPlayers = new AllPlayers().init([player]).resetReadyStatuses();
 
@@ -85,15 +85,15 @@ test('resets all player statuses', () => {
 });
 
 test('shuffles all players', () => {
-  const player1 = new Player().init('111', 'Ben', '5t6y');
-  const player2 = new Player().init('222', 'Sam', '5t6y');
+  const player1 = new AvalonPlayer().init('111', 'Ben', '5t6y');
+  const player2 = new AvalonPlayer().init('222', 'Sam', '5t6y');
   const allPlayers = new AllPlayers().init([player1, player2]).shuffle();
 
   expect(allPlayers.players.length).toBe(2)
 });
 
 test('returns a random player id', () => {
-  const player1 = new Player().init('111', 'Ben', '5t6y');
+  const player1 = new AvalonPlayer().init('111', 'Ben', '5t6y');
   const allPlayers = new AllPlayers().init([player1]);
 
   expect(allPlayers.selectPlayerAtRandom().id).toBe('111')

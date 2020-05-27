@@ -1,5 +1,5 @@
 const AvalonSocket = require('./AvalonSocket');
-const Player = require('../common/models/Player');
+const AvalonPlayer = require('./models/AvalonPlayer');
 const AvalonRoom = require('./models/AvalonRoom');
 const MockRedisClient = require('../mocks/MockRedisClient');
 const MockIo = require('../mocks/MockIo')
@@ -11,7 +11,7 @@ test('disconnect player from open game', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const player = new Player().init('socketId', 'Ben', 'roomId');
+  const player = new AvalonPlayer().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId');
@@ -38,7 +38,7 @@ test('disconnect player from closed game', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const player = new Player().init('socketId', 'Ben', 'roomId');
+  const player = new AvalonPlayer().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId');
@@ -75,7 +75,7 @@ test('adds player to room', () => {
   avalonSocket.playerJoined(io, redisClient, socket, data);
 
   // Then
-  new Player().getFromRedis(redisClient, 'socketId', (player) => {
+  new AvalonPlayer().getFromRedis(redisClient, 'socketId', (player) => {
     expect(player.name).toBe('Ben');
     expect(player.ready).toBe(false);
     expect(player.roomId).toBe('roomId');
@@ -110,7 +110,7 @@ test('does not add player to room', () => {
   avalonSocket.playerJoined(io, redisClient, socket, data);
 
   // Then
-  new Player().getFromRedis(redisClient, 'socketId', () => {
+  new AvalonPlayer().getFromRedis(redisClient, 'socketId', () => {
     // Should not get here.
     expect(true).toBe(false);
   }, () => { });
@@ -131,7 +131,7 @@ test('update player with ready status', () => {
   const redisClient = new MockRedisClient();
   const data = { ready: true }
 
-  const player = new Player().init('socketId', 'Ben', 'roomId');
+  const player = new AvalonPlayer().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId');
@@ -142,7 +142,7 @@ test('update player with ready status', () => {
   avalonSocket.playerUpdated(io, redisClient, socket, data);
 
   // Then
-  new Player().getFromRedis(redisClient, 'socketId', (player) => {
+  new AvalonPlayer().getFromRedis(redisClient, 'socketId', (player) => {
     expect(player.ready).toBe(true);
   }, () => { });
 
@@ -159,7 +159,7 @@ test('update player with proposal approval vote', () => {
   const redisClient = new MockRedisClient();
   const data = { approveProposal: true }
 
-  const player = new Player().init('socketId', 'Ben', 'roomId');
+  const player = new AvalonPlayer().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId');
@@ -170,7 +170,7 @@ test('update player with proposal approval vote', () => {
   avalonSocket.playerUpdated(io, redisClient, socket, data);
 
   // Then
-  new Player().getFromRedis(redisClient, 'socketId', (player) => {
+  new AvalonPlayer().getFromRedis(redisClient, 'socketId', (player) => {
     expect(player.vote).toBe('APPROVE');
   }, () => { });
 
@@ -187,7 +187,7 @@ test('update player with proposal approval vote', () => {
   const redisClient = new MockRedisClient();
   const data = { succeedQuest: true }
 
-  const player = new Player().init('socketId', 'Ben', 'roomId');
+  const player = new AvalonPlayer().init('socketId', 'Ben', 'roomId');
   player.storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId');
@@ -198,7 +198,7 @@ test('update player with proposal approval vote', () => {
   avalonSocket.playerUpdated(io, redisClient, socket, data);
 
   // Then
-  new Player().getFromRedis(redisClient, 'socketId', (player) => {
+  new AvalonPlayer().getFromRedis(redisClient, 'socketId', (player) => {
     expect(player.vote).toBe('SUCCEED');
   }, () => { });
 
@@ -215,11 +215,11 @@ test('start next section of game', () => {
   const redisClient = new MockRedisClient();
   const data = {};
 
-  new Player().init('1', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
-  new Player().init('2', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
-  new Player().init('3', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
-  new Player().init('4', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
-  new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('1', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('2', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('3', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('4', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId').addPlayerId('socketId').addPlayerId('1').addPlayerId('2').addPlayerId('3').addPlayerId('4');
   room.game.closed = true;
@@ -229,7 +229,7 @@ test('start next section of game', () => {
   avalonSocket.playerUpdated(io, redisClient, socket, data);
 
   // Then
-  new Player().getFromRedis(redisClient, 'socketId', (player) => {
+  new AvalonPlayer().getFromRedis(redisClient, 'socketId', (player) => {
     expect(player.ready).toBe(false);
   }, () => { });
 
@@ -244,7 +244,7 @@ test('enable roles', () => {
   const redisClient = new MockRedisClient();
   const data = { game: { settings: { percivalEnabled: true, oberonEnabled: true, morganaEnabled: true } } };
 
-  new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.storeInRedis(redisClient);
@@ -270,7 +270,7 @@ test('proposes player id', () => {
   const redisClient = new MockRedisClient();
   const data = { game: { currentQuest: { playerIdToPropose: 'socketId' } } };
 
-  new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest.organiserId = 'socketId';
@@ -297,7 +297,7 @@ test('unproposes player id', () => {
   const redisClient = new MockRedisClient();
   const data = { game: { currentQuest: { playerIdToUnpropose: 'socketId' } } };
 
-  new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest.proposedPlayerIds = ['socketId']
@@ -324,7 +324,7 @@ test('proposes merlin id', () => {
   const redisClient = new MockRedisClient();
   const data = { game: { currentQuest: { merlinIdToPropose: 'socketId' } } };
 
-  new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest.proposedPlayerIds = [];
@@ -350,7 +350,7 @@ test('unproposes merlin id', () => {
   const redisClient = new MockRedisClient();
   const data = { game: { currentQuest: { merlinIdToUnpropose: 'socketId' } } };
 
-  new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest.proposedPlayerIds = ['socketId'];
@@ -376,7 +376,7 @@ test('reveals quest vote', () => {
   const redisClient = new MockRedisClient();
   const data = { game: { currentQuest: { voteToReveal: 1 } } };
 
-  new Player().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
   const room = new AvalonRoom().init('roomId').addPlayerId('socketId');
   room.game.currentQuest = room.game.currentQuest.withSucceedVote().withSucceedVote().withSucceedVote();

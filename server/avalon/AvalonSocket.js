@@ -1,5 +1,5 @@
 const AvalonRoom = require('./models/AvalonRoom');
-const Player = require('../common/models/Player');
+const AvalonPlayer = require('./models/AvalonPlayer');
 const AllPlayers = require('../common/models/AllPlayers');
 const { v4: uuidv4 } = require('uuid');
 
@@ -27,7 +27,7 @@ class AvalonSocket {
   }
 
   playerDisconnected(io, redisClient, socket) {
-    new Player().getFromRedis(redisClient, socket.id, (player) => {
+    new AvalonPlayer().getFromRedis(redisClient, socket.id, (player) => {
       new AvalonRoom().getFromRedis(redisClient, player.roomId, (room) => {
         var updatedRoom = room.copy();
         if (updatedRoom.game.closed) {
@@ -52,7 +52,7 @@ class AvalonSocket {
       new AvalonRoom().getFromRedis(redisClient, data.roomId, (room) => {
         if (!room.game.closed) {
           console.log('player joined room ' + socket.id);
-          let player = new Player().init(socket.id, data.name.substring(0, 8), data.roomId);
+          let player = new AvalonPlayer().init(socket.id, data.name.substring(0, 8), data.roomId);
           player.storeInRedis(redisClient);
           
           const updatedRoom = room.addPlayerId(socket.id);
@@ -75,7 +75,7 @@ class AvalonSocket {
   playerUpdated(io, redisClient, socket, data) {
     console.log(data);
     if (data) {
-      new Player().getFromRedis(redisClient, socket.id, (player) => {
+      new AvalonPlayer().getFromRedis(redisClient, socket.id, (player) => {
         let updatedPlayer = player.copy();
         if (data.hasOwnProperty('ready')) {
           updatedPlayer = updatedPlayer.withReady(data.ready);
@@ -108,7 +108,7 @@ class AvalonSocket {
 
   roomUpdated(io, redisClient, socket, data) {
     if (data) {
-      new Player().getFromRedis(redisClient, socket.id, (player) => {
+      new AvalonPlayer().getFromRedis(redisClient, socket.id, (player) => {
         new AvalonRoom().getFromRedis(redisClient, player.roomId, (room) => {
           let updatedRoom = room.copy();
           if (data.game && data.game.settings && data.game.settings.hasOwnProperty('percivalEnabled') && player.id == room.ownerId) {
@@ -165,7 +165,7 @@ class AvalonSocket {
   playerRejoined(io, redisClient, socket, data) {
     if (data && data.name && data.name.length > 0 && data.roomId) {
       new AvalonRoom().getFromRedis(redisClient, data.roomId, (room) => {
-        new Player().getFromRedis(redisClient, data.name, (existingPlayer) => {
+        new AvalonPlayer().getFromRedis(redisClient, data.name, (existingPlayer) => {
           const oldPlayerId = existingPlayer.id;
           const newPlayerId = socket.id;
           new AllPlayers().getFromRedis(redisClient, room.playerIds, (allPlayers) => {
