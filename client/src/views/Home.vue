@@ -12,7 +12,7 @@
           :maxPlayers="10"
           :teams="2"
           @play="initResistance"
-          :comingSoon="!inDevMode"
+          :comingSoon="true"
         />
       </div>
       <div class="col-12 col-lg-6">

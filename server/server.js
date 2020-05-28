@@ -41,11 +41,11 @@ io.on('connection', (socket) => {
   });
 });
 
-// process.on('uncaughtException', (err, origin) => {
-//   console.log(
-//     `Caught exception: ${err}\n` +
-//     `Exception origin: ${origin}`
-//   );
-// });
+process.on('uncaughtException', (err, origin) => {
+  console.log(
+    `Caught exception: ${err}\n` +
+    `Exception origin: ${origin}`
+  );
+});
 
 http.listen(process.env.PORT || 3000);
