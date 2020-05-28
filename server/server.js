@@ -1,4 +1,5 @@
 const AvalonSocket = require('./avalon/AvalonSocket');
+const ResistanceSocket = require('./resistance/ResistanceSocket');
 
 // Setup express app
 const express = require('express');
@@ -34,13 +35,17 @@ io.on('connection', (socket) => {
     console.log('player connected to avalon game...');
     new AvalonSocket().registerListeners(io, socket, redisClient);
   });
+  socket.on('connect-resistance', () => {
+    console.log('player connected to resistance game...');
+    new ResistanceSocket().registerListeners(io, socket, redisClient);
+  });
 });
 
-process.on('uncaughtException', (err, origin) => {
-  console.log(
-    `Caught exception: ${err}\n` +
-    `Exception origin: ${origin}`
-  );
-});
+// process.on('uncaughtException', (err, origin) => {
+//   console.log(
+//     `Caught exception: ${err}\n` +
+//     `Exception origin: ${origin}`
+//   );
+// });
 
 http.listen(process.env.PORT || 3000);

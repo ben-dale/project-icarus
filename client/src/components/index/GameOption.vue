@@ -8,8 +8,11 @@
         class="card-subtitle"
       >{{minPlayers}} - {{maxPlayers}} players, {{teams}} teams</p>
     </div>
-    <div class="card-footer bg-primary">
+    <div v-if="!comingSoon" class="card-footer bg-primary">
       <button class="btn btn-sm btn-secondary btn-block" @click="$emit('play')">Start</button>
+    </div>
+     <div v-if="comingSoon" class="card-footer bg-primary text-center">
+      Coming Soon!
     </div>
   </div>
 </template>
@@ -23,7 +26,8 @@ export default {
     minPlayers: Number,
     maxPlayers: Number,
     teams: Number,
-    image: String
+    image: String,
+    comingSoon: Boolean
   }
 };
 </script>

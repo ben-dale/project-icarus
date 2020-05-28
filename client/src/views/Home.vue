@@ -4,7 +4,18 @@
       <Title />
     </div>
     <div class="row">
-      <div class="col-12 col-lg-8 offset-lg-2 pb-4">
+      <div class="col-12 col-lg-6">
+        <GameOption
+          name="The Resistance"
+          description="The Empire must fall. Our mission must succeed. By destroying their key bases, we will shatter Imperial strength and liberate our people."
+          :minPlayers="5"
+          :maxPlayers="10"
+          :teams="2"
+          @play="initResistance"
+          :comingSoon="!inDevMode"
+        />
+      </div>
+      <div class="col-12 col-lg-6">
         <GameOption
           name="The Resistance: Avalon"
           description="Avalon pits the forces of Good and Evil in a battle to control the future of civilization."
@@ -12,7 +23,6 @@
           :maxPlayers="10"
           :teams="2"
           @play="initAvalon"
-          image="avalon.jpeg"
         />
       </div>
     </div>
@@ -38,12 +48,20 @@ export default {
   },
   methods: {
     initAvalon() {
+      this.socket.emit("connect-avalon");
       this.socket.emit("init-avalon");
+    },
+    initResistance() {
+      this.socket.emit("connect-resistance");
+      this.socket.emit("init-resistance");
+    },
+    inDevMode() {
+      return process.env.NODE_ENV == "development";
     }
   },
   data: function() {
     let socket = null;
-    if (process.env.NODE_ENV == "development") {
+    if (this.inDevMode()) {
       socket = io.connect("http://localhost:3000", {
         upgrade: false,
         transports: ["websocket"]
@@ -54,7 +72,9 @@ export default {
     socket.on("avalon-created", roomId => {
       this.$router.replace({ name: `AvalonGame`, params: { socket, roomId } });
     });
-    socket.emit("connect-avalon");
+    socket.on("resistance-created", roomId => {
+      this.$router.replace({ name: `ResistanceGame`, params: { socket, roomId } });
+    })
     return { socket };
   }
 };
