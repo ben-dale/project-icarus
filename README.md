@@ -42,7 +42,9 @@ In development the client will point socket connections at localhost:3000.
 ```
 Compiles Vue.js app and moves to `./server/public`.
 
+Commit these files to `master` at this point.
+
 ```
 ./deploy.sh
 ```
-Pushes contents of `./server` up to Heroku.
+Pushes latest master to heroku.
