@@ -164,9 +164,9 @@ class AvalonSocket {
   }
 
   playerRejoined(io, redisClient, socket, data) {
-    if (data && data.name && data.name.length > 0 && data.roomId) {
+    if (data && data.id && data.id.length > 0 && data.roomId) {
       new AvalonRoom().getFromRedis(redisClient, data.roomId, (room) => {
-        new AvalonPlayer().getFromRedis(redisClient, data.name, (existingPlayer) => {
+        new AvalonPlayer().getFromRedis(redisClient, data.id, (existingPlayer) => {
           const oldPlayerId = existingPlayer.id;
           const newPlayerId = socket.id;
           new AllPlayers().getFromRedis(redisClient, room.playerIds, (allPlayers) => {
@@ -176,11 +176,13 @@ class AvalonSocket {
             // update refs across all players
             const updatedPlayers = allPlayers.reconnectPlayer(oldPlayerId, newPlayerId);
             updatedPlayers.storeInRedis(redisClient);
+
+            // Emit private info to individual players, and general information to all players
             updatedPlayers.emitToAll(io, room.id);
 
-            // Emit sensitive player info back to each player as this may have been updated
-            // todo mark all players as not ready when player has left the game?
-            updatedPlayers.players.forEach(p => p.emitAssignmentInformation(io));
+            if (room.game.screen == 'GAME' && room.game.state == 'QUEST_PROPOSAL_RESULT') {
+              updatedPlayers.emitToAllWithVote(io, room.id);
+            }
 
             // update refs across the room and game
             var updatedRoom = room.reconnectPlayer(oldPlayerId, newPlayerId);

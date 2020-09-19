@@ -398,3 +398,51 @@ test('reveals quest vote', () => {
   expect(io.messageHistory).toContain('room-updated');
 });
 
+test('player rejoins', () => {
+  // Given
+  const avalonSocket = new AvalonSocket();
+  const oldSocket = { id: '5' };
+  const newSocket = { id: '789', join() { } };
+  const io = new MockIo();
+  const redisClient = new MockRedisClient();
+  const data = { roomId: 'roomId', id: '5' };
+
+  new AvalonPlayer().init('1', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('2', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('3', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('4', 'Sam', 'roomId').withReady(true).storeInRedis(redisClient);
+  new AvalonPlayer().init('5', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
+
+  const room = new AvalonRoom().init('roomId').addPlayerId('1').addPlayerId('2').addPlayerId('3').addPlayerId('4').addPlayerId('5');
+  room.game.state = 'QUEST_PROPOSAL_RESULT'
+  room.game.screen = 'GAME'
+  room.game.closed = true;
+  room.storeInRedis(redisClient);
+
+  avalonSocket.playerDisconnected(io, redisClient, oldSocket);
+
+  // When
+  io.messageHistory = [];
+  avalonSocket.playerRejoined(io, redisClient, newSocket, data);
+
+  // Then
+  new AvalonPlayer().getFromRedis(redisClient, '789', (player) => {
+    expect(player.name).toBe('Ben');
+    expect(player.id).toBe('789');
+  }, () => { })
+
+  new AvalonRoom().getFromRedis(redisClient, 'roomId', (room) => { 
+    expect(room.playerIds).toStrictEqual(['1', '2', '3', '4', '789']);
+  }, () => { });
+
+  console.log(io);
+
+  expect(io.messageHistory[0]).toBe('player-assigned');
+  expect(io.messageHistory[1]).toBe('player-assigned');
+  expect(io.messageHistory[2]).toBe('player-assigned');
+  expect(io.messageHistory[3]).toBe('player-assigned');
+  expect(io.messageHistory[4]).toBe('player-assigned');
+  expect(io.messageHistory[5]).toBe('players-updated');
+  expect(io.messageHistory[6]).toBe('players-updated'); // Updated message again because of the emit to all with vote
+  expect(io.messageHistory[7]).toBe('room-updated');
+});

@@ -267,7 +267,7 @@ export default {
     },
     rejoinSession(code) {
       this.socket.emit("player-rejoined", {
-        name: code,
+        id: code,
         roomId: this.roomId
       });
     },
