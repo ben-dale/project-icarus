@@ -47,6 +47,7 @@
         :organiser="currentOrganiser.name"
         :names="proposedQuestMemberNames"
         :isPlayerReady="isPlayerReady"
+        :vote="vote"
         v-on="$listeners"
       />
     </div>
@@ -83,6 +84,7 @@
         :questId="game.currentQuest.id"
         :isEvil="team == 'EVIL'"
         :isPlayerReady="isPlayerReady"
+        :vote="vote"
         v-on="$listeners"
       />
     </div>
@@ -175,6 +177,7 @@ export default {
     playerId: String,
     team: String,
     role: String,
+    vote: String,
     isPlayerReady: Boolean
   },
   computed: {

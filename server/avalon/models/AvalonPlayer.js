@@ -102,17 +102,10 @@ class AvalonPlayer extends Player {
     io.in(this.roomId).emit('player-updated', copy);
   }
 
-  emitToPlayer(io) {
-    const copy = this.copy();
-    delete copy.roomId;
-    delete copy.vote;
-    io.to(this.id).emit('player-assigned', copy);
-  }
-
+  // rename to player-updated-full or something
   emitAssignmentInformation(io) {
     const copy = this.copy();
     delete copy.roomId;
-    delete copy.vote;
     io.to(this.id).emit('player-assigned', copy);
   }
 

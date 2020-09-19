@@ -64,6 +64,7 @@ class AllPlayers {
   }
 
   emitToAll(io, roomId) {
+    this.players.forEach(p => p.emitAssignmentInformation(io));
     const playersToEmit = this.players.map(p => {
       const copy = p.copy();
       delete copy.roomId;

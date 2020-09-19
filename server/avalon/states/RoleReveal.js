@@ -75,7 +75,7 @@ class RoleReveal {
       }
     });
 
-    updatedAllPlayers.storeInRedis(redisClient).emitToAll(io, roomId).forEach(p => p.emitAssignmentInformation(io));
+    updatedAllPlayers.storeInRedis(redisClient).emitToAll(io, roomId);
   }
 }
 

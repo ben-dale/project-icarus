@@ -91,6 +91,7 @@ class AvalonSocket {
 
         updatedPlayer.storeInRedis(redisClient);
         updatedPlayer.emitToAll(io);
+        updatedPlayer.emitAssignmentInformation(io);
 
         new AvalonRoom().getFromRedis(redisClient, updatedPlayer.roomId, (room) => {
           new AllPlayers().getFromRedis(redisClient, room.playerIds, (allPlayers) => {
@@ -179,7 +180,7 @@ class AvalonSocket {
 
             // Emit sensitive player info back to each player as this may have been updated
             // todo mark all players as not ready when player has left the game?
-            updatedPlayers.players.forEach(p => p.emitToPlayer(io));
+            updatedPlayers.players.forEach(p => p.emitAssignmentInformation(io));
 
             // update refs across the room and game
             var updatedRoom = room.reconnectPlayer(oldPlayerId, newPlayerId);

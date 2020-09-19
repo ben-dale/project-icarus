@@ -91,25 +91,6 @@ test('sets role', () => {
   expect(player.role).toBe('MERLIN')
 });
 
-test('emits all data to player', () => {
-  const player = new AvalonPlayer().init('111', 'Ben', '5t6y').withMetadata(['444', '555']).withRole('MERLIN').withTeam('GOOD');
-  const io = new MockIo();
-
-  player.emitToPlayer(io, ['444', '555']);
-
-  const expected = new AvalonPlayer();
-  expected.id = '111';
-  expected.name = 'Ben';
-  expected.ready = false;
-  expected.role = 'MERLIN';
-  expected.team = 'GOOD';
-  expected.metadata = ['444', '555'];
-
-  expect(io.toPlayerId).toBe('111');
-  expect(io.message).toBe('player-assigned');
-  expect(io.obj).toStrictEqual(expected);
-});
-
 test('reconnects player', () => {
   const id = '111';
   const newId = '222';

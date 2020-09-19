@@ -107,6 +107,7 @@
         :players="players"
         :team="team"
         :role="role"
+        :vote="vote"
         :playerId="getPlayerId()"
         :isPlayerReady="isPlayerReady"
         @reveal-quest-vote="revealQuestVote"
@@ -161,6 +162,7 @@ export default {
       players: [],
       team: null,
       role: null,
+      vote: null,
       metadata: []
     };
   },
@@ -188,6 +190,7 @@ export default {
       // console.log(player);
       this.team = player.team;
       this.role = player.role;
+      this.vote = player.vote;
       this.metadata = player.metadata.slice();
     });
     this.socket.on("room-updated", room => {
@@ -221,7 +224,6 @@ export default {
       });
     },
     getPlayerId() {
-      // return "111";
       return this.socket.id;
     },
     morganaEnabled(enabled) {
@@ -273,13 +275,11 @@ export default {
     },
     playerApproveVote(approve) {
       this.socket.emit("player-updated", {
-        ready: true,
         approveProposal: approve
       });
     },
     playerSucceedQuest(succeed) {
       this.socket.emit("player-updated", {
-        ready: true,
         succeedQuest: succeed
       });
     },

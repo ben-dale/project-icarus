@@ -12,46 +12,39 @@
             <p class="card-text bg-info py-1">{{name}}</p>
           </div>
         </div>
-        <p class="card-text">Your vote will be seen by the other players. This is a majority vote.</p>
-      </div>
-      <div class="card-footer d-none d-lg-block">
+        <div class="row mb-5">
+          <div class="col-12">
+            <p class="card-text">Do you approve or reject this proposal?</p>
+            <p
+              class="card-text"
+            >Your vote will be seen by the other players. This is a majority vote.</p>
+          </div>
+        </div>
         <div class="row">
-          <div class="col-6">
+          <div class="col-6 col-md-3 offset-md-3">
             <button
-              @click="approve(true)"
-              class="btn btn-secondary btn-block"
+              :class="[(vote == 'APPROVE' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4']"
               :disabled="isPlayerReady"
+              @click="approve(true)"
             >Approve</button>
           </div>
-          <div class="col-6">
+          <div class="col-6 col-md-3">
             <button
-              @click="approve(false)"
-              class="btn btn-secondary btn-block"
+              :class="[(vote == 'REJECT' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4']"
               :disabled="isPlayerReady"
+              @click="approve(false)"
             >Reject</button>
           </div>
         </div>
+      </div>
+      <div class="card-footer d-none d-lg-block">
+        <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" :disabled="vote == ''" />
       </div>
     </div>
     <div class="fixed-bottom">
       <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
         <div class="card-body pb-5">
-          <div class="row">
-            <div class="col-12 col-md-6 pb-3">
-              <button
-                @click="approve(true)"
-                class="btn btn-secondary btn-block"
-                :disabled="isPlayerReady"
-              >Approve</button>
-            </div>
-            <div class="col-12 col-md-6">
-              <button
-                @click="approve(false)"
-                class="btn btn-secondary btn-block"
-                :disabled="isPlayerReady"
-              >Reject</button>
-            </div>
-          </div>
+          <ReadyButton :isPlayerReady="isPlayerReady" v-on="$listeners" :disabled="vote == ''" />
         </div>
       </div>
     </div>
@@ -59,16 +52,20 @@
 </template>
 
 <script>
+import ReadyButton from "@/components/common/ReadyButton.vue";
+
 export default {
+  components: { ReadyButton },
   props: {
     organiser: String,
     names: Array,
-    isPlayerReady: Boolean
+    vote: String,
+    isPlayerReady: Boolean,
   },
   methods: {
-    approve: function(approve) {
+    approve: function (approve) {
       this.$emit("player-approve-proposal", approve);
-    }
-  }
+    },
+  },
 };
 </script>

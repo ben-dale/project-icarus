@@ -83,6 +83,7 @@
       <div class="col-12">
         <QuestOutcomeVoteInput
           :isEvil="true"
+          vote="SABOTAGE"
           :names="['Ben', 'Sam']"
           :isPlayerReady="isPlayerReady"
         />
@@ -91,7 +92,10 @@
     <div class="row pb-5">
       <div class="col-12">
         <Outcome
-          winner="GOOD" buttonText="Play Again" outcome="Good has taken the win!" :isPlayerReady="isPlayerReady"
+          winner="GOOD"
+          buttonText="Play Again"
+          outcome="Good has taken the win!"
+          :isPlayerReady="isPlayerReady"
         />
       </div>
     </div>

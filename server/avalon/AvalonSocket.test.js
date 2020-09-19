@@ -146,8 +146,10 @@ test('update player with ready status', () => {
     expect(player.ready).toBe(true);
   }, () => { });
 
-  expect(io.messageHistory.length).toBe(1);
+  console.log(io.messageHistory);
+  expect(io.messageHistory.length).toBe(2);
   expect(io.messageHistory[0]).toBe('player-updated');
+  expect(io.messageHistory[1]).toBe('player-assigned');
   expect(io.obj).toBeDefined();
 });
 
@@ -174,8 +176,9 @@ test('update player with proposal approval vote', () => {
     expect(player.vote).toBe('APPROVE');
   }, () => { });
 
-  expect(io.messageHistory.length).toBe(1);
+  expect(io.messageHistory.length).toBe(2);
   expect(io.messageHistory[0]).toBe('player-updated');
+  expect(io.messageHistory[1]).toBe('player-assigned');
   expect(io.obj).toBeDefined();
 });
 
@@ -202,8 +205,9 @@ test('update player with proposal approval vote', () => {
     expect(player.vote).toBe('SUCCEED');
   }, () => { });
 
-  expect(io.messageHistory.length).toBe(1);
+  expect(io.messageHistory.length).toBe(2);
   expect(io.messageHistory[0]).toBe('player-updated');
+  expect(io.messageHistory[1]).toBe('player-assigned');
   expect(io.obj).toBeDefined();
 });
 
