@@ -1,6 +1,11 @@
 class Room {
 
   // Need to be implemented by child classes
+  constructor() {
+    this.minPlayers = 100;
+    this.maxPlayers = 100;
+  }
+
   init(id) { }
   copy() { }
   fromRawObject(obj) { }
@@ -32,8 +37,9 @@ class Room {
     }
     return copy;
   }
+
   hasEnoughPlayers() {
-    return this.playerIds.length >= this.game.minPlayers;
+    return this.playerIds.length >= this.minPlayers && this.playerIds.length <= this.maxPlayers;
   }
 
   hasPlayerId(playerId) {

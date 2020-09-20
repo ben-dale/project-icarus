@@ -2,6 +2,12 @@ const Room = require('../../common/models/Room');
 const Avalon = require('../Avalon');
 
 class AvalonRoom extends Room {
+
+  constructor() {
+    super()
+    this.minPlayers = 5;
+    this.maxPlayers = 10;
+  }
   
   init(id) {
     this.id = id;

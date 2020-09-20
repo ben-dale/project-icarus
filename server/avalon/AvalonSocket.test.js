@@ -435,8 +435,6 @@ test('player rejoins', () => {
     expect(room.playerIds).toStrictEqual(['1', '2', '3', '4', '789']);
   }, () => { });
 
-  console.log(io);
-
   expect(io.messageHistory[0]).toBe('player-assigned');
   expect(io.messageHistory[1]).toBe('player-assigned');
   expect(io.messageHistory[2]).toBe('player-assigned');

@@ -95,7 +95,7 @@ class AvalonSocket {
 
         new AvalonRoom().getFromRedis(redisClient, updatedPlayer.roomId, (room) => {
           new AllPlayers().getFromRedis(redisClient, room.playerIds, (allPlayers) => {
-            if (allPlayers.areReady() && room.hasEnoughPlayers()) { // Need to put in a condition to stop play if a player leaves
+            if (allPlayers.areReady() && room.hasEnoughPlayers()) {
               room.game.next(redisClient, io, allPlayers, room.id); // This mutates the game instance which is grim
               room.storeInRedis(redisClient);
               room.emitToAll(io);

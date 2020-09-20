@@ -10,12 +10,6 @@ const BasicState = require('./states/BasicState');
 
 class Avalon {
 
-  // Move to AvalonRoom.js?
-  constructor() {
-    this.minPlayers = 5;
-    this.maxPlayers = 10;
-  }
-
   fromRawObject(obj) {
     this.questLogs = obj.questLogs.map(ql => new QuestLog().fromRawObject(ql));
     this.settings = new Settings().fromRawObject(obj.settings);
@@ -23,8 +17,6 @@ class Avalon {
     this.screen = obj.screen;
     this.state = obj.state;
     this.closed = obj.closed;
-    this.minPlayers = obj.minPlayers;
-    this.maxPlayers = obj.maxPlayers;
     this.result = obj.result;
     return this;
   }
@@ -37,8 +29,6 @@ class Avalon {
     avalon.currentQuest = this.currentQuest.copy();
     avalon.settings = this.settings.copy();
     avalon.questLogs = this.questLogs.map(ql => ql.copy());
-    avalon.minPlayers = this.minPlayers;
-    avalon.maxPlayers = this.maxPlayers;
     avalon.result = this.result;
     return avalon;
   }
@@ -56,7 +46,7 @@ class Avalon {
 
   // TODO remove mutation from this and have each block return new instance of Avalon
   next(redisClient, io, allPlayers, roomId) {
-    if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER')) && this.enoughPlayersToStartGame(allPlayers)) {
+    if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER'))) {
       console.log('starting role reveal...');
       new RoleReveal(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'ROLE_REVEAL') {
@@ -98,10 +88,6 @@ class Avalon {
       const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
       this.questLogs[indexOfCurrentQuestLog].result = this.currentQuest.result;
     }
-  }
-
-  enoughPlayersToStartGame(allPlayers) {
-    return allPlayers.count() >= this.minPlayers && allPlayers.count() <= this.maxPlayers;
   }
 
   allQuestVotesAreRevealed() {
