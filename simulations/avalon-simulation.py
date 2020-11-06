@@ -19,6 +19,7 @@ try:
     driver.find_element_by_tag_name('input').send_keys('user0')
     driver.find_element_by_id('button-start').click()
     wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'btn-success')))
+    driver.find_elements_by_class_name('btn-success')[0].click()
 
     # Set up other players
     for i in range(1,5):
@@ -30,6 +31,7 @@ try:
         driver.find_element_by_tag_name('input').send_keys('user' + str(i))
         driver.find_element_by_id('button-start').click()
         wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'btn-success')))
+        driver.find_elements_by_class_name('btn-success')[0].click()
 
 finally:
     print('test')
