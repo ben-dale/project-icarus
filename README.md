@@ -57,3 +57,24 @@ Commit these files to `master` at this point.
 ```
 
 Pushes latest master to heroku.
+
+## Selenium
+
+[Selenium](https://selenium-python.readthedocs.io/locating-elements.html) is used to run automated tests in the browser, to make sure nothing is broken. Cypress would have been used but it doesn't support mulitple tabs and isn't really for this kind of testing.
+
+```shell
+sudo apt install geckodriver-firefox
+pip3 install selenium
+```
+
+Run geckodriver
+
+```shell
+geckodriver
+```
+
+Once geckodriver is running locally, you can run any of the tests in `/simulations`.
+
+```shell
+python3 test.py
+```
