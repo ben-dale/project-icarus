@@ -1,6 +1,6 @@
 const ProposalResult = require('./ProposalResult');
 const QuestLog = require('../models/QuestLog');
-const Avalon = require('../Avalon');
+const Avalon = require('../models/Avalon');
 const AvalonPlayer = require('../../avalon/models/AvalonPlayer');
 const AllPlayers = require('../../common/models/AllPlayers');
 const MockIo = require('../../mocks/MockIo');

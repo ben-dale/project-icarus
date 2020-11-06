@@ -1,5 +1,5 @@
 const Room = require('../../common/models/Room');
-const Avalon = require('../Avalon');
+const Avalon = require('./Avalon');
 
 class AvalonRoom extends Room {
 

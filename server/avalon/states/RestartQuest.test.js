@@ -1,6 +1,6 @@
 const RestartQuest = require('./RestartQuest');
 const QuestLog = require('../models/QuestLog');
-const Avalon = require('../Avalon');
+const Avalon = require('../models/Avalon');
 const AvalonPlayer = require('../models/AvalonPlayer');
 const AllPlayers = require('../../common/models/AllPlayers');
 const MockIo = require('../../mocks/MockIo');

@@ -1,5 +1,5 @@
 const QuestResultReveal = require('./QuestResultReveal');
-const Avalon = require('../Avalon');
+const Avalon = require('../models/Avalon');
 const AvalonPlayer = require('../models/AvalonPlayer');
 const AllPlayers = require('../../common/models/AllPlayers');
 const MockIo = require('../../mocks/MockIo');

@@ -1,5 +1,5 @@
 const BasicState = require('./BasicState');
-const Avalon = require('../Avalon');
+const Avalon = require('../models/Avalon');
 const AvalonPlayer = require('../../avalon/models/AvalonPlayer');
 const AllPlayers = require('../../common/models/AllPlayers');
 const MockIo = require('../../mocks/MockIo');
