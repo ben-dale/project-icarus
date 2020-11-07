@@ -15,13 +15,13 @@
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"
-              :class="['sim-select-player-' + index, 'btn border-secondary text-white btn-block']"
+              :class="['sim-select-player-button-' + index, 'btn border-secondary text-white btn-block']"
               v-on:click="onPlayerSelected(player.id)"
               :disabled="isPlayerReady || requiredPlayers == proposedPlayerIds.length"
             >{{player.name}}</button>
             <button
               v-if="proposedPlayerIds.includes(player.id)"
-              :class="['sim-select-player-' + index, 'btn btn-info btn-block']"
+              :class="['sim-select-player-button-' + index, 'btn btn-info btn-block']"
               v-on:click="onPlayerDeselected(player.id)"
               :disabled="isPlayerReady"
             >{{player.name}}</button>

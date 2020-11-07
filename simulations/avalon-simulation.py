@@ -75,7 +75,7 @@ try:
         # Setup quest proposal
         driver.switch_to_window(driver.window_handles[current_leader])
         for i in range (0, players_required_per_round[j]):
-            driver.find_element_by_class_name('sim-select-player-' + str(i)).click()
+            driver.find_element_by_class_name('sim-select-player-button-' + str(i)).click()
 
         # Start quest proposal vote
         for i in range (0, 5):
@@ -115,9 +115,9 @@ try:
 
     # Switch to assassin and nominate player (not merlin)
     driver.switch_to_window(driver.window_handles[assassin])
-    goodPlayer0 = driver.find_element_by_class_name('sim-select-player-0')
-    goodPlayer1 = driver.find_element_by_class_name('sim-select-player-1')
-    goodPlayer2 = driver.find_element_by_class_name('sim-select-player-2')
+    goodPlayer0 = driver.find_element_by_class_name('sim-select-player-button-0')
+    goodPlayer1 = driver.find_element_by_class_name('sim-select-player-button-1')
+    goodPlayer2 = driver.find_element_by_class_name('sim-select-player-button-2')
     if goodPlayer0.text != 'User' + str(merlin):
         goodPlayer0.click()
     elif goodPlayer1.text != 'User' + str(merlin):
