@@ -17,7 +17,7 @@
           >
             <button
               v-if="!result.revealed"
-              class="btn btn-secondary btn py-4 btn-block"
+              :class="['sim-reveal-button-' + index, 'btn btn-secondary btn py-4 btn-block']"
               v-on:click="revealQuestVote(index)"
               :disabled="!playerIsOrganiser"
             >Reveal</button>

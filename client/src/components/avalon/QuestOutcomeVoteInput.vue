@@ -32,14 +32,14 @@
             <div class="row">
               <div class="col-6 col-md-3 offset-md-3">
                 <button
-                  :class="[(vote == 'SUCCEED' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4']"
+                  :class="[(vote == 'SUCCEED' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4 sim-succeed-button']"
                   :disabled="isPlayerReady"
                   @click="succeed(true)"
                 >Succeed</button>
               </div>
               <div class="col-6 col-md-3">
                 <button
-                  :class="[(vote == 'SABOTAGE' ? 'btn-danger' : 'border-secondary'), 'btn text-white btn-block py-4']"
+                  :class="[(vote == 'SABOTAGE' ? 'btn-danger' : 'border-secondary'), 'btn text-white btn-block py-4 sim-sabotage-button']"
                   :disabled="!isEvil || isPlayerReady"
                   @click="succeed(false)"
                 >Sabotage</button>

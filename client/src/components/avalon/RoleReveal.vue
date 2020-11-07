@@ -8,19 +8,17 @@
         </h2>
       </div>
     </div>
+    
     <div class="row">
       <div class="col-md-12 col-lg-6 offset-lg-3">
         <div class="card bg-dark border-primary text-center">
-          <h4 v-if="role == 'GUARD'" class="text-white bg-info card-header">You are a Royal Guard</h4>
-          <h4 v-if="role == 'MERLIN'" class="text-white bg-info card-header">You are Merlin</h4>
-          <h4 v-if="role == 'PERCIVAL'" class="text-white bg-info card-header">You are Percival</h4>
-          <h4
-            v-if="role == 'ASSASSIN'"
-            class="text-white bg-danger card-header"
-          >You are the Assassin</h4>
-          <h4 v-if="role == 'MINION'" class="text-white bg-danger card-header">You are a Minion</h4>
-          <h4 v-if="role == 'MORGANA'" class="text-white bg-danger card-header">You are Morgana</h4>
-          <h4 v-if="role == 'OBERON'" class="text-white bg-danger card-header">You are Oberon</h4>
+          <h4 v-if="role == 'GUARD'" class="sim-role sim-role-good text-white bg-info card-header">You are a Royal Guard</h4>
+          <h4 v-if="role == 'MERLIN'" class="sim-role sim-role-good text-white bg-info card-header">You are Merlin</h4>
+          <h4 v-if="role == 'PERCIVAL'" class="sim-role sim-role-good text-white bg-info card-header">You are Percival</h4>
+          <h4 v-if="role == 'ASSASSIN'" class="sim-role sim-role-bad text-white bg-danger card-header">You are the Assassin</h4>
+          <h4 v-if="role == 'MINION'" class="sim-role sim-role-bad text-white bg-danger card-header">You are a Minion</h4>
+          <h4 v-if="role == 'MORGANA'" class="sim-role sim-role-bad text-white bg-danger card-header">You are Morgana</h4>
+          <h4 v-if="role == 'OBERON'" class="sim-role sim-role-bad text-white bg-danger card-header">You are Oberon</h4>
           <div class="card-body text-white">
             <p v-if="team == 'GOOD' && role === 'MERLIN'" class="card-text">
               Your goal is to successfully complete three quests. The Assassin will have an opportunity to identify you after three successful quests. Evil will win if the Assassin can identify you.
@@ -95,7 +93,7 @@
           <div class="card-body" v-if="team == 'EVIL' || role == 'MERLIN'">
             <div class="row">
               <div v-for="(playerId, index) in metadata" :key="index" class="col-6">
-                <p class="text-center card-text bg-danger py-1">{{findPlayerName(playerId)}}</p>
+                <p class="sim-team-mate text-center card-text bg-danger py-1">{{findPlayerName(playerId)}}</p>
               </div>
             </div>
           </div>

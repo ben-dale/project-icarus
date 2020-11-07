@@ -2,7 +2,7 @@
   <button
     @click="click"
     type="button"
-    :class="['btn', 'btn-success', 'btn-block', (isPlayerReady ? 'btn-warning' : 'btn-success')]"
+    :class="['sim-ready-button', 'btn', 'btn-success', 'btn-block', (isPlayerReady ? 'btn-warning' : 'btn-success')]"
     :disabled="disabled"
   >{{isPlayerReady ? 'Not ready' : 'Ready'}}</button>
 </template>

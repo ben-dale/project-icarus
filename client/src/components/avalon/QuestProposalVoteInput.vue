@@ -23,14 +23,14 @@
         <div class="row">
           <div class="col-6 col-md-3 offset-md-3">
             <button
-              :class="[(vote == 'APPROVE' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4']"
+              :class="[(vote == 'APPROVE' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4 sim-approve-button']"
               :disabled="isPlayerReady"
               @click="approve(true)"
             >Approve</button>
           </div>
           <div class="col-6 col-md-3">
             <button
-              :class="[(vote == 'REJECT' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4']"
+              :class="[(vote == 'REJECT' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4 sim-reject-button']"
               :disabled="isPlayerReady"
               @click="approve(false)"
             >Reject</button>
