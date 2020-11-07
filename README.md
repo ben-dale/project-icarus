@@ -26,7 +26,7 @@ Ping Redis
 redis-cli -h localhost ping
 ```
 
-## Local development
+## Development
 
 ```shell
 cd client && npm run serve
@@ -41,6 +41,12 @@ cd server && node server.js
 Starts Express server on port 3000. This is where all the socket stuff is configured.
 
 In development the client will point socket connections at localhost:3000.
+
+Run server code unit tests
+
+```shell
+cd server && npm test
+```
 
 ## Deployment
 
