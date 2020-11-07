@@ -18,7 +18,7 @@
   "scripts": {
     "test": "jest",
     "testCoverage": "jest --coverage",
-    "start": "node server.js"
+    "serve": "node server.js"
   },
   "author": "",
   "license": "ISC"
