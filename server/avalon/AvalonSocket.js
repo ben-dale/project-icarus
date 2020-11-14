@@ -153,7 +153,8 @@ class AvalonSocket {
           }
 
           if (data.game && data.game.currentQuest && data.game.currentQuest.hasOwnProperty('voteToReveal') && room.game.currentQuest.organiserId == player.id) {
-            updatedRoom.game.revealVote(data.game.currentQuest.voteToReveal); // MORE MUTATION OH NO
+            // TODO - finish off mutation with all of the code above
+            updatedRoom.game = updatedRoom.game.revealVote(data.game.currentQuest.voteToReveal); 
           }
 
           updatedRoom.storeInRedis(redisClient);

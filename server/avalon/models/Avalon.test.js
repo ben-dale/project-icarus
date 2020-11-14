@@ -299,7 +299,7 @@ test('starts next quest', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
   avalon.next(redisClient, io, allPlayers, roomId); // role reveal
@@ -326,8 +326,8 @@ test('starts next quest', () => {
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
-  avalon.revealVote(0);
-  avalon.revealVote(1);
+  avalon = avalon.revealVote(0);
+  avalon = avalon.revealVote(1);
 
   const previousOrganiserId = avalon.currentQuest.organiserId;
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
@@ -347,8 +347,6 @@ test('starts next quest', () => {
   expect(avalon.currentQuest.result).toBe('');
 });
 
-
-
 test('starts merlin id', () => {
   const roomId = '293jd9';
   const allPlayers = new AllPlayers().init([
@@ -361,7 +359,7 @@ test('starts merlin id', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
   avalon.next(redisClient, io, allPlayers, roomId); // role reveal
@@ -388,8 +386,8 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
-  avalon.revealVote(0);
-  avalon.revealVote(1);
+  avalon = avalon.revealVote(0);
+  avalon = avalon.revealVote(1);
 
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
@@ -407,9 +405,9 @@ test('starts merlin id', () => {
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
-  avalon.revealVote(0);
-  avalon.revealVote(1);
-  avalon.revealVote(2);
+  avalon = avalon.revealVote(0);
+  avalon = avalon.revealVote(1);
+  avalon = avalon.revealVote(2);
 
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
@@ -426,8 +424,8 @@ test('starts merlin id', () => {
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
-  avalon.revealVote(0);
-  avalon.revealVote(1);
+  avalon = avalon.revealVote(0);
+  avalon = avalon.revealVote(1);
 
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
@@ -447,7 +445,7 @@ test('starts merlin id', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
   avalon.next(redisClient, io, allPlayers, roomId); // role reveal
@@ -474,8 +472,8 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
-  avalon.revealVote(0);
-  avalon.revealVote(1);
+  avalon = avalon.revealVote(0);
+  avalon = avalon.revealVote(1);
 
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
@@ -493,9 +491,9 @@ test('starts merlin id', () => {
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
-  avalon.revealVote(0);
-  avalon.revealVote(1);
-  avalon.revealVote(2);
+  avalon = avalon.revealVote(0);
+  avalon = avalon.revealVote(1);
+  avalon = avalon.revealVote(2);
 
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
@@ -512,8 +510,8 @@ test('starts merlin id', () => {
   ]);
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
-  avalon.revealVote(0);
-  avalon.revealVote(1);
+  avalon = avalon.revealVote(0);
+  avalon = avalon.revealVote(1);
 
   avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 

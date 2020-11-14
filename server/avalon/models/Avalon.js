@@ -82,12 +82,14 @@ class Avalon {
   }
 
   revealVote(index) {
-    this.currentQuest = this.currentQuest.revealVote(index);
-    if (this.currentQuest.allVotesRevealed()) {
-      this.currentQuest = this.currentQuest.withResult();
-      const indexOfCurrentQuestLog = this.questLogs.map(ql => ql.id).indexOf(this.currentQuest.id);
-      this.questLogs[indexOfCurrentQuestLog].result = this.currentQuest.result;
+    const copy = this.copy();
+    copy.currentQuest = copy.currentQuest.revealVote(index);
+    if (copy.currentQuest.allVotesRevealed()) {
+      copy.currentQuest = copy.currentQuest.withResult();
+      const indexOfCurrentQuestLog = copy.questLogs.map(ql => ql.id).indexOf(copy.currentQuest.id);
+      copy.questLogs[indexOfCurrentQuestLog].result = copy.currentQuest.result;
     }
+    return copy;
   }
 
   allQuestVotesAreRevealed() {
