@@ -5,6 +5,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support import expected_conditions as EC
 
 driver = webdriver.Firefox()
+driver.set_window_position(0, 0)
+driver.set_window_size(1024, 2000)
 wait = WebDriverWait(driver, 2)
 
 # Simulate a good only voting game for 
@@ -137,4 +139,5 @@ try:
         assert final_text == 'The Assassin was not able to identify Merlin. Good has taken the win!'
 
 finally:
+    # print("done")
     driver.quit()
