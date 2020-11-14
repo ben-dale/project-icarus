@@ -4,9 +4,8 @@
     <div class="card-body text-center bg-dark">
       <p v-if="description" class="card-text">{{description}}</p>
       <p
-        v-if="minPlayers && maxPlayers && teams"
         class="card-subtitle"
-      >{{minPlayers}} - {{maxPlayers}} players, {{teams}} teams</p>
+      >{{minPlayers}} - {{maxPlayers}} players{{teams == 0 ? '' : ', ' + teams + ' teams'}}</p>
     </div>
     <div v-if="!comingSoon" class="card-footer bg-primary">
       <button class="btn btn-sm btn-secondary btn-block" @click="$emit('play')">Start</button>

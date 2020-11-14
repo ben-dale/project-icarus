@@ -176,17 +176,21 @@
         </div>
       </div>
     </div>
+    <div class="row d-none d-lg-block">
+      <Footer />
+    </div>
   </div>
 </template>
 
 <script>
 import ReadyButton from "@/components/common/ReadyButton.vue";
 import PlayerReadyBar from "@/components/common/PlayerReadyBar.vue";
+import Footer from "@/components/common/Footer.vue";
 import $ from "jquery";
 
 export default {
   name: "Lobby",
-  components: { ReadyButton, PlayerReadyBar },
+  components: { ReadyButton, PlayerReadyBar, Footer },
   props: {
     minPlayers: Number,
     socket: Object,

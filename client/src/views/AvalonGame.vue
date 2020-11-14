@@ -123,6 +123,9 @@
     </div>
 
     <div style="padding-bottom:200px"></div>
+    <div class="row d-none d-lg-block">
+      <Footer />
+    </div>
   </div>
 </template>
 
@@ -133,10 +136,11 @@ import TextInput from "@/components/common/TextInput.vue";
 import Lobby from "@/components/common/Lobby.vue";
 import RoleReveal from "@/components/avalon/RoleReveal.vue";
 import Game from "@/components/avalon/Game.vue";
+import Footer from "@/components/common/Footer.vue";
 
 export default {
   name: "AvalonGame",
-  components: { TextInput, Lobby, RoleReveal, Game, RoomClosed },
+  components: { TextInput, Lobby, RoleReveal, Game, RoomClosed, Footer },
   props: {
     socket: {
       type: Object,

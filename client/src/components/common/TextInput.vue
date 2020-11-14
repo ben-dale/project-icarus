@@ -24,12 +24,17 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <Footer />
+    </div>
   </div>
 </template>
 
 <script>
+import Footer from "@/components/common/Footer.vue";
 export default {
   name: "TextInput",
+  components: { Footer },
   props: {
     buttonText: String,
     placeholder: String,

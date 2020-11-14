@@ -189,11 +189,7 @@ export default {
     },
     proposedQuestPlayerNames: function() {
       let names = [];
-      for (
-        let i = 0;
-        i < this.game.currentQuest.proposedPlayerIds.length;
-        i++
-      ) {
+      for (let i = 0; i < this.game.currentQuest.proposedPlayerIds.length; i++) {
         names.push(
           this.getPlayerNameById(this.game.currentQuest.proposedPlayerIds[i])
         );

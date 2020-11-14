@@ -1,7 +1,7 @@
 <template>
   <div class="fixed-bottom text-center pt-3 pb-1 bg-primary text-light">
     <p>
-      Please consider donating to Project Icarus <u><a class="text-light" href="/donate">here</a></u>.
+      Built and mainted by <u><a class="text-light" href="https://twitter.com/mrbenjamind">@mrbenjamind</a></u>
     </p>
   </div>
 </template>
