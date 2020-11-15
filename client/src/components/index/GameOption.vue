@@ -3,12 +3,13 @@
     <h5 class="card-header border-primary text-center">{{name}}</h5>
     <div class="card-body text-center bg-dark">
       <p v-if="description" class="card-text">{{description}}</p>
+      <p>Based on the original board game.</p>
       <p
         class="card-subtitle"
-      >{{minPlayers}} - {{maxPlayers}} players{{teams == 0 ? '' : ', ' + teams + ' teams'}}</p>
+      ><b>{{minPlayers}} - {{maxPlayers}} players{{teams == 0 ? '' : ', ' + teams + ' teams'}}</b></p>
     </div>
     <div v-if="!comingSoon" class="card-footer bg-primary">
-      <button class="btn btn-sm btn-secondary btn-block" @click="$emit('play')">Start</button>
+      <button class="btn btn-md btn-secondary btn-block" @click="$emit('play')">Create lobby</button>
     </div>
      <div v-if="comingSoon" class="card-footer bg-primary text-center">
       Coming Soon!

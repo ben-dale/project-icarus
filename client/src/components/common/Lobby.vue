@@ -151,6 +151,8 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content bg-dark text-white border-primary">
           <div class="modal-body py-5 px-5">
+            <p>Based on the original board game <u><a class="text-light" href="https://boardgamegeek.com/boardgame/128882/resistance-avalon">The Resistance: Avalon</a></u></p>
+            <hr class="border border-primary"/>
             <p>The game begins by assigning each player a role and a team, either Good or Evil.</p>
             <p>The goal of Good is to complete three quests and help Merlin to keep their identity hidden.</p>
             <p>The goal of Evil is to disrupt the flow of the game.</p>
