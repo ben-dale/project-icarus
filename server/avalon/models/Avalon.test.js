@@ -30,11 +30,11 @@ test('starts the game', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId);
-  avalon.next(redisClient, io, allPlayers, roomId);
+  avalon = avalon.next(redisClient, io, allPlayers, roomId);
+  avalon = avalon.next(redisClient, io, allPlayers, roomId);
 
   expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('QUEST_PROPOSING');
@@ -52,15 +52,15 @@ test('starts proposal vote', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('QUEST_PROPOSAL');
@@ -78,15 +78,15 @@ test('starts proposal vote result', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
@@ -95,7 +95,7 @@ test('starts proposal vote result', () => {
     new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
     new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
 
   expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('QUEST_PROPOSAL_RESULT');
@@ -115,15 +115,15 @@ test('starts quest', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
@@ -132,8 +132,8 @@ test('starts quest', () => {
     new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
     new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
 
   expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('QUEST_STARTED');
@@ -154,15 +154,15 @@ test('restarts quest', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(false),
@@ -171,9 +171,9 @@ test('restarts quest', () => {
     new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
     new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   const previousOrganiserId = avalon.currentQuest.organiserId;
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
   const nextOrganiserId = previousOrganiserId == '5' ? '1' : '' + (parseInt(previousOrganiserId) + 1);
 
   expect(avalon.screen).toBe('GAME');
@@ -195,15 +195,15 @@ test('game over with EVIL win when 5 disagreements', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(false),
@@ -212,32 +212,32 @@ test('game over with EVIL win when 5 disagreements', () => {
     new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
     new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest restarting
 });
 
 test('starts quest result reveal', () => {
@@ -252,15 +252,15 @@ test('starts quest result reveal', () => {
   const io = new MockIo();
   const redisClient = new MockRedisClient();
 
-  const avalon = new Avalon().init();
+  let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
@@ -269,8 +269,8 @@ test('starts quest result reveal', () => {
     new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
     new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
   const allPlayersWithQuestVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
     new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
@@ -278,14 +278,13 @@ test('starts quest result reveal', () => {
     new AvalonPlayer().init('4', 'player4', roomId),
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
 
   expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('QUEST_RESULT_REVEAL');
   expect(avalon.questLogs[0].playerIds).toStrictEqual(['1', '2']);
   expect(avalon.currentQuest.proposalAccepted).toBe(true);
 });
-
 
 test('starts next quest', () => {
   const roomId = '293jd9';
@@ -302,12 +301,12 @@ test('starts next quest', () => {
   let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
@@ -316,8 +315,8 @@ test('starts next quest', () => {
     new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
     new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
   const allPlayersWithQuestVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
     new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
@@ -325,12 +324,12 @@ test('starts next quest', () => {
     new AvalonPlayer().init('4', 'player4', roomId),
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon = avalon.revealVote(0);
   avalon = avalon.revealVote(1);
 
   const previousOrganiserId = avalon.currentQuest.organiserId;
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
   const nextOrganiserId = previousOrganiserId == '5' ? '1' : '' + (parseInt(previousOrganiserId) + 1);
 
   expect(avalon.screen).toBe('GAME');
@@ -362,12 +361,12 @@ test('starts merlin id', () => {
   let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
@@ -376,8 +375,8 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
     new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
   let allPlayersWithQuestVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
     new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
@@ -385,17 +384,17 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('4', 'player4', roomId),
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon = avalon.revealVote(0);
   avalon = avalon.revealVote(1);
 
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('3');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   allPlayersWithQuestVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
     new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
@@ -403,18 +402,18 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('4', 'player4', roomId),
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
   avalon = avalon.revealVote(0);
   avalon = avalon.revealVote(1);
   avalon = avalon.revealVote(2);
 
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   allPlayersWithQuestVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
     new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
@@ -422,12 +421,12 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('4', 'player4', roomId),
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
   avalon = avalon.revealVote(0);
   avalon = avalon.revealVote(1);
 
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
   expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('MERLIN_ID');
@@ -448,12 +447,12 @@ test('starts merlin id', () => {
   let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
-  avalon.next(redisClient, io, allPlayers, roomId); // role reveal
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // role reveal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposing
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
 
   const allPlayersWithVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withProposalApproved(true),
@@ -462,8 +461,8 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('4', 'player4', roomId).withProposalApproved(true),
     new AvalonPlayer().init('5', 'player5', roomId).withProposalApproved(true)
   ]);
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest started
   let allPlayersWithQuestVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
     new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
@@ -471,17 +470,17 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('4', 'player4', roomId),
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
   avalon = avalon.revealVote(0);
   avalon = avalon.revealVote(1);
 
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('3');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   allPlayersWithQuestVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withSucceedQuest(true),
     new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
@@ -489,18 +488,18 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('4', 'player4', roomId),
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
   avalon = avalon.revealVote(0);
   avalon = avalon.revealVote(1);
   avalon = avalon.revealVote(2);
 
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1');
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('2');
-  avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
-  avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
+  avalon = avalon.next(redisClient, io, allPlayers, roomId); // quest proposal
+  avalon = avalon.next(redisClient, io, allPlayersWithVote, roomId); // quest proposal result
   allPlayersWithQuestVote = new AllPlayers().init([
     new AvalonPlayer().init('1', 'player1', roomId).withTeam('GOOD').withRole('MERLIN').withSucceedQuest(true),
     new AvalonPlayer().init('2', 'player2', roomId).withTeam('EVIL').withSucceedQuest(true),
@@ -508,16 +507,16 @@ test('starts merlin id', () => {
     new AvalonPlayer().init('4', 'player4', roomId),
     new AvalonPlayer().init('5', 'player5', roomId)
   ]);
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // quest result reveal
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
   avalon = avalon.revealVote(0);
   avalon = avalon.revealVote(1);
 
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
   avalon.currentQuest = avalon.currentQuest.withProposedPlayerId('1')
 
-  avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
+  avalon = avalon.next(redisClient, io, allPlayersWithQuestVote, roomId); // next quest
 
   expect(avalon.screen).toBe('GAME');
   expect(avalon.state).toBe('GAME_OVER');

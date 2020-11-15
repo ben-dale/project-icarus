@@ -96,9 +96,9 @@ class AvalonSocket {
         new AvalonRoom().getFromRedis(redisClient, updatedPlayer.roomId, (room) => {
           new AllPlayers().getFromRedis(redisClient, room.playerIds, (allPlayers) => {
             if (allPlayers.areReady() && room.hasEnoughPlayers()) {
-              room.game.next(redisClient, io, allPlayers, room.id); // This mutates the game instance which is grim
-              room.storeInRedis(redisClient);
-              room.emitToAll(io);
+              const updatedRoom = room.next(redisClient, io, allPlayers, room.id);
+              updatedRoom.storeInRedis(redisClient);
+              updatedRoom.emitToAll(io);
             }
           }, () => { });
         }, () => { });
@@ -153,7 +153,7 @@ class AvalonSocket {
           }
 
           if (data.game && data.game.currentQuest && data.game.currentQuest.hasOwnProperty('voteToReveal') && room.game.currentQuest.organiserId == player.id) {
-            // TODO - finish off mutation with all of the code above
+            // TODO - finish off mutation with all of the code above?
             updatedRoom.game = updatedRoom.game.revealVote(data.game.currentQuest.voteToReveal); 
           }
 

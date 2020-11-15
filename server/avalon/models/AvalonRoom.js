@@ -28,6 +28,12 @@ class AvalonRoom extends Room {
     return copy;
   }
 
+  next(redisClient, io, allPlayers, roomId) {
+    const copy = this.copy();
+    copy.game = this.game.next(redisClient, io, allPlayers, roomId);
+    return copy;
+  }
+
   fromRawObject(obj) {
     this.id = obj.id;
     this.ownerId = obj.ownerId;

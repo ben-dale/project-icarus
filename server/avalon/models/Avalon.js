@@ -45,39 +45,58 @@ class Avalon {
   }
 
   // TODO remove mutation from this and have each block return new instance of Avalon
+  // I don't think this should have access to redisClient? Maybe, maybe not.
   next(redisClient, io, allPlayers, roomId) {
     if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER'))) {
       console.log('starting role reveal...');
-      new RoleReveal(this).start(redisClient, io, allPlayers, roomId);
+      const copy = this.copy();
+      new RoleReveal(copy).start(redisClient, io, allPlayers, roomId);
+      return copy;
     } else if (this.screen == 'ROLE_REVEAL') {
       console.log('starting game...');
-      new BasicState(this, 'GAME', 'QUEST_PROPOSING').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
+      const copy = this.copy();
+      new BasicState(copy, 'GAME', 'QUEST_PROPOSING').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
+      return copy;
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSING' && this.currentQuest.proposedPlayerIds.length == this.currentQuest.requiredPlayers) {
       console.log('starting proposal vote...');
-      new BasicState(this, 'GAME', 'QUEST_PROPOSAL').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
+      const copy = this.copy();
+      new BasicState(copy, 'GAME', 'QUEST_PROPOSAL').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
+      return copy;
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL') {
       console.log('starting proposal result...');
-      new ProposalResult(this).start(redisClient, io, allPlayers, roomId);
+      const copy = this.copy();
+      new ProposalResult(copy).start(redisClient, io, allPlayers, roomId);
+      return copy;
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && this.currentQuest.proposalAccepted) {
       console.log('starting quest...');
-      new BasicState(this, 'GAME', 'QUEST_STARTED').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
+      const copy = this.copy();
+      new BasicState(copy, 'GAME', 'QUEST_STARTED').resetPlayersAndEmit(redisClient, io, allPlayers, roomId);
+      return copy;
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && !this.currentQuest.proposalAccepted) {
       console.log('restarting quest...');
-      new RestartQuest(this).start(redisClient, io, allPlayers, roomId);
+      const copy = this.copy();
+      new RestartQuest(copy).start(redisClient, io, allPlayers, roomId);
+      return copy;
     } else if (this.screen == 'GAME' && this.state == 'QUEST_STARTED' && this.allPlayersHaveVotedOnQuestResult(allPlayers)) {
       console.log('starting quest result reveal...');
-      new QuestResultReveal(this).start(redisClient, io, allPlayers, roomId);
+      const copy = this.copy();
+      new QuestResultReveal(copy).start(redisClient, io, allPlayers, roomId);
+      return copy;
     } else if (this.screen == 'GAME' && this.state == 'QUEST_RESULT_REVEAL' && this.allQuestVotesAreRevealed()) {
       console.log('starting next quest...');
-      new NextQuest(this).start(redisClient, io, allPlayers, roomId);
+      const copy = this.copy();
+      new NextQuest(copy).start(redisClient, io, allPlayers, roomId);
+      return copy;
     } else if (this.screen == 'GAME' && this.state == 'MERLIN_ID' && this.currentQuest.proposedPlayerIds.length == 1) {
       console.log('starting game over...');
+      const copy = this.copy();
       if (allPlayers.players.find(p => p.role == 'MERLIN' && p.id == this.currentQuest.proposedPlayerIds[0])) {
-        new BasicState(this, 'GAME', 'GAME_OVER').withResult('EVIL');
+        new BasicState(copy, 'GAME', 'GAME_OVER').withResult('EVIL');
       } else {
-        new BasicState(this, 'GAME', 'GAME_OVER').withResult('GOOD');
+        new BasicState(copy, 'GAME', 'GAME_OVER').withResult('GOOD');
       }
       allPlayers.resetReadyStatuses().storeInRedis(redisClient).emitToAllWithTeamAndRole(io, roomId);
+      return copy;
     }
   }
 
