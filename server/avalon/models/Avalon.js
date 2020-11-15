@@ -49,9 +49,7 @@ class Avalon {
   next(redisClient, io, allPlayers, roomId) {
     if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER'))) {
       console.log('starting role reveal...');
-      const copy = this.copy();
-      new RoleReveal(copy).start(redisClient, io, allPlayers, roomId);
-      return copy;
+      return new RoleReveal(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'ROLE_REVEAL') {
       console.log('starting game...');
       const copy = this.copy();

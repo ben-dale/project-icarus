@@ -22,28 +22,28 @@ test('start', () => {
   const allPlayers = new AllPlayers().init(players);
 
   // When
-  new RoleReveal(avalon).start(redisClient, io, allPlayers, roomId);
+  const result = new RoleReveal(avalon).start(redisClient, io, allPlayers, roomId);
 
   // Then
-  expect(avalon.questLogs.length).toBe(5);
+  expect(result.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
-    const currentLog = avalon.questLogs[i];
+    const currentLog = result.questLogs[i];
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
-    expect(currentLog.organiserId).toBe(i == 0 ? avalon.currentQuest.organiserId : '');
+    expect(currentLog.organiserId).toBe(i == 0 ? result.currentQuest.organiserId : '');
   }
-  expect(avalon.closed).toBe(true);
-  expect(avalon.screen).toBe('ROLE_REVEAL');
-  expect(avalon.state).toBe('');
-  expect(['1', '2', '3', '4', '5']).toContain(avalon.currentQuest.organiserId);
-  expect(avalon.currentQuest.id).toBe(1);
-  expect(avalon.currentQuest.requiredPlayers).toBe(2);
-  expect(avalon.currentQuest.disagreements).toBe(0);
-  expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(avalon.currentQuest.proposalAccepted).toBe(false);
-  expect(avalon.currentQuest.votes).toStrictEqual([]);
-  expect(avalon.currentQuest.result).toBe('');
+  expect(result.closed).toBe(true);
+  expect(result.screen).toBe('ROLE_REVEAL');
+  expect(result.state).toBe('');
+  expect(['1', '2', '3', '4', '5']).toContain(result.currentQuest.organiserId);
+  expect(result.currentQuest.id).toBe(1);
+  expect(result.currentQuest.requiredPlayers).toBe(2);
+  expect(result.currentQuest.disagreements).toBe(0);
+  expect(result.currentQuest.proposedPlayerIds).toStrictEqual([]);
+  expect(result.currentQuest.proposalAccepted).toBe(false);
+  expect(result.currentQuest.votes).toStrictEqual([]);
+  expect(result.currentQuest.result).toBe('');
 
   expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
   expect(io.messageHistory.filter(mh => mh == 'player-assigned').length).toBe(5);
@@ -88,28 +88,28 @@ test('start with percival and morgana', () => {
   const allPlayers = new AllPlayers().init(players);
 
   // When
-  new RoleReveal(avalon).start(redisClient, io, allPlayers, roomId);
+  const result = new RoleReveal(avalon).start(redisClient, io, allPlayers, roomId);
 
   // Then
-  expect(avalon.questLogs.length).toBe(5);
+  expect(result.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
-    const currentLog = avalon.questLogs[i];
+    const currentLog = result.questLogs[i];
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
-    expect(currentLog.organiserId).toBe(i == 0 ? avalon.currentQuest.organiserId : '');
+    expect(currentLog.organiserId).toBe(i == 0 ? result.currentQuest.organiserId : '');
   }
-  expect(avalon.closed).toBe(true);
-  expect(avalon.screen).toBe('ROLE_REVEAL');
-  expect(avalon.state).toBe('');
-  expect(['1', '2', '3', '4', '5']).toContain(avalon.currentQuest.organiserId);
-  expect(avalon.currentQuest.id).toBe(1);
-  expect(avalon.currentQuest.requiredPlayers).toBe(2);
-  expect(avalon.currentQuest.disagreements).toBe(0);
-  expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(avalon.currentQuest.proposalAccepted).toBe(false);
-  expect(avalon.currentQuest.votes).toStrictEqual([]);
-  expect(avalon.currentQuest.result).toBe('');
+  expect(result.closed).toBe(true);
+  expect(result.screen).toBe('ROLE_REVEAL');
+  expect(result.state).toBe('');
+  expect(['1', '2', '3', '4', '5']).toContain(result.currentQuest.organiserId);
+  expect(result.currentQuest.id).toBe(1);
+  expect(result.currentQuest.requiredPlayers).toBe(2);
+  expect(result.currentQuest.disagreements).toBe(0);
+  expect(result.currentQuest.proposedPlayerIds).toStrictEqual([]);
+  expect(result.currentQuest.proposalAccepted).toBe(false);
+  expect(result.currentQuest.votes).toStrictEqual([]);
+  expect(result.currentQuest.result).toBe('');
 
   expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
   expect(io.messageHistory.filter(mh => mh == 'player-assigned').length).toBe(5);
@@ -156,28 +156,28 @@ test('start with percival and oberon', () => {
   const allPlayers = new AllPlayers().init(players);
 
   // When
-  new RoleReveal(avalon).start(redisClient, io, allPlayers, roomId);
+  const result = new RoleReveal(avalon).start(redisClient, io, allPlayers, roomId);
 
   // Then
-  expect(avalon.questLogs.length).toBe(5);
+  expect(result.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
-    const currentLog = avalon.questLogs[i];
+    const currentLog = result.questLogs[i];
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
-    expect(currentLog.organiserId).toBe(i == 0 ? avalon.currentQuest.organiserId : '');
+    expect(currentLog.organiserId).toBe(i == 0 ? result.currentQuest.organiserId : '');
   }
-  expect(avalon.closed).toBe(true);
-  expect(avalon.screen).toBe('ROLE_REVEAL');
-  expect(avalon.state).toBe('');
-  expect(['1', '2', '3', '4', '5']).toContain(avalon.currentQuest.organiserId);
-  expect(avalon.currentQuest.id).toBe(1);
-  expect(avalon.currentQuest.requiredPlayers).toBe(2);
-  expect(avalon.currentQuest.disagreements).toBe(0);
-  expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(avalon.currentQuest.proposalAccepted).toBe(false);
-  expect(avalon.currentQuest.votes).toStrictEqual([]);
-  expect(avalon.currentQuest.result).toBe('');
+  expect(result.closed).toBe(true);
+  expect(result.screen).toBe('ROLE_REVEAL');
+  expect(result.state).toBe('');
+  expect(['1', '2', '3', '4', '5']).toContain(result.currentQuest.organiserId);
+  expect(result.currentQuest.id).toBe(1);
+  expect(result.currentQuest.requiredPlayers).toBe(2);
+  expect(result.currentQuest.disagreements).toBe(0);
+  expect(result.currentQuest.proposedPlayerIds).toStrictEqual([]);
+  expect(result.currentQuest.proposalAccepted).toBe(false);
+  expect(result.currentQuest.votes).toStrictEqual([]);
+  expect(result.currentQuest.result).toBe('');
   expect(io.messageHistory.filter(mh => mh == 'players-updated').length).toBe(1);
   expect(io.messageHistory.filter(mh => mh == 'player-assigned').length).toBe(5);
 
@@ -226,28 +226,28 @@ test('start with percival, morgana and oberon', () => {
   const allPlayers = new AllPlayers().init(players);
 
   // When
-  new RoleReveal(avalon).start(redisClient, io, allPlayers, roomId);
+  const result = new RoleReveal(avalon).start(redisClient, io, allPlayers, roomId);
 
   // Then
-  expect(avalon.questLogs.length).toBe(5);
+  expect(result.questLogs.length).toBe(5);
   for (let i = 0; i < 5; i++) {
-    const currentLog = avalon.questLogs[i];
+    const currentLog = result.questLogs[i];
     expect(currentLog.id).toBe(i + 1);
     expect(currentLog.playerIds).toStrictEqual([]);
     expect(currentLog.result).toBe('');
-    expect(currentLog.organiserId).toBe(i == 0 ? avalon.currentQuest.organiserId : '');
+    expect(currentLog.organiserId).toBe(i == 0 ? result.currentQuest.organiserId : '');
   }
-  expect(avalon.closed).toBe(true);
-  expect(avalon.screen).toBe('ROLE_REVEAL');
-  expect(avalon.state).toBe('');
-  expect(['1', '2', '3', '4', '5', '6', '7']).toContain(avalon.currentQuest.organiserId);
-  expect(avalon.currentQuest.id).toBe(1);
-  expect(avalon.currentQuest.requiredPlayers).toBe(2);
-  expect(avalon.currentQuest.disagreements).toBe(0);
-  expect(avalon.currentQuest.proposedPlayerIds).toStrictEqual([]);
-  expect(avalon.currentQuest.proposalAccepted).toBe(false);
-  expect(avalon.currentQuest.votes).toStrictEqual([]);
-  expect(avalon.currentQuest.result).toBe('');
+  expect(result.closed).toBe(true);
+  expect(result.screen).toBe('ROLE_REVEAL');
+  expect(result.state).toBe('');
+  expect(['1', '2', '3', '4', '5', '6', '7']).toContain(result.currentQuest.organiserId);
+  expect(result.currentQuest.id).toBe(1);
+  expect(result.currentQuest.requiredPlayers).toBe(2);
+  expect(result.currentQuest.disagreements).toBe(0);
+  expect(result.currentQuest.proposedPlayerIds).toStrictEqual([]);
+  expect(result.currentQuest.proposalAccepted).toBe(false);
+  expect(result.currentQuest.votes).toStrictEqual([]);
+  expect(result.currentQuest.result).toBe('');
 
   expect(io.messageHistory).toContain('players-updated');
   expect(io.messageHistory).toContain('player-assigned');

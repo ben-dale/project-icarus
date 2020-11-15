@@ -5,7 +5,7 @@ const CurrentQuest = require('../models/CurrentQuest');
 
 class RoleReveal {
   constructor(avalon) {
-    this.avalon = avalon;
+    this.avalon = avalon.copy();
   }
 
   start(redisClient, io, allPlayers, roomId) {
@@ -76,6 +76,8 @@ class RoleReveal {
     });
 
     updatedAllPlayers.storeInRedis(redisClient).emitToAll(io, roomId);
+
+    return this.avalon;
   }
 }
 
