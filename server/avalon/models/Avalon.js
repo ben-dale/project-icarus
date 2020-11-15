@@ -1,11 +1,11 @@
 const CurrentQuest = require('./CurrentQuest');
 const QuestLog = require('./QuestLog');
 const Settings = require('./Settings');
-const RoleReveal = require('../states/RoleReveal');
-const QuestResultReveal = require('../states/QuestResultReveal');
-const NextQuest = require('../states/NextQuest');
-const RestartQuest = require('../states/RestartQuest');
-const ProposalResult = require('../states/ProposalResult');
+const RoleRevealState = require('../states/RoleRevealState');
+const QuestResultRevealState = require('../states/QuestResultRevealState');
+const NextQuestState = require('../states/NextQuestState');
+const RestartQuestState = require('../states/RestartQuestState');
+const ProposalResultState = require('../states/ProposalResultState');
 const BasicState = require('../states/BasicState');
 
 class Avalon {
@@ -49,7 +49,7 @@ class Avalon {
   next(redisClient, io, allPlayers, roomId) {
     if ((this.screen == 'LOBBY' || (this.screen == 'GAME' && this.state == 'GAME_OVER'))) {
       console.log('starting role reveal...');
-      return new RoleReveal(this).start(redisClient, io, allPlayers, roomId);
+      return new RoleRevealState(this).start(redisClient, io, allPlayers, roomId);
     } else if (this.screen == 'ROLE_REVEAL') {
       console.log('starting game...');
       const copy = this.copy();
@@ -63,7 +63,7 @@ class Avalon {
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL') {
       console.log('starting proposal result...');
       const copy = this.copy();
-      new ProposalResult(copy).start(redisClient, io, allPlayers, roomId);
+      new ProposalResultState(copy).start(redisClient, io, allPlayers, roomId);
       return copy;
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && this.currentQuest.proposalAccepted) {
       console.log('starting quest...');
@@ -73,17 +73,17 @@ class Avalon {
     } else if (this.screen == 'GAME' && this.state == 'QUEST_PROPOSAL_RESULT' && !this.currentQuest.proposalAccepted) {
       console.log('restarting quest...');
       const copy = this.copy();
-      new RestartQuest(copy).start(redisClient, io, allPlayers, roomId);
+      new RestartQuestState(copy).start(redisClient, io, allPlayers, roomId);
       return copy;
     } else if (this.screen == 'GAME' && this.state == 'QUEST_STARTED' && this.allPlayersHaveVotedOnQuestResult(allPlayers)) {
       console.log('starting quest result reveal...');
       const copy = this.copy();
-      new QuestResultReveal(copy).start(redisClient, io, allPlayers, roomId);
+      new QuestResultRevealState(copy).start(redisClient, io, allPlayers, roomId);
       return copy;
     } else if (this.screen == 'GAME' && this.state == 'QUEST_RESULT_REVEAL' && this.allQuestVotesAreRevealed()) {
       console.log('starting next quest...');
       const copy = this.copy();
-      new NextQuest(copy).start(redisClient, io, allPlayers, roomId);
+      new NextQuestState(copy).start(redisClient, io, allPlayers, roomId);
       return copy;
     } else if (this.screen == 'GAME' && this.state == 'MERLIN_ID' && this.currentQuest.proposedPlayerIds.length == 1) {
       console.log('starting game over...');

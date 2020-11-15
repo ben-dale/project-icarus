@@ -1,4 +1,4 @@
-const NextQuest = require('./NextQuest')
+const NextQuest = require('./NextQuestState')
 
 test('blah', () => {
   expect(true).toBe(true);

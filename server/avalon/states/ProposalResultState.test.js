@@ -1,4 +1,4 @@
-const ProposalResult = require('./ProposalResult');
+const ProposalResult = require('./ProposalResultState');
 const QuestLog = require('../models/QuestLog');
 const Avalon = require('../models/Avalon');
 const AvalonPlayer = require('../../avalon/models/AvalonPlayer');

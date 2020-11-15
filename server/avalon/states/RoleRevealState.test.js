@@ -1,4 +1,4 @@
-const RoleReveal = require('./RoleReveal');
+const RoleReveal = require('./RoleRevealState');
 const Avalon = require('../models/Avalon');
 const AvalonPlayer = require('../models/AvalonPlayer');
 const AllPlayers = require('../../common/models/AllPlayers');
