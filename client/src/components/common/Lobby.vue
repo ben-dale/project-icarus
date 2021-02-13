@@ -53,6 +53,20 @@
                 </button>
               </div>
             </div>
+            <hr class="border border-primary mt-0"/>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <button
+                  v-on:click="questLogEnabled(!room.game.settings.questLogEnabled)"
+                  type="button"
+                  v-bind:class="['btn border-secondary btn-block text-white', (room && room.game.settings.questLogEnabled ? 'btn-secondary border-secondary text-dark' : '')]"
+                  :disabled="!isRoomOwner"
+                >
+                  Quest Log
+                  <br />Record who went on each quest
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -246,7 +260,10 @@ export default {
     },
     oberonEnabled(enabled) {
       this.$emit("oberon-enabled", enabled);
-    }
+    },
+    questLogEnabled(enabled) {
+      this.$emit("quest-log-enabled", enabled);
+    },
   }
 };
 </script>

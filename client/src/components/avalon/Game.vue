@@ -7,14 +7,14 @@
         </div>
       </div>
     </div>
-    <div class="row">
+    <div v-if="game.settings.questLogEnabled" class="row">
       <QuestLog
         :questLog="game.questLogs"
         :players="players"
         :disagreements="game.currentQuest.disagreements"
       />
     </div>
-    <hr class="border border-primary" />
+    <hr v-if="game.settings.questLogEnabled" class="border border-primary" />
     <div v-if="game.state == 'QUEST_PROPOSING' && !playerIsOrganiser" class="row">
       <Waiting
         header="Team proposal"

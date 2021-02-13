@@ -121,6 +121,9 @@ class AvalonSocket {
           if (data.game && data.game.settings && data.game.settings.hasOwnProperty('morganaEnabled') && player.id == room.ownerId) {
             updatedRoom.game.settings = updatedRoom.game.settings.withMorganaEnabled(data.game.settings.morganaEnabled);
           }
+          if (data.game && data.game.settings && data.game.settings.hasOwnProperty('questLogEnabled') && player.id == room.ownerId) {
+            updatedRoom.game.settings = updatedRoom.game.settings.withQuestLogEnabled(data.game.settings.questLogEnabled);
+          }
 
           if (data.game && data.game.currentQuest && data.game.currentQuest.hasOwnProperty('playerIdToPropose') && room.game.currentQuest.organiserId == player.id && room.game.currentQuest.proposedPlayerIds.length < room.game.currentQuest.requiredPlayers) {
             const playerIdToPropose = data.game.currentQuest.playerIdToPropose;

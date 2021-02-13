@@ -240,13 +240,13 @@ test('start next section of game', () => {
   expect(io.messageHistory).toContain('room-updated');
 });
 
-test('enable roles', () => {
+test('enable settings', () => {
   // Given
   const avalonSocket = new AvalonSocket();
   const socket = { id: 'socketId' };
   const io = new MockIo();
   const redisClient = new MockRedisClient();
-  const data = { game: { settings: { percivalEnabled: true, oberonEnabled: true, morganaEnabled: true } } };
+  const data = { game: { settings: { percivalEnabled: true, oberonEnabled: true, morganaEnabled: true, questLogEnabled: true } } };
 
   new AvalonPlayer().init('socketId', 'Ben', 'roomId').withReady(true).storeInRedis(redisClient);
 
@@ -261,6 +261,7 @@ test('enable roles', () => {
     expect(room.game.settings.percivalEnabled).toBe(true);
     expect(room.game.settings.morganaEnabled).toBe(true);
     expect(room.game.settings.oberonEnabled).toBe(true);
+    expect(room.game.settings.questLogEnabled).toBe(true);
   }, () => { });
 
   expect(io.messageHistory).toContain('room-updated');

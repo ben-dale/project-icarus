@@ -4,7 +4,8 @@ test('create instance from raw object', () => {
   const rawObject = {
     morganaEnabled: false,
     percivalEnabled: true,
-    oberonEnabled: false
+    oberonEnabled: false,
+    questLogEnabled: false
   }
 
   const settings = new Settings().fromRawObject(rawObject);
@@ -12,6 +13,7 @@ test('create instance from raw object', () => {
   expect(settings.oberonEnabled).toBe(false);
   expect(settings.percivalEnabled).toBe(true);
   expect(settings.morganaEnabled).toBe(false);
+  expect(settings.questLogEnabled).toBe(false);
 });
 
 test('with Morgana enabled', () => {
@@ -20,6 +22,7 @@ test('with Morgana enabled', () => {
   expect(settings.oberonEnabled).toBe(false);
   expect(settings.percivalEnabled).toBe(false);
   expect(settings.morganaEnabled).toBe(true);
+  expect(settings.questLogEnabled).toBe(false);
 });
 
 test('with Oberon enabled', () => {
@@ -28,6 +31,7 @@ test('with Oberon enabled', () => {
   expect(settings.oberonEnabled).toBe(true);
   expect(settings.percivalEnabled).toBe(false);
   expect(settings.morganaEnabled).toBe(false);
+  expect(settings.questLogEnabled).toBe(false);
 });
 
 test('with Percival enabled', () => {
@@ -36,4 +40,14 @@ test('with Percival enabled', () => {
   expect(settings.oberonEnabled).toBe(false);
   expect(settings.percivalEnabled).toBe(true);
   expect(settings.morganaEnabled).toBe(false);
+  expect(settings.questLogEnabled).toBe(false);
+});
+
+test('with quest log enabled', () => {
+  const settings = new Settings().init().withQuestLogEnabled(true);
+
+  expect(settings.oberonEnabled).toBe(false);
+  expect(settings.percivalEnabled).toBe(false);
+  expect(settings.morganaEnabled).toBe(false);
+  expect(settings.questLogEnabled).toBe(true);
 });

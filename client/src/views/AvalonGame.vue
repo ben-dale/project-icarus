@@ -77,6 +77,7 @@
         @percival-enabled="percivalEnabled"
         @oberon-enabled="oberonEnabled"
         @morgana-enabled="morganaEnabled"
+        @quest-log-enabled="questLogEnabled"
         @player-ready="readyUp"
         @player-not-ready="notReady"
       />
@@ -229,6 +230,11 @@ export default {
     },
     getPlayerId() {
       return this.socket.id;
+    },
+    questLogEnabled(enabled) {
+      this.socket.emit("room-updated", {
+        game: { settings: { questLogEnabled: enabled } }
+      });
     },
     morganaEnabled(enabled) {
       this.socket.emit("room-updated", {

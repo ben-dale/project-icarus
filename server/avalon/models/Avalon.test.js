@@ -33,6 +33,7 @@ test('starts the game', () => {
   let avalon = new Avalon().init();
   avalon.settings = avalon.settings.withMorganaEnabled(true);
   avalon.settings = avalon.settings.withPercivalEnabled(true);
+  avalon.settings = avalon.settings.withQuestLogEnabled(true);
   avalon = avalon.next(redisClient, io, allPlayers, roomId);
   avalon = avalon.next(redisClient, io, allPlayers, roomId);
 
