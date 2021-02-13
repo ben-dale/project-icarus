@@ -26,31 +26,6 @@
         />
       </div>
     </div>
-    <div class="row mb-5">
-      <div class="col-12 col-lg-6 mb-5">
-        <GameOption
-          name="Secret Hitler"
-          description="In pre-WW2 Germany, Liberals and Fascists square off in an intrigue-filled parliament."
-          :minPlayers="5"
-          :maxPlayers="10"
-          :teams="2"
-          @play="initResistance"
-          :comingSoon="true"
-        />
-      </div>
-      <div class="col-12 col-lg-6 mb-5">
-        <GameOption
-          name="Skull"
-          description="Does the token hide a flower or skull? Bid, bluff and laugh with striking components."
-          :minPlayers="3"
-          :maxPlayers="6"
-          :teams="0"
-          @play="initResistance"
-          :comingSoon="true"
-        />
-      </div>
-    </div>
-
     <div class="row">
       <Footer />
     </div>
