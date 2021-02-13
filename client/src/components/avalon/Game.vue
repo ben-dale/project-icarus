@@ -1,9 +1,13 @@
 <template>
   <div class="col-12">
-    <div class="row pb-2">
+    <div class="row pb-2 pt-3">
       <div class="col-12">
-        <div class="border-bottom mb-2 border-primary">
-          <PlayerReadyBar :nameColSpan="2" :players="players" />
+        <div class="mb-2">
+          <div class="card bg-dark border border-primary">
+            <div class="card-body pb-1">
+              <PlayerReadyBar :nameColSpan="2" :players="players" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -28,8 +32,7 @@
       <PlayerSelection
         :header="'Quest ' + game.currentQuest.id + ' - Team proposal'"
         :body="[
-          'There are five quests to complete. You are tasked with proposing a team for Quest ' +game.currentQuest.id+'.',
-          'Your proposal will be put to a majority vote when everyone is ready.',
+          'There are five quests to complete. You are tasked with proposing a team for Quest ' +game.currentQuest.id+'. Your proposal will be put to a majority vote when everyone is ready.',
           'Select ' + game.currentQuest.requiredPlayers + ' players to send on Quest ' +game.currentQuest.id+'.'
         ]"
         :players="players"

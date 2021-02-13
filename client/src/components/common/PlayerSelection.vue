@@ -1,8 +1,8 @@
 <template>
   <div class="col-12">
     <div class="card bg-primary text-light">
-      <div class="card-body py-5 bg-dark">
-        <div class="row mb-4">
+      <div class="card-body py-4 bg-dark">
+        <div class="row mb-2">
           <div class="col-12 text-center">
             <p v-for="(line, index) in body" :key="index">{{line}}</p>
           </div>

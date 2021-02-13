@@ -1,7 +1,7 @@
 <template>
   <div class="col-md-12">
     <div class="card bg-primary text-light">
-      <div class="card-body py-5 bg-dark text-center">
+      <div class="card-body py-4 bg-dark text-center">
         <div class="row mb-2">
           <div class="col-12">
             <p v-if="!playerIsOrganiser">{{organiserName}} is revealing the results of the quest...</p>

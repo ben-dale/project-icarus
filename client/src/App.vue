@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-dark bg-primary mb-5">
+    <nav class="navbar navbar-dark bg-primary">
       <a class="navbar-brand" href="/">Project Icarus</a>
     </nav>
     <router-view />

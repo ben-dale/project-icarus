@@ -14,7 +14,7 @@
     </div>
     <div class="fixed-bottom">
       <div class="card bg-primary rounded-0 d-none d-block d-lg-none">
-        <div class="card-body">
+        <div class="card-body pb-5">
           <button
             @click="ready"
             class="btn btn-secondary btn-block"

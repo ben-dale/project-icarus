@@ -5,7 +5,7 @@
       class="row"
     >
       <div class="col-12">
-        <div class="row mb-3">
+        <div class="row my-3">
           <div class="col-12 col-lg-8 offset-lg-2 text-center">
             <h5 class="text-light">Enter your name</h5>
           </div>
@@ -20,7 +20,7 @@
       class="row"
     >
       <div class="col-12">
-        <div class="row mb-3">
+        <div class="row my-3">
           <div class="col-12 col-lg-8 offset-lg-2 text-center">
             <h5 class="text-light">Enter your code</h5>
           </div>
@@ -41,9 +41,9 @@
       v-if="room && room.game.closed && room.disconnectedPlayerIds.length > 0 && room.playerIds.includes(getPlayerId())"
     >
       <div class="row" v-for="player in getDisconnectedPlayers()" :key="player.id">
-        <div class="col-12">
-          <div class="card bg-dark border border-primary mb-5">
-            <div class="card-body text-light text-center py-5">
+        <div class="col-12 py-3">
+          <div class="card bg-dark border border-primary">
+            <div class="card-body text-light text-center">
               <p class="card-text">{{player.name}} has left the game.</p>
               <p class="card-text">The game will resume when {{player.name}} rejoins the game.</p>
               <p class="card-text">
@@ -123,7 +123,7 @@
       />
     </div>
 
-    <div style="padding-bottom:200px"></div>
+    
     <div class="row d-none d-lg-block">
       <Footer />
     </div>

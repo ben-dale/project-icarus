@@ -1,18 +1,18 @@
 <template>
   <div class="col-12">
     <div class="card bg-primary text-light">
-      <div class="card-body py-5 bg-dark text-center">
+      <div class="card-body py-4 bg-dark text-center">
         <p class="card-text">{{organiser}} has proposed the following team:</p>
-        <div class="row">
+        <div class="row pb-3">
           <div
             v-for="(name, index) in names"
             :key="index"
-            :class="['card-text mb-4 col-md-2 col-12', (index == 0 && names.length == 2 ? 'offset-md-4' : ''), (index == 0 && names.length == 3 ? 'offset-md-3' : ''),(index == 0 && names.length == 4 ? 'offset-md-2' : '')]"
+            :class="['card-text mb-2 col-md-2 col-12', (index == 0 && names.length == 2 ? 'offset-md-4' : ''), (index == 0 && names.length == 3 ? 'offset-md-3' : ''),(index == 0 && names.length == 4 ? 'offset-md-2' : '')]"
           >
-            <p class="card-text bg-info py-1">{{name}}</p>
+            <div class="bg-primary py-1">{{name}}</div>
           </div>
         </div>
-        <div class="row mb-5">
+        <div class="row mb-4">
           <div class="col-12">
             <p class="card-text">Do you approve or reject this proposal?</p>
             <p
