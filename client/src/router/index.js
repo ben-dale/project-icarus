@@ -18,12 +18,6 @@ const routes = [
     props: true
   },
   {
-    path: '/resistance/:roomId',
-    name: 'ResistanceGame',
-    component: () => import('../views/ResistanceGame.vue'),
-    props: true
-  },
-  {
     path: '/donate',
     name: 'Donate',
     component: Donate

@@ -14,17 +14,6 @@
           @play="initAvalon"
         />
       </div>
-      <div class="col-12 col-lg-6 mb-4">
-        <GameOption
-          name="The Resistance"
-          description="The Empire must fall. Our mission must succeed. By destroying their key bases, we will shatter Imperial strength and liberate our people."
-          :minPlayers="5"
-          :maxPlayers="10"
-          :teams="2"
-          @play="initResistance"
-          :comingSoon="true"
-        />
-      </div>
     </div>
     <div class="row">
       <Footer />

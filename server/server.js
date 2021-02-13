@@ -1,5 +1,4 @@
 const AvalonSocket = require('./avalon/AvalonSocket');
-const ResistanceSocket = require('./resistance/ResistanceSocket');
 
 // Setup express app
 const express = require('express');
@@ -34,10 +33,6 @@ io.on('connection', (socket) => {
   socket.on('connect-avalon', () => {
     console.log('player connected to avalon game...');
     new AvalonSocket().registerListeners(io, socket, redisClient);
-  });
-  socket.on('connect-resistance', () => {
-    console.log('player connected to resistance game...');
-    new ResistanceSocket().registerListeners(io, socket, redisClient);
   });
 });
 
