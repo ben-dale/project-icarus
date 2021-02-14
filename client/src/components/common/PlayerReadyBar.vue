@@ -2,7 +2,7 @@
   <div class="row text-center">
     <div
       v-for="(player) in players"
-      :class="['col-3 col-md-4 col-lg-' + nameColSpan]"
+      class="col-4"
       :key="player.id"
     >
       <p
@@ -16,7 +16,7 @@
     </div>
     <div
       v-for="i in maxPlayers - players.length"
-      :class="['col-3 col-md-4 col-lg-' + nameColSpan]"
+      class="col-4"
       :key="i"
     >
       <p
@@ -37,7 +37,7 @@ export default {
     },
     nameColSpan: {
       type: Number,
-      default: 3
+      default: 4
     },
     showEmptySpaces: Boolean
   }

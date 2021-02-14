@@ -8,6 +8,9 @@
 </template>
 
 <style>
+.mobile-bottom-page-padding {
+  padding-bottom: 200px;
+}
 </style>
 <style lang="scss">
 /* change the colors */

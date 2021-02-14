@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-12">
+  <div class="col-12">
     <div class="card bg-primary text-light">
       <div class="card-body py-4 bg-dark text-center">
         <div class="row">
@@ -9,7 +9,7 @@
               <div
                 v-for="(player, index) in names"
                 :key="index"
-                :class="['card-text mb-2 col-md-2 col-12', (index == 0 && names.length == 2 ? 'offset-md-4' : ''), (index == 0 && names.length == 3 ? 'offset-md-3' : ''),(index == 0 && names.length == 4 ? 'offset-md-2' : '')]"
+                :class="['card-text mb-2 col-12']"
               >
                 <div class="py-1 bg-primary">{{player}}</div>
               </div>
@@ -22,14 +22,14 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-6 col-md-3 offset-md-3">
+              <div class="col-6">
                 <button
                   :class="[(vote == 'SUCCEED' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4 sim-succeed-button']"
                   :disabled="isPlayerReady"
                   @click="succeed(true)"
                 >Succeed</button>
               </div>
-              <div class="col-6 col-md-3">
+              <div class="col-6">
                 <button
                   :class="[(vote == 'SABOTAGE' ? 'btn-danger' : 'border-secondary'), 'btn text-white btn-block py-4 sim-sabotage-button']"
                   :disabled="!isEvil || isPlayerReady"

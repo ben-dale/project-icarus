@@ -41,7 +41,7 @@
       v-if="room && room.game.closed && room.disconnectedPlayerIds.length > 0 && room.playerIds.includes(getPlayerId())"
     >
       <div class="row" v-for="player in getDisconnectedPlayers()" :key="player.id">
-        <div class="col-12 py-3">
+        <div class="col-12 py-3 col-md-8 offset-md-2">
           <div class="card bg-dark border border-primary">
             <div class="card-body text-light text-center">
               <p class="card-text">{{player.name}} has left the game.</p>

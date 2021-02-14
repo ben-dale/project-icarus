@@ -2,7 +2,7 @@
   <div class="col-12">
     <div class="card bg-primary text-light">
       <div class="card-body py-4 bg-dark">
-        <div class="row mb-2">
+        <div class="row">
           <div class="col-12 text-center">
             <p v-for="(line, index) in body" :key="index">{{line}}</p>
           </div>
@@ -11,7 +11,7 @@
           <div
             v-for="(player, index) in players"
             :key="index"
-            :class="['col-6 col-md-3 col-lg-2 mb-3', (index % 5 === 0 ? 'offset-lg-1' : ''), (index % 3 === 0 && players.length == 3 ? 'offset-lg-3' : ''), (index % 4 === 0 && players.length == 4 ? 'offset-lg-2' : '')]"
+            :class="['col-6 mt-3']"
           >
             <button
               v-if="!proposedPlayerIds.includes(player.id)"

@@ -70,7 +70,7 @@
         <QuestResultReveal
           :playerIsOrganiser="true"
           organiserName="Ben"
-          :results="[{choice: 'SABOTAGE', revealed: true},{choice: 'SUCCEED', revealed: true},{choice: 'SABOTAGE', revealed: false}]"
+          :results="[{choice: 'SABOTAGE', revealed: true},{choice: 'SUCCEED', revealed: true},{choice: 'SABOTAGE', revealed: false},{choice: 'SABOTAGE', revealed: false}]"
           questResult
           :isPlayerReady="true"
         />
@@ -85,7 +85,7 @@
       <div class="col-12">
         <QuestProposalVoteInput
           organiser="Sidd"
-          :names="['Ben', 'Sam']"
+          :names="['Ben', 'sam']"
           :isPlayerReady="true"
         />
       </div>
@@ -95,7 +95,7 @@
         <QuestOutcomeVoteInput
           :isEvil="true"
           vote="SABOTAGE"
-          :names="['Ben', 'Sam']"
+          :names="['Ben', 'Sam', 'Don', 'hi']"
           :isPlayerReady="true"
         />
       </div>
@@ -150,9 +150,7 @@ export default {
         { id: "111", name: "Ben", ready: true, vote: "APPROVE" },
         { id: "222", name: "Sam", ready: false, vote: "APPROVE" },
         { id: "333", name: "Adam", ready: true, vote: "REJECT" },
-        { id: "444", name: "Rodney", ready: false, vote: "APPROVE" },
-        { id: "555", name: "Sidd", ready: false, vote: "APPROVE" },
-        { id: "666", name: "Jim", ready: false, vote: "REJECT" },
+        { id: "444", name: "Rodney", ready: false, vote: "APPROVE" }
       ],
       selectComponent: "Waiting",
       components: [

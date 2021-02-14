@@ -7,7 +7,7 @@
           <div
             v-for="(name, index) in names"
             :key="index"
-            :class="['card-text mb-2 col-md-2 col-12', (index == 0 && names.length == 2 ? 'offset-md-4' : ''), (index == 0 && names.length == 3 ? 'offset-md-3' : ''),(index == 0 && names.length == 4 ? 'offset-md-2' : '')]"
+            :class="['card-text mb-2 col-12']"
           >
             <div class="bg-primary py-1">{{name}}</div>
           </div>
@@ -21,14 +21,14 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-6 col-md-3 offset-md-3">
+          <div class="col-6">
             <button
               :class="[(vote == 'APPROVE' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4 sim-approve-button']"
               :disabled="isPlayerReady"
               @click="approve(true)"
             >Approve</button>
           </div>
-          <div class="col-6 col-md-3">
+          <div class="col-6">
             <button
               :class="[(vote == 'REJECT' ? 'btn-info' : 'border-secondary'), 'btn text-white btn-block py-4 sim-reject-button']"
               :disabled="isPlayerReady"

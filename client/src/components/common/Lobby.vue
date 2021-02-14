@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12">
+  <div class="col-12 col-md-8 offset-md-2">
     <div class="row mb-3">
       <div class="col-12">
         <div v-if="isRoomOwner" class="card bg-dark border-primary text-light mt-3">
@@ -80,7 +80,7 @@
         </div>
       </div>
     </div>
-    <div class="row mb-3">
+    <div class="row mb-3 mobile-bottom-page-padding">
       <div class="col-12">
         <div class="card bg-dark border border-primary text-center text-light">
           <div class="card-body py-4">

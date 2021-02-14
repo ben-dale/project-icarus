@@ -1,9 +1,9 @@
 <template>
-  <div class="col-md-12">
+  <div class="col-12">
     <div class="card bg-primary text-light">
       <div class="card-body bg-dark text-center">
         <div class="row">
-          <div class="col-lg-4 offset-lg-1 col-6">
+          <div class="col-6">
             <div class="row">
               <div class="col-12">
                 <p class="card-text">Approve</p>
@@ -12,7 +12,7 @@
             <hr class="border border-primary" />
             <div class="row">
               <div
-                class="col-12 mb-2"
+                class="col-12 mt-2"
                 v-for="(player, index) in players.filter(p => p.vote == 'APPROVE')"
                 :key="index"
               >
@@ -20,7 +20,7 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4 offset-lg-2 col-6">
+          <div class="col-6">
             <div class="row">
               <div class="col-12">
                 <p class="card-text">Reject</p>
@@ -29,7 +29,7 @@
             <hr class="border border-primary" />
             <div class="row">
               <div
-                class="col-12 mb-2"
+                class="col-12 mt-2"
                 v-for="(player, index) in players.filter(p => p.vote == 'REJECT')"
                 :key="index"
               >

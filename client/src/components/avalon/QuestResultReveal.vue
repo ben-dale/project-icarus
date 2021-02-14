@@ -1,8 +1,8 @@
 <template>
-  <div class="col-md-12">
+  <div class="col-12">
     <div class="card bg-primary text-light">
-      <div class="card-body py-4 bg-dark text-center">
-        <div class="row mb-2">
+      <div class="card-body bg-dark text-center">
+        <div class="row">
           <div class="col-12">
             <p v-if="!playerIsOrganiser">{{organiserName}} is revealing the results of the quest...</p>
             <p v-if="playerIsOrganiser">You are revealing the results of the request to everyone.</p>
@@ -13,22 +13,22 @@
           <div
             v-for="(result, index) in results"
             :key="index"
-            :class="['col-lg-2 mb-3', index === 0 ? 'offset-lg-' + resultOffset(): '']"
+            :class="['col-12 mt-2']"
           >
             <button
               v-if="!result.revealed"
-              :class="['sim-reveal-button-' + index, 'btn btn-secondary btn py-4 btn-block']"
+              :class="['sim-reveal-button-' + index, 'btn btn-secondary btn py-3 btn-block']"
               v-on:click="revealQuestVote(index)"
               :disabled="!playerIsOrganiser"
             >Reveal</button>
             <button
               v-if="result.revealed && result.choice === 'SUCCEED'"
-              class="btn btn-info btn py-4 btn-block"
+              class="btn btn-info btn py-3 btn-block"
               disabled
             >Succeed</button>
             <button
               v-if="result.revealed && result.choice === 'SABOTAGE'"
-              class="btn btn-danger btn py-4 btn-block"
+              class="btn btn-danger btn py-3 btn-block"
               disabled
             >Sabotage</button>
           </div>
@@ -75,12 +75,8 @@ export default {
     resultOffset: function() {
       switch (this.results.length) {
         case 2:
-          return 4;
-        case 3:
-          return 3;
-        case 4:
           return 2;
-        case 5:
+        case 4:
           return 1;
       }
     }
