@@ -63,7 +63,7 @@
                   :disabled="!isRoomOwner"
                 >
                   Quest Log
-                  <br />Record who went on each quest
+                  <br />Show quest history
                 </button>
               </div>
             </div>

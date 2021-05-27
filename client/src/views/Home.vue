@@ -4,7 +4,7 @@
       <Title />
     </div>
     <div class="row">
-      <div class="col-12 col-lg-6 mb-4">
+      <div class="col-12 col-lg-6 offset-lg-3 mb-4">
         <GameOption
           name="The Resistance: Avalon"
           description="Avalon pits the forces of Good and Evil in a battle to control the future of civilization."
