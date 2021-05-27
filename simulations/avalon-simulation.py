@@ -34,7 +34,7 @@ try:
     for i in range(1, 5):
         url = driver.current_url
         driver.execute_script("window.open('" + url + "');")
-        driver.switch_to_window(driver.window_handles[i])
+        driver.switch_to.window(driver.window_handles[i])
         wait.until(EC.presence_of_element_located((By.TAG_NAME, 'input')))
         driver.find_element_by_tag_name('input').send_keys('user' + str(i))
         driver.find_element_by_id('button-start').click()
@@ -43,7 +43,7 @@ try:
 
     # Find role for each user and assert
     for i in range (0, 5):
-        driver.switch_to_window(driver.window_handles[i])
+        driver.switch_to.window(driver.window_handles[i])
         
         if 'sim-role-good' in driver.find_element_by_class_name('sim-role').get_attribute('class'):
             roles.append('GOOD')
@@ -64,59 +64,59 @@ try:
 
     # Start game
     for i in range (0, 5):
-        driver.switch_to_window(driver.window_handles[i])
+        driver.switch_to.window(driver.window_handles[i])
         driver.find_element_by_class_name('sim-ready-button').click()
 
     for j in range (0, 3):
         # Find current leader
         for i in range (0, 5):
-            driver.switch_to_window(driver.window_handles[i])
+            driver.switch_to.window(driver.window_handles[i])
             if driver.find_element_by_class_name('sim-ready-button').get_attribute('disabled') is not None:
                 current_leader = i
 
         # Setup quest proposal
-        driver.switch_to_window(driver.window_handles[current_leader])
+        driver.switch_to.window(driver.window_handles[current_leader])
         for i in range (0, players_required_per_round[j]):
             driver.find_element_by_class_name('sim-select-player-button-' + str(i)).click()
 
         # Start quest proposal vote
         for i in range (0, 5):
-            driver.switch_to_window(driver.window_handles[i])
+            driver.switch_to.window(driver.window_handles[i])
             driver.find_element_by_class_name('sim-ready-button').click()
 
         # Approve quest proposal
         for i in range (0, 5):
-            driver.switch_to_window(driver.window_handles[i])
+            driver.switch_to.window(driver.window_handles[i])
             driver.find_element_by_class_name('sim-approve-button').click()
             driver.find_element_by_class_name('sim-ready-button').click()
 
         # Start quest
         for i in range (0, 5):
-            driver.switch_to_window(driver.window_handles[i])
+            driver.switch_to.window(driver.window_handles[i])
             driver.find_element_by_class_name('sim-ready-button').click()
 
         # Players on quest vote to succeed
         for i in range (0, players_required_per_round[j]):
-            driver.switch_to_window(driver.window_handles[i])
+            driver.switch_to.window(driver.window_handles[i])
             driver.find_element_by_class_name('sim-succeed-button').click()
 
         # Start results reveal
         for i in range (0, 5):
-            driver.switch_to_window(driver.window_handles[i])
+            driver.switch_to.window(driver.window_handles[i])
             driver.find_element_by_class_name('sim-ready-button').click()
 
         # Leader reveal results
-        driver.switch_to_window(driver.window_handles[current_leader])
+        driver.switch_to.window(driver.window_handles[current_leader])
         for i in range (0, players_required_per_round[j]):
             driver.find_element_by_class_name('sim-reveal-button-' + str(i)).click()
         
         # Start next round
         for i in range (0, 5):
-            driver.switch_to_window(driver.window_handles[i])
+            driver.switch_to.window(driver.window_handles[i])
             driver.find_element_by_class_name('sim-ready-button').click()
 
     # Switch to assassin and nominate player (not merlin)
-    driver.switch_to_window(driver.window_handles[assassin])
+    driver.switch_to.window(driver.window_handles[assassin])
     goodPlayer0 = driver.find_element_by_class_name('sim-select-player-button-0')
     goodPlayer1 = driver.find_element_by_class_name('sim-select-player-button-1')
     goodPlayer2 = driver.find_element_by_class_name('sim-select-player-button-2')
@@ -129,12 +129,12 @@ try:
 
     # Show final result
     for i in range (0, 5):
-        driver.switch_to_window(driver.window_handles[i])
+        driver.switch_to.window(driver.window_handles[i])
         driver.find_element_by_class_name('sim-ready-button').click()
     
     # Assert final screen contents
     for i in range (0, 5):
-        driver.switch_to_window(driver.window_handles[i])
+        driver.switch_to.window(driver.window_handles[i])
         final_text = driver.find_element_by_class_name('card-title').text
         assert final_text == 'The Assassin was not able to identify Merlin. Good has taken the win!'
 
