@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-12 text-light text-center">
-    <img src="logo.svg" width="700" class="img-fluid"/>
+    <img src="logo.svg" width="500" class="img-fluid"/>
   </div>
 </template>
 
