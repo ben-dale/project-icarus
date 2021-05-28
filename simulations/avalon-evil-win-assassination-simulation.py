@@ -9,7 +9,7 @@ driver.set_window_position(0, 0)
 driver.set_window_size(1024, 2000)
 wait = WebDriverWait(driver, 2)
 
-# Simulate a good only voting game for 
+# Simulate a good only voting game
 try:
     roles = []
     current_leader = 0
@@ -67,6 +67,7 @@ try:
         driver.switch_to.window(driver.window_handles[i])
         driver.find_element_by_class_name('sim-ready-button').click()
 
+    # For three rounds...
     for j in range (0, 3):
         # Find current leader
         for i in range (0, 5):
@@ -120,9 +121,9 @@ try:
     goodPlayer0 = driver.find_element_by_class_name('sim-select-player-button-0')
     goodPlayer1 = driver.find_element_by_class_name('sim-select-player-button-1')
     goodPlayer2 = driver.find_element_by_class_name('sim-select-player-button-2')
-    if goodPlayer0.text != 'User' + str(merlin):
+    if goodPlayer0.text == 'User' + str(merlin):
         goodPlayer0.click()
-    elif goodPlayer1.text != 'User' + str(merlin):
+    elif goodPlayer1.text == 'User' + str(merlin):
         goodPlayer1.click()
     else:
         goodPlayer2.click()
@@ -136,8 +137,13 @@ try:
     for i in range (0, 5):
         driver.switch_to.window(driver.window_handles[i])
         final_text = driver.find_element_by_class_name('card-title').text
-        assert final_text == 'The Assassin was not able to identify Merlin. Good has taken the win!'
+        assert final_text == 'Evil has taken the win!'
+
+    # Start new game
+    for i in range (0, 5):
+        driver.switch_to.window(driver.window_handles[i])
+        driver.find_element_by_class_name('sim-outcome-button').click()
 
 finally:
     # print("done")
-    driver.quit()
+    driver.quit()    

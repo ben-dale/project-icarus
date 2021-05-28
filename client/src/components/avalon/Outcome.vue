@@ -7,7 +7,7 @@
       <div class="card-footer d-none d-lg-block">
         <button
           @click="ready"
-          class="btn btn-secondary btn-block"
+          class="btn btn-secondary btn-block sim-outcome-button"
           :disabled="isPlayerReady"
         >{{buttonText}}</button>
       </div>
@@ -17,7 +17,7 @@
         <div class="card-body pb-5">
           <button
             @click="ready"
-            class="btn btn-secondary btn-block"
+            class="btn btn-secondary btn-block sim-outcome-button"
             :disabled="isPlayerReady"
           >{{buttonText}}</button>
         </div>
